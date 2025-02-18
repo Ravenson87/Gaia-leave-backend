@@ -1,0 +1,50 @@
+package com.caci.gaia_leave.administration.model.request;
+
+import com.caci.gaia_leave.shared_tools.model.Auditable;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+import java.io.Serializable;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
+@Entity
+@JsonInclude(JsonInclude.Include.USE_DEFAULTS)
+@Table(name = "menu")
+public class Menu extends Auditable implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    @Column(name = "id")
+    private Integer id;
+
+    @NotEmpty(message = "name cannot be empty")
+    @NotNull(message = "name cannot be null")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonProperty("name")
+    @Column(name = "name")
+    private String name;
+
+    @NotNull(message = "menu_number cannot be null")
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+    @JsonProperty("menu_number")
+    @Column(name = "menu_number")
+    private Integer menuNumber;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonProperty("description")
+    @Column(name = "description")
+    private String description;
+}
