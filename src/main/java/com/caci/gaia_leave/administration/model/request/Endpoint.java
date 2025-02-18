@@ -18,8 +18,6 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @ToString
 @Entity
 @JsonInclude(JsonInclude.Include.USE_DEFAULTS)
