@@ -5,17 +5,17 @@ import com.caci.gaia_leave.shared_tools.exception.CustomException;
 import com.caci.gaia_leave.shared_tools.model.Mapping;
 import com.caci.gaia_leave.shared_tools.model.MappingServiceWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -36,10 +36,7 @@ public class MappingService {
             return null;
         }
 
-        getMapping(res.getBody(), appName);
-
-
-        return null;
+        return getMapping(res.getBody(), appName);
     }
 
     public MappingServiceWrapper getMapping(String body, String appName) {
@@ -64,45 +61,75 @@ public class MappingService {
                 .path("dispatcherServlets")
                 .path("dispatcherServlet");
 
-        if (mappingNode == null) {
-            return null;
-        }
-
         MappingServiceWrapper mappingServiceWrapper = new MappingServiceWrapper();
-        List<Mapping> mappings = new ArrayList<>();
-        List<String> services = new ArrayList<>();
+        List<Mapping> mappings = new LinkedList<>();
+        List<String> servicesList = new LinkedList<>();
+
+        if (mappingNode.isMissingNode() || !mappingNode.isArray()) {
+            mappingServiceWrapper.setMappings(mappings);
+            mappingServiceWrapper.setServices(servicesList);
+            return mappingServiceWrapper;
+        }
 
         for (JsonNode mapping : mappingNode) {
             JsonNode mappingDetails = mapping.path("details");
 
-            if (mappingDetails == null) {
+            if (mappingDetails.isMissingNode() || mappingDetails.isNull()) {
                 continue;
             }
+
             JsonNode handlerMethod = mappingDetails.path("handlerMethod");
-            String className = handlerMethod.path("className").asText();
-
-
             JsonNode requestMappingConditions = mappingDetails.path("requestMappingConditions");
-            JsonNode methodName = requestMappingConditions.path("methods");
-            JsonNode patternName = requestMappingConditions.path("patterns");
+            JsonNode methodNameNod = requestMappingConditions.path("methods");
+            JsonNode patternsNode = requestMappingConditions.path("patterns");
 
-            //TODO Pattern name nam ne stampa, ali nam zato stampa className... videti zasto!!!
-            if(handlerMethod.isEmpty() || methodName.isEmpty() || patternName.isEmpty()) {
+            JsonNode classNameNode = handlerMethod.path("className");
+            if (classNameNode.isMissingNode() || classNameNode.isNull()) {
                 continue;
             }
 
-            if(patternName.asText().contains("actuator")) {
+            String classNameText = classNameNode.asText();
+
+            String controllerName = classNameText.substring(classNameText.lastIndexOf(".") + 1);
+            String[] serviceNameArray = classNameText.split("\\.");
+
+            if (serviceNameArray.length < 4) {
                 continue;
             }
-            System.out.println("handlerMethod: " + handlerMethod.asText());
-            System.out.println("methodName: " + methodName.asText());
-            System.out.println("patternName: " + patternName.asText());
 
+            if (methodNameNod.isEmpty() || patternsNode.isEmpty()) {
+                continue;
+            }
+
+            String serviceName = serviceNameArray[3];
+            String methodName = methodNameNod.get(0).asText();
+
+            for (JsonNode pattern : patternsNode) {
+                String patternText = pattern.asText();
+                if (patternText.contains("actuator") || Arrays.asList(appProperties.getExcludedPackets()).contains(serviceName)) {
+                    continue;
+                }
+                String hashPath = DigestUtils.md5Hex(appName + "_" + controllerName + "_" + pattern.asText());
+                String hashController = DigestUtils.md5Hex(appName + "_" + controllerName);
+
+                Mapping newMapping = new Mapping();
+                newMapping.setMethod(methodName);
+                newMapping.setService(serviceName);
+                newMapping.setController(controllerName);
+                newMapping.setHashController(hashController);
+                newMapping.setPath(pattern.asText());
+                newMapping.setHashPath(hashPath);
+                mappings.add(newMapping);
+                if (!servicesList.contains(serviceName)) {
+                    servicesList.add(serviceName);
+                }
+
+            }
 
         }
-
-
-        return null;
+        mappingServiceWrapper.setMappings(mappings);
+        mappingServiceWrapper.setServices(servicesList);
+        return mappingServiceWrapper;
     }
 
 }

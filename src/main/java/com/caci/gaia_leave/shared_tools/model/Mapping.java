@@ -15,9 +15,6 @@ import lombok.ToString;
 @JsonInclude(JsonInclude.Include.USE_DEFAULTS)
 public class Mapping {
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty("id")
-    private String id;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("method")
