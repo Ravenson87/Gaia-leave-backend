@@ -5,14 +5,12 @@ import com.caci.gaia_leave.administration.repository.request.EndpointRepository;
 import com.caci.gaia_leave.administration.repository.response.EndpointResponseRepository;
 import com.caci.gaia_leave.shared_tools.configuration.AppProperties;
 import com.caci.gaia_leave.shared_tools.exception.CustomException;
-import com.caci.gaia_leave.shared_tools.helper.AllHelpers;
 import com.caci.gaia_leave.shared_tools.model.Mapping;
 import com.caci.gaia_leave.shared_tools.model.MappingServiceWrapper;
 import com.caci.gaia_leave.shared_tools.service.MappingService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -92,7 +90,7 @@ public class EndpointService {
         List<String> diffEndpoints = existedEndpoints.stream().filter(existedEndpoint -> !usedEndpoints.contains(existedEndpoint)).toList();
         if (!diffEndpoints.isEmpty()) {
             try {
-                endpointResponseRepository.deleteAllById(diffEndpoints);
+                endpointRepository.deleteAllById(diffEndpoints);
             }catch (Exception e) {
                 throw new CustomException(e.getMessage());
             }

@@ -1,0 +1,2 @@
+ALTER TABLE `user`
+ADD COLUMN `refresh_token` VARCHAR(150) DEFAULT NULL AFTER status;

@@ -7,6 +7,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -69,6 +71,11 @@ public class UserResponse implements Serializable {
     @JsonProperty("status")
     @Column(name = "status")
     private Boolean status;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonProperty("refresh_token")
+    @Column(name = "refresh_token")
+    private String refreshToken;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("created_by")

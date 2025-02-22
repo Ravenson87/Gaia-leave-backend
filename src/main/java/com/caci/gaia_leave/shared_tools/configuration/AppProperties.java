@@ -18,7 +18,6 @@ public class AppProperties {
      * Admin user.
      */
     private String adminFullName = null;
-    public static final Integer EXPIRATION_TIME = 1;
 
     /**
      * Excluded packets from mapping.
@@ -33,5 +32,8 @@ public class AppProperties {
 
     @Value("${spring.security.user.password}")
     private String globalPassword;
+
+    @Value("${jwt.secret}")
+    private String jwtSecret;
 
 }
