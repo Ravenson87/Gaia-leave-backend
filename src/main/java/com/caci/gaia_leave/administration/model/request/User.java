@@ -30,14 +30,13 @@ public class User extends Auditable implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @NotEmpty(message = "role_id cannot be empty")
     @NotNull(message = "role_id cannot be empty")
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     @JsonProperty("role_id")
     @Column(name = "role_id")
     private Integer roleId;
 
-    @NotEmpty(message = "job_position_id cannot be empty")
+
     @NotNull(message = "job_position_id cannot be empty")
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     @JsonProperty("job_position_id")
@@ -79,7 +78,6 @@ public class User extends Auditable implements Serializable {
     @Column(name = "password")
     private String password;
 
-    @NotEmpty(message = "status cannot be empty")
     @NotNull(message = "status cannot be empty")
     @JsonFormat(shape = JsonFormat.Shape.BOOLEAN)
     @JsonProperty("status")

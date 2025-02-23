@@ -29,14 +29,12 @@ public class RoleEndpoint implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @NotBlank(message = "role_id must be provided")
     @NotNull(message = "role_id must be provided")
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     @JsonProperty("role_id")
     @Column(name = "role_id")
     private Integer roleId;
 
-    @NotBlank(message = "endpoint_id must be provided")
     @NotNull(message = "endpoint_id must be provided")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("endpoint_id")
