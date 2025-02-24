@@ -24,6 +24,6 @@ public class AfterStartUp {
 
     @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() {
-        authorizationService.login("system", "3011972Fenix!");
+//        authorizationService.login("system", "3011972Fenix!");
     }
 }

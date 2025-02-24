@@ -2,8 +2,15 @@ package com.caci.gaia_leave.shared_tools.service;
 
 import com.caci.gaia_leave.administration.model.response.UserResponse;
 import com.caci.gaia_leave.shared_tools.configuration.AppProperties;
+import com.caci.gaia_leave.shared_tools.exception.BadToken;
+import com.caci.gaia_leave.shared_tools.exception.CustomException;
+import com.caci.gaia_leave.shared_tools.exception.TokenExpired;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -26,7 +33,10 @@ import static com.caci.gaia_leave.shared_tools.component.AppConst.EXPIRATION_TIM
 @RequiredArgsConstructor
 public class JwtService {
 
+    private static final String HEADER_STRING = "Authorization";
+    private static final String TOKEN_PREFIX = "Bearer ";
     private final AppProperties appProperties;
+
 
 
     public String generateToken(UserResponse model) {
@@ -35,8 +45,7 @@ public class JwtService {
 
         SecretKey secretKey = Keys.hmacShaKeyFor(appProperties.getJwtSecret().getBytes(StandardCharsets.UTF_8));
 
-        return Jwts
-                .builder()
+        return Jwts.builder()
                 .header().add("typ", "JWT")
                 .and()
                 .claims(createClaims(model))
@@ -63,4 +72,39 @@ public class JwtService {
                 "email", model.getEmail()
         );
     }
+
+    public Claims jwsToken(HttpServletRequest request) {
+        SecretKey secretKey = Keys.hmacShaKeyFor(appProperties.getJwtSecret().getBytes());
+        Claims jws;
+        try {
+            jws = Jwts.parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(getBearer(request))
+                    .getPayload();
+        } catch (ExpiredJwtException e) {
+            throw new TokenExpired(e.getMessage());
+        } catch (JwtException | IllegalArgumentException ex) {
+            throw new BadToken(ex.getMessage());
+        }
+        return jws;
+    }
+
+
+    private String getBearer(HttpServletRequest request) {
+        String authTokenHeader = request.getHeader(HEADER_STRING);
+        if (authTokenHeader == null || authTokenHeader.trim().isEmpty()) {
+            throw new BadToken("Bearer token missing");
+        }
+        return authTokenHeader.replace(TOKEN_PREFIX, "");
+    }
+
+    public String getFullName(HttpServletRequest request) {
+        return getValue(request, "first_name") + " " +  getValue(request, "last_name");
+
+    }
+    public String getValue(HttpServletRequest request, String key) {
+        return jwsToken(request).get(key).toString();
+    }
+
 }

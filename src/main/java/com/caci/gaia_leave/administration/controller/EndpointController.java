@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
+
 @Validated
 @RestController
 @RequestMapping("/api/v1/endpoint")

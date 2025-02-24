@@ -7,11 +7,13 @@ import com.caci.gaia_leave.shared_tools.model.MappingServiceWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.HandlerMapping;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -130,6 +132,11 @@ public class MappingService {
         mappingServiceWrapper.setMappings(mappings);
         mappingServiceWrapper.setServices(servicesList);
         return mappingServiceWrapper;
+    }
+
+
+    public String endpoint(HttpServletRequest request) {
+        return (String) request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
     }
 
 }

@@ -37,7 +37,9 @@ public class AuthorizationService {
         }
 
         String token = jwtService.generateToken(res.get());
+        System.out.println("token: " + token);
         String refreshToken = jwtService.generateRefreshToken();
+        System.out.println("refreshToken: " + refreshToken);
 
         AuthorizationTokenDTO authorizationTokenDTO = new AuthorizationTokenDTO();
         authorizationTokenDTO.setToken(token);
