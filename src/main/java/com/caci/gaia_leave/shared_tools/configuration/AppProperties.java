@@ -48,6 +48,8 @@ public class AppProperties {
 
     private final String[] allowedMethods = {"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"};
 
+    private final String[] securityHeaders = {"authorization", "content-type", "x-auth-token", "permissions"};
+
     private final String[] excludedRoutes = {
             "/api/v1/auth/**"
     };
