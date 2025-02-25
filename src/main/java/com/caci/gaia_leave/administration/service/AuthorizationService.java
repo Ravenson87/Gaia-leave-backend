@@ -23,7 +23,6 @@ public class AuthorizationService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     public ResponseEntity<AuthorizationTokenDTO> login(String user, String password) {
-        System.out.println("login: " + user + ", " + password);
         Optional<UserResponse> res = userResponseRepository.findByUsernameAndStatusIsTrueOrEmailAndStatusIsTrue(user, user);
 
         if (res.isEmpty()) {
@@ -37,9 +36,7 @@ public class AuthorizationService {
         }
 
         String token = jwtService.generateToken(res.get());
-        System.out.println("token: " + token);
         String refreshToken = jwtService.generateRefreshToken();
-        System.out.println("refreshToken: " + refreshToken);
 
         AuthorizationTokenDTO authorizationTokenDTO = new AuthorizationTokenDTO();
         authorizationTokenDTO.setToken(token);

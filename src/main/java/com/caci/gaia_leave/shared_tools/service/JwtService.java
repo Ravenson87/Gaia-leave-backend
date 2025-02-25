@@ -103,6 +103,12 @@ public class JwtService {
         return getValue(request, "first_name") + " " +  getValue(request, "last_name");
 
     }
+
+    public String getRole(HttpServletRequest request) {
+        return getValue(request, "role_id");
+
+    }
+
     public String getValue(HttpServletRequest request, String key) {
         return jwsToken(request).get(key).toString();
     }

@@ -18,7 +18,6 @@ public class AuthorizationController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthorizationTokenDTO> login(@Valid @RequestParam("user") String user, @RequestParam("password") String password) {
-        System.out.println("login: " + user + ", " + password);
         return authorizationService.login(user, password);
     }
 }

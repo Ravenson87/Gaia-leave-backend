@@ -44,7 +44,7 @@ public class SecurityConfiguration {
                 .map(AntPathRequestMatcher::new)
                 .toArray(RequestMatcher[]::new);
 
-        RequestMatcher[] basicAuthEndpoints = Arrays.stream(appProperties.getExcludedRoutes())
+        RequestMatcher[] basicAuthEndpoints = Arrays.stream(appProperties.getBasicAuthorization())
                 .map(AntPathRequestMatcher::new)
                 .toArray(RequestMatcher[]::new);
 

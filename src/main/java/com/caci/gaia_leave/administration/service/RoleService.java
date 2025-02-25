@@ -29,6 +29,7 @@ public class RoleService {
      * @return
      */
     public ResponseEntity<RoleResponse> createRole(Role model) {
+        System.out.println("Entered createRole");
 
         Optional<RoleResponse> check = roleResponseRepository.findByName(model.getName());
         if (check.isPresent()) {
