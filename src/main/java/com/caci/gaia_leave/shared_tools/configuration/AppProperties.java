@@ -54,6 +54,7 @@ public class AppProperties {
 
     private final String[] excludedRoutes = {
             "/api/v1/auth/**"
+
     };
 
     @Value("${spring.application.name}")

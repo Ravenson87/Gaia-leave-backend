@@ -3,10 +3,7 @@ package com.caci.gaia_leave.administration.model.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -96,4 +93,9 @@ public class UserResponse implements Serializable {
     @JsonProperty("last_modified_date")
     @Column(name = "last_modified_date")
     private Date lastModifiedDate;
+
+    @OneToOne(fetch = FetchType.EAGER,
+            mappedBy = "role")
+    @JoinColumn(name = "id", referencedColumnName = "role_id")
+    private RoleResponse role;
 }

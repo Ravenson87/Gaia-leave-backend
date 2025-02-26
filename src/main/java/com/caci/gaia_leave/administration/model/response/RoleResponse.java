@@ -3,10 +3,7 @@ package com.caci.gaia_leave.administration.model.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +11,8 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -59,4 +58,14 @@ public class RoleResponse implements Serializable {
     @JsonProperty("last_modified_date")
     @Column(name = "last_modified_date")
     private Date lastModifiedDate;
+
+    @ManyToMany(fetch = FetchType.EAGER,
+            mappedBy = "role_endpoint")
+    @JoinColumn(
+            name = "role_id", referencedColumnName = "id")
+    @Column(insertable = false,
+            updatable = false)
+    private List<RoleEndpointResponse> roleEndpoints;
+
+
 }

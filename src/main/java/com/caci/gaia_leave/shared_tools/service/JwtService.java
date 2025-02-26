@@ -3,7 +3,6 @@ package com.caci.gaia_leave.shared_tools.service;
 import com.caci.gaia_leave.administration.model.response.UserResponse;
 import com.caci.gaia_leave.shared_tools.configuration.AppProperties;
 import com.caci.gaia_leave.shared_tools.exception.BadToken;
-import com.caci.gaia_leave.shared_tools.exception.CustomException;
 import com.caci.gaia_leave.shared_tools.exception.TokenExpired;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
@@ -35,6 +33,7 @@ public class JwtService {
 
     private static final String HEADER_STRING = "Authorization";
     private static final String TOKEN_PREFIX = "Bearer ";
+    public static final String SUPER_ADMIN = "super_admin";
     private final AppProperties appProperties;
 
 
@@ -66,10 +65,12 @@ public class JwtService {
         return Map.of(
                 "id", model.getId(),
                 "role_id", model.getRoleId(),
+                "role", model.getRole().getName(),
                 "job_position_id", model.getJobPositionId(),
                 "first_name", model.getFirstName(),
                 "last_name", model.getLastName(),
                 "email", model.getEmail()
+
         );
     }
 
@@ -104,13 +105,17 @@ public class JwtService {
 
     }
 
-    public String getRole(HttpServletRequest request) {
-        return getValue(request, "role_id");
+    public Integer getRoleId(HttpServletRequest request) {
+        return Integer.parseInt(getValue(request,"role_id"));
 
     }
 
-    public String getValue(HttpServletRequest request, String key) {
+    private String getValue(HttpServletRequest request, String key) {
         return jwsToken(request).get(key).toString();
     }
+    public boolean superAdmin(HttpServletRequest request) {
+        return getValue(request, "role").equals(SUPER_ADMIN);
+    }
+
 
 }

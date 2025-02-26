@@ -3,14 +3,13 @@ package com.caci.gaia_leave.administration.model.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -36,4 +35,13 @@ public class RoleEndpointResponse {
     @JsonProperty("endpoint_id")
     @Column(name = "endpoint_id")
     private String endpointId;
+
+    @OneToOne(fetch = FetchType.EAGER,
+            mappedBy = "endpoint")
+    @JoinColumn(
+            name = "id", referencedColumnName = "endpoint_id")
+    private EndpointResponse endpoint;
+
 }
+
+
