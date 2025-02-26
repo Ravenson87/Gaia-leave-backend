@@ -84,7 +84,7 @@ public class JwtService {
                     .parseSignedClaims(getBearer(request))
                     .getPayload();
         } catch (ExpiredJwtException e) {
-            throw new TokenExpired("Unauthorized token");
+            throw new TokenExpired(e.getMessage());
         } catch (JwtException | IllegalArgumentException ex) {
             throw new BadToken("Bad token");
         }

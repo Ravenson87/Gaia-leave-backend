@@ -53,8 +53,8 @@ public class AppProperties {
     private final String[] securityHeaders = {"authorization", "content-type", "x-auth-token", "permissions"};
 
     private final String[] excludedRoutes = {
-            "/api/v1/auth/**"
-
+            "/api/v1/auth/**",
+            "/error"
     };
 
     @Value("${spring.application.name}")
