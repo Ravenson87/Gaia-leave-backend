@@ -1,14 +1,11 @@
-package com.caci.gaia_leave.shared_tools.helper;
+package com.caci.gaia_leave.shared_tools.component;
 
-import com.caci.gaia_leave.administration.model.response.EndpointResponse;
 import com.caci.gaia_leave.administration.model.response.RoleResponse;
 import com.caci.gaia_leave.administration.repository.response.RoleResponseRepository;
-import com.caci.gaia_leave.administration.service.RoleService;
 import com.caci.gaia_leave.shared_tools.configuration.AppProperties;
 import com.caci.gaia_leave.shared_tools.service.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

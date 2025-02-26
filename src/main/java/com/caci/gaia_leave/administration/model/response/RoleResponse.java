@@ -59,8 +59,7 @@ public class RoleResponse implements Serializable {
     @Column(name = "last_modified_date")
     private Date lastModifiedDate;
 
-    @ManyToMany(fetch = FetchType.EAGER,
-            mappedBy = "role_endpoint")
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(
             name = "role_id", referencedColumnName = "id")
     @Column(insertable = false,

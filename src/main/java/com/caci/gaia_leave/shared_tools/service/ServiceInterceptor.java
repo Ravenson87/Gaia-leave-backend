@@ -1,7 +1,7 @@
 package com.caci.gaia_leave.shared_tools.service;
 
 import com.caci.gaia_leave.shared_tools.configuration.AppProperties;
-import com.caci.gaia_leave.shared_tools.helper.UserValidation;
+import com.caci.gaia_leave.shared_tools.component.UserValidation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

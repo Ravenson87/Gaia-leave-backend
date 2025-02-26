@@ -36,8 +36,7 @@ public class RoleEndpointResponse {
     @Column(name = "endpoint_id")
     private String endpointId;
 
-    @OneToOne(fetch = FetchType.EAGER,
-            mappedBy = "endpoint")
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(
             name = "id", referencedColumnName = "endpoint_id")
     private EndpointResponse endpoint;
