@@ -29,6 +29,7 @@ public class ServiceInterceptor implements HandlerInterceptor {
         // Exclude basic auth endpoints
         if (!endpoint.equals("/**")
                 && !Arrays.asList(appProperties.getExcludedRoutes()).contains(endpoint)) {
+
             return userValidation.validate(request, endpoint);
         }
         return false;

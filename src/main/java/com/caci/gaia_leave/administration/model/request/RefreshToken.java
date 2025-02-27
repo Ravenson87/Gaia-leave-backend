@@ -14,6 +14,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -34,4 +35,9 @@ public class RefreshToken extends Auditable implements Serializable {
     @JsonProperty("refresh_token")
     @Column(name = "refresh_token")
     private String refreshToken;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonProperty("refresh_token_expire_time")
+    @Column(name = "refresh_token_expire_time")
+    private Date refreshTokenExpireTime;
 }

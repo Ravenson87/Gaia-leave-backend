@@ -74,6 +74,11 @@ public class UserResponse implements Serializable {
     @Column(name = "refresh_token")
     private String refreshToken;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonProperty("refresh_token_expire_time")
+    @Column(name = "refresh_token_expire_time")
+    private Date refreshTokenExpireTime;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("created_by")
     @Column(name = "created_by")

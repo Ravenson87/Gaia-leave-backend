@@ -21,4 +21,9 @@ public class AuthorizationController {
     public ResponseEntity<AuthorizationTokenDTO> login(@Valid @RequestParam("user") String user, @RequestParam("password") String password) {
         return authorizationService.login(user, password);
     }
+
+    @GetMapping("/refresh_token")
+    public ResponseEntity<AuthorizationTokenDTO> refresh(@Valid @RequestParam("refreshToken") String refreshToken) {
+        return authorizationService.refreshToken(refreshToken);
+    }
 }

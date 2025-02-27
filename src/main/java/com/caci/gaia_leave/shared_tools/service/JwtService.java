@@ -26,7 +26,7 @@ import java.util.UUID;
 
 import static com.caci.gaia_leave.shared_tools.component.AppConst.EXPIRATION_TIME;
 
-@Slf4j
+
 @Service
 @RequiredArgsConstructor
 public class JwtService {
@@ -86,7 +86,7 @@ public class JwtService {
         } catch (ExpiredJwtException e) {
             throw new TokenExpired(e.getMessage());
         } catch (JwtException | IllegalArgumentException ex) {
-            throw new BadToken("Bad token");
+            throw new BadToken(ex.getMessage());
         }
         return jws;
     }

@@ -11,5 +11,6 @@ import java.util.Optional;
 public interface UserResponseRepository extends CrudRepository<UserResponse, Integer> {
 
     Optional<UserResponse> findByUsernameAndStatusIsTrueOrEmailAndStatusIsTrue(String username, String email);
+    Optional<UserResponse> findByRefreshTokenAndStatusIsTrue(String refreshToken);
 
 }
