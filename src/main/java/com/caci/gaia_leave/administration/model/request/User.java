@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -77,6 +79,11 @@ public class User extends Auditable implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("password")
     @Column(name = "password")
+    @Size(min = 8, message = "Incorrect password")
+    @Pattern(
+            regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).{8,}$",
+            message = "Incorrect password"
+    )
     private String password;
 
     @NotNull(message = "status cannot be empty")

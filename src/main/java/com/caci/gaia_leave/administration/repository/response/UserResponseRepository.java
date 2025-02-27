@@ -10,6 +10,10 @@ import java.util.Optional;
 @Repository
 public interface UserResponseRepository extends CrudRepository<UserResponse, Integer> {
 
+    Optional<UserResponse> findByUsername(String username);
+    Optional<UserResponse> findByEmail(String email);
+    boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
     Optional<UserResponse> findByUsernameAndStatusIsTrueOrEmailAndStatusIsTrue(String username, String email);
     Optional<UserResponse> findByRefreshTokenAndStatusIsTrue(String refreshToken);
 

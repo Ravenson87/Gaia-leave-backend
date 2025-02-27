@@ -23,7 +23,7 @@ public class AuthorizationController {
     }
 
     @GetMapping("/refresh_token")
-    public ResponseEntity<AuthorizationTokenDTO> refresh(@Valid @RequestParam("refreshToken") String refreshToken) {
+    public ResponseEntity<AuthorizationTokenDTO> refresh(@Valid @RequestParam("refresh_token") String refreshToken) {
         return authorizationService.refreshToken(refreshToken);
     }
 }
