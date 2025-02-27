@@ -6,10 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -65,6 +62,7 @@ public class User extends Auditable implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("email")
     @Column(name = "email")
+    @Email(message = "Invalid email format")
     private String email;
 
     @NotEmpty(message = "username cannot be empty")

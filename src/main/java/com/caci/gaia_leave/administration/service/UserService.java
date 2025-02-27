@@ -25,10 +25,11 @@ public class UserService {
 
     public ResponseEntity<String> create(User model) {
 
-        if (!userResponseRepository.existsByUsername(model.getUsername())) {
+        if (userResponseRepository.existsByUsername(model.getUsername())) {
             throw new CustomException("Username already taken");
         }
-        if (!userResponseRepository.existsByEmail(model.getEmail())) {
+
+        if (userResponseRepository.existsByEmail(model.getEmail())) {
             throw new CustomException("Email already taken");
         }
 
@@ -84,7 +85,7 @@ public class UserService {
         try {
             userRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).build();
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
     }
@@ -95,28 +96,28 @@ public class UserService {
         }
         User user = userRepository.findById(id).get();
         boolean checkPassword = BCrypt.checkpw(oldPassword, user.getPassword());
-        if(!checkPassword) {
+        if (!checkPassword) {
             throw new CustomException("Wrong old password.");
         }
 
         try {
             user.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt()));
             userRepository.save(user);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
         return ResponseEntity.ok().body("Successfully updated password");
     }
 
     public ResponseEntity<String> updateStatus(Integer id, Boolean status) {
-        if(!userRepository.existsById(id)) {
+        if (!userRepository.existsById(id)) {
             throw new CustomException("User with id `" + id + "` does not exist.");
         }
         User user = userRepository.findById(id).get();
         try {
             user.setStatus(status);
             userRepository.save(user);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
         return ResponseEntity.ok().body("Successfully updated status");

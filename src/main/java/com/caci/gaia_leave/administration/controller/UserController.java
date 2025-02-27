@@ -17,11 +17,12 @@ import java.util.List;
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 public class UserController {
-
-    UserService userService;
+    //TODO kad se profile updajtuje ne hashira se password pa pravi gresku
+    private final UserService userService;
 
     @PostMapping("/create")
     public ResponseEntity<String> createUser(@Valid @RequestBody User model) {
+        System.out.println("Creating user: " + model);
         return userService.create(model);
     }
 
@@ -48,14 +49,14 @@ public class UserController {
 
     @PutMapping("/update-password/{id}")
     public ResponseEntity<String> updatePassword(@Valid @PathVariable("id") Integer id,
-            @RequestParam("old_password") String oldPassword,
-            @RequestParam("new_password") String newPassword) {
+                                                 @RequestParam("old_password") String oldPassword,
+                                                 @RequestParam("new_password") String newPassword) {
         return userService.updatePassword(id, oldPassword, newPassword);
     }
 
     @PutMapping("/update-status/{id}")
     public ResponseEntity<String> updateStatus(@Valid @PathVariable("id") Integer id, @RequestParam("status") Boolean status) {
-       return userService.updateStatus(id, status);
+        return userService.updateStatus(id, status);
     }
 
 }
