@@ -1,6 +1,7 @@
 package com.caci.gaia_leave.administration.controller;
 
 import com.caci.gaia_leave.administration.model.request.JobPosition;
+import com.caci.gaia_leave.administration.model.response.JobPositionResponse;
 import com.caci.gaia_leave.administration.service.JobPositionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +26,12 @@ public class JobPositionController {
     }
 
     @GetMapping("/read")
-    public ResponseEntity<List<JobPosition>> read(){
+    public ResponseEntity<List<JobPositionResponse>> read(){
         return jobPositionService.read();
     }
 
     @GetMapping("/read-by-id")
-    public ResponseEntity<JobPosition> readById(@Valid @RequestParam("id") Integer id){
+    public ResponseEntity<JobPositionResponse> readById(@Valid @RequestParam("id") Integer id){
         return jobPositionService.readById(id);
     }
 

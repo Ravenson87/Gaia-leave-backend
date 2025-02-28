@@ -1,6 +1,7 @@
 package com.caci.gaia_leave.administration.controller;
 
 import com.caci.gaia_leave.administration.model.request.Menu;
+import com.caci.gaia_leave.administration.model.response.MenuResponse;
 import com.caci.gaia_leave.administration.service.MenuService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +25,12 @@ public class MenuController {
     }
 
     @GetMapping("/read")
-    public ResponseEntity<List<Menu>> read() {
+    public ResponseEntity<List<MenuResponse>> read() {
         return menuService.read();
     }
 
     @GetMapping("/read-by-id")
-    public ResponseEntity<Menu> readById(@Valid @RequestParam("id") Integer id) {
+    public ResponseEntity<MenuResponse> readById(@Valid @RequestParam("id") Integer id) {
         return menuService.readById(id);
     }
 

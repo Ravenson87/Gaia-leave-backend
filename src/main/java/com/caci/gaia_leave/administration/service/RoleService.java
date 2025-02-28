@@ -30,8 +30,7 @@ public class RoleService {
      */
     public ResponseEntity<RoleResponse> createRole(Role model) {
 
-        Optional<RoleResponse> check = roleResponseRepository.findByName(model.getName());
-        if (check.isPresent()) {
+        if (roleResponseRepository.existsByName(model.getName())) {
             throw new CustomException("Role with name `" + model.getName() + "` already exists.");
         }
 
@@ -48,12 +47,16 @@ public class RoleService {
     }
 
     public ResponseEntity<List<RoleResponse>> read() {
-
-        List<RoleResponse> result = listConverter(roleResponseRepository.findAll());
+        List<RoleResponse> result = roleResponseRepository.findByIdGreaterThan(1);
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);
     }
 
     public ResponseEntity<RoleResponse> readById(Integer id) {
+
+        if (id == 1) {
+            throw new CustomException("Doesn't exist.");
+        }
+
         Optional<RoleResponse> result = roleResponseRepository.findById(id);
         return result
                 .map(response -> ResponseEntity.ok().body(response))

@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface JobPositionRepository extends CrudRepository<JobPosition, Integer> {
     Optional<JobPosition> findByTitle(String title);
     Optional<JobPosition> findById(Integer id);
-
+    boolean existsByTitle(String title);
 }

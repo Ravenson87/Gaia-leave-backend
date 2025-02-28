@@ -8,6 +8,9 @@ import java.util.Optional;
 
 @Repository
 public interface MenuRepository extends CrudRepository<Menu, Integer> {
-    Optional<Menu> findByName(String name);
     Optional<Menu> findById(Integer id);
+    Optional<Menu> findByName(String name);
+    Optional<Menu> findByMenuNumber(Integer MenuNumber);
+    boolean existsByName(String name);
+    boolean existsByMenuNumber(Integer menuNumber);
 }

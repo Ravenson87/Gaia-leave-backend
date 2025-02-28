@@ -46,12 +46,18 @@ public class UserService {
     }
 
     public ResponseEntity<List<UserResponse>> read() {
-        List<UserResponse> result = listConverter(userResponseRepository.findAll());
+        List<UserResponse> result = listConverter(userResponseRepository.findByIdGreaterThan(1));
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);
     }
 
     public ResponseEntity<UserResponse> readById(Integer id) {
+
+        if (id == 1) {
+            throw new CustomException("Does not exist");
+        }
+
         Optional<UserResponse> result = userResponseRepository.findById(id);
+
         return result
                 .map(response -> ResponseEntity.ok().body(response))
                 .orElseGet(() -> ResponseEntity.noContent().build());
