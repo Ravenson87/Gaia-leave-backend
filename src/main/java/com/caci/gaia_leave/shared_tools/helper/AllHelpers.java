@@ -1,5 +1,7 @@
 package com.caci.gaia_leave.shared_tools.helper;
 
+import org.springframework.security.crypto.bcrypt.BCrypt;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,5 +12,7 @@ public class AllHelpers {
         iterable.forEach(list::add);
         return list;
     }
+
+
 
 }

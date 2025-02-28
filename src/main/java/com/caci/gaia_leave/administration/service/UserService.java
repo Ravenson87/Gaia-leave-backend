@@ -6,6 +6,7 @@ import com.caci.gaia_leave.administration.model.response.UserResponse;
 import com.caci.gaia_leave.administration.repository.request.UserRepository;
 import com.caci.gaia_leave.administration.repository.response.UserResponseRepository;
 import com.caci.gaia_leave.shared_tools.exception.CustomException;
+import com.caci.gaia_leave.shared_tools.helper.AllHelpers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,6 +72,7 @@ public class UserService {
         }
         try {
             model.setId(id);
+            model.setPassword(BCrypt.hashpw(model.getPassword(), BCrypt.gensalt()));
             userRepository.save(model);
             return ResponseEntity.ok().body("Successfully updated");
         } catch (Exception e) {
