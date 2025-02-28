@@ -5,7 +5,6 @@ import com.caci.gaia_leave.administration.model.response.JobPositionResponse;
 import com.caci.gaia_leave.administration.repository.request.JobPositionRepository;
 import com.caci.gaia_leave.administration.repository.response.JobPositionResponseRepository;
 import com.caci.gaia_leave.shared_tools.exception.CustomException;
-import com.caci.gaia_leave.shared_tools.helper.AllHelpers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

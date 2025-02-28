@@ -3,16 +3,14 @@ package com.caci.gaia_leave.administration.model.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,7 +24,7 @@ public class RoleMenuResponse implements Serializable {
     @Id
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     @JsonProperty("id")
-    @Column(name = "name")
+    @Column(name = "id")
     private Integer id;
 
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
@@ -38,4 +36,9 @@ public class RoleMenuResponse implements Serializable {
     @JsonProperty("menu_id")
     @Column(name = "menu_id")
     private Integer menuId;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(
+            name = "id", referencedColumnName = "menu_id")
+    private MenuResponse menu;
 }

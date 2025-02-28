@@ -66,5 +66,12 @@ public class RoleResponse implements Serializable {
             updatable = false)
     private List<RoleEndpointResponse> roleEndpoints;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(
+            name = "role_id", referencedColumnName = "id")
+    @Column(insertable = false,
+            updatable = false)
+    private List<RoleMenuResponse> roleMenus;
+
 
 }
