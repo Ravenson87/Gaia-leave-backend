@@ -87,7 +87,7 @@ public class RoleService {
 
         try {
             roleRepository.deleteById(id);
-            return ResponseEntity.ok(HttpStatus.OK);
+            return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
