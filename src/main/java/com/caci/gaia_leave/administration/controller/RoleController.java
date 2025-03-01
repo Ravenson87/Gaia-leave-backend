@@ -22,7 +22,7 @@ public class RoleController {
 
     @PostMapping("/create")
     public ResponseEntity<RoleResponse> createRole(@Valid @RequestBody Role model) {
-        return roleService.createRole(model);
+        return roleService.create(model);
     }
 
     @GetMapping("/read")

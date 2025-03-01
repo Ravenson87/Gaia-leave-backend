@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static com.caci.gaia_leave.shared_tools.helper.AllHelpers.listConverter;
-
 @Service
 @RequiredArgsConstructor
 public class RoleService {
@@ -28,7 +26,7 @@ public class RoleService {
      * @param model
      * @return
      */
-    public ResponseEntity<RoleResponse> createRole(Role model) {
+    public ResponseEntity<RoleResponse> create(Role model) {
 
         if (roleResponseRepository.existsByName(model.getName())) {
             throw new CustomException("Role with name `" + model.getName() + "` already exists.");
