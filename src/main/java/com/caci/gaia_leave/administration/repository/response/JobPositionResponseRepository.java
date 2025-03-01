@@ -9,6 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface JobPositionResponseRepository extends CrudRepository<JobPositionResponse, Integer> {
-    Optional<JobPositionResponse> findById(Integer id);
     List<JobPositionResponse> findByIdGreaterThan(Integer id);
 }

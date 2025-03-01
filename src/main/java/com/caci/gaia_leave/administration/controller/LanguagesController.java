@@ -16,6 +16,7 @@ import java.util.List;
 @RequestMapping("/api/v1/language")
 @RequiredArgsConstructor
 public class LanguagesController {
+
     private final LanguagesService languagesService;
 
     @PostMapping("/create")
@@ -24,7 +25,7 @@ public class LanguagesController {
     }
 
     @GetMapping("/read")
-    public ResponseEntity<List<Languages>> read() {
+    public ResponseEntity<List<LanguagesResponse>> read() {
         return languagesService.read();
     }
 
@@ -34,7 +35,7 @@ public class LanguagesController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> delete(@PathVariable("id") Integer id) {
+    public ResponseEntity<String> delete(@Valid @RequestParam("id") Integer id) {
         return languagesService.delete(id);
     }
 }

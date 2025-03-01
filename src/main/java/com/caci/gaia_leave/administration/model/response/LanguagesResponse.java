@@ -1,6 +1,5 @@
 package com.caci.gaia_leave.administration.model.response;
 
-import com.caci.gaia_leave.shared_tools.model.Auditable;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -17,9 +16,10 @@ import java.util.Date;
 @Setter
 @ToString
 @NoArgsConstructor
+@Entity
 @JsonInclude(JsonInclude.Include.USE_DEFAULTS)
 @Table(name = "languages")
-public class LanguagesResponse extends Auditable implements Serializable {
+public class LanguagesResponse implements Serializable {
 
     @Id
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)

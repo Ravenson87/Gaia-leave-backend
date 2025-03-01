@@ -19,6 +19,7 @@ import java.io.Serializable;
 @Setter
 @ToString
 @NoArgsConstructor
+@Entity
 @JsonInclude(JsonInclude.Include.USE_DEFAULTS)
 @Table(name = "languages")
 public class Languages extends Auditable implements Serializable {

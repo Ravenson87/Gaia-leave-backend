@@ -1,5 +1,6 @@
 package com.caci.gaia_leave.administration.service;
 
+import com.caci.gaia_leave.administration.model.response.LanguagesResponse;
 import com.caci.gaia_leave.administration.repository.request.UserRepository;
 import com.caci.gaia_leave.shared_tools.exception.CustomException;
 import com.caci.gaia_leave.shared_tools.helper.AllHelpers;
@@ -20,7 +21,6 @@ public class LanguagesService {
 
     private final LanguagesRepository languagesRepository;
     private final LanguagesResponseRepository languagesResponseRepository;
-    private final UserRepository userRepository;
 
     public ResponseEntity<String> create(Languages model) {
 
@@ -40,24 +40,24 @@ public class LanguagesService {
         }
     }
 
-    public ResponseEntity<List<Languages>> read() {
-        List<Languages> res = AllHelpers.listConverter(languagesResponseRepository.findAll());
+    public ResponseEntity<List<LanguagesResponse>> read() {
+        List<LanguagesResponse> res = AllHelpers.listConverter(languagesResponseRepository.findAll());
         return res.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
     public ResponseEntity<String> update(Integer id, Languages model) {
 
-        if (languagesResponseRepository.existsById(id)) {
-            throw new CustomException("Language id already exists");
+        if (!languagesResponseRepository.existsById(id)) {
+            throw new CustomException("Language id does not exist");
         }
 
-        Optional<Languages> name = languagesResponseRepository.findByNameIgnoreCase(model.getName());
-        if (name.isPresent() && name.get().getId().equals(id)) {
+        Optional<LanguagesResponse> name = languagesResponseRepository.findByNameIgnoreCase(model.getName());
+        if (name.isPresent() && !name.get().getId().equals(id)) {
             throw new CustomException("Language with name ` " + model.getName() + " `already exists");
         }
 
-        Optional<Languages> code = languagesResponseRepository.findByCodeIgnoreCase(model.getCode());
-        if (code.isPresent() && code.get().getId().equals(id)) {
+        Optional<LanguagesResponse> code = languagesResponseRepository.findByCodeIgnoreCase(model.getCode());
+        if (code.isPresent() && !code.get().getId().equals(id)) {
             throw new CustomException("Language with code `" + model.getCode() + " `already exists");
         }
 
@@ -76,7 +76,7 @@ public class LanguagesService {
         }
 
         try {
-            userRepository.deleteById(id);
+            languagesRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body("Successfully deleted.");
         } catch (Exception e) {
             throw new CustomException(e.getMessage());

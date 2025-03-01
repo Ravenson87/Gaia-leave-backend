@@ -1,14 +1,13 @@
 package com.caci.gaia_leave.administration.repository.response;
 
 import com.caci.gaia_leave.administration.model.request.Languages;
+import com.caci.gaia_leave.administration.model.response.LanguagesResponse;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface LanguagesResponseRepository extends CrudRepository<Languages, Long> {
-    boolean existsByNameIgnoreCase(String name);
-    boolean existsByCodeIgnoreCase(String code);
+public interface LanguagesResponseRepository extends CrudRepository<LanguagesResponse, Integer> {
     boolean existsById(Integer id);
-    Optional<Languages> findByNameIgnoreCase(String name);
-    Optional<Languages> findByCodeIgnoreCase(String code);
+    Optional<LanguagesResponse> findByNameIgnoreCase(String name);
+    Optional<LanguagesResponse> findByCodeIgnoreCase(String code);
 }
