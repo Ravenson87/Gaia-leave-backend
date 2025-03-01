@@ -1,5 +1,6 @@
 package com.caci.gaia_leave.administration.model.request;
 
+import com.caci.gaia_leave.shared_tools.model.Auditable;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Getter
@@ -22,7 +24,7 @@ import java.util.Date;
 @Entity
 @JsonInclude(JsonInclude.Include.USE_DEFAULTS)
 @Table(name = "leave_days")
-public class LeaveDays {
+public class LeaveDays extends Auditable implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

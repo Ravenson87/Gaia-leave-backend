@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Getter
@@ -22,7 +23,7 @@ import java.util.Date;
 @Entity
 @JsonInclude(JsonInclude.Include.USE_DEFAULTS)
 @Table(name = "leave_days")
-public class LeaveDaysResponse {
+public class LeaveDaysResponse implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

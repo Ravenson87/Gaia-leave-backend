@@ -48,13 +48,11 @@ public class LeaveDaysService {
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
-    public ResponseEntity<LeaveDays> readByYear(Integer year) {
+    public ResponseEntity<List<LeaveDaysResponse>> readAllByYear(Integer year) {
 
-        Optional<LeaveDays> res = leaveDaysResponseRepository.findByYear(year);
+        List<LeaveDaysResponse> res = leaveDaysResponseRepository.findAllByYear(year);
 
-        return res
-                .map(response -> ResponseEntity.ok().body(response))
-                .orElseGet(() -> ResponseEntity.noContent().build());
+        return res.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
     public ResponseEntity<String> update(Integer id, LeaveDays model) {

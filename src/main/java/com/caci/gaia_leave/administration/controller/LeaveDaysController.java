@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @Validated
-@RequestMapping("/api/v1/job-position")
+@RequestMapping("/api/v1/leave-days")
 @RequiredArgsConstructor
 public class LeaveDaysController {
 
@@ -37,8 +37,8 @@ public class LeaveDaysController {
     }
 
     @GetMapping("/read-by-year")
-    public ResponseEntity<LeaveDays> readByYear(@Valid @RequestParam("year") Integer year) {
-        return leaveDaysService.readByYear(year);
+    public ResponseEntity<List<LeaveDaysResponse>> readByYear(@Valid @RequestParam("year") Integer year) {
+        return leaveDaysService.readAllByYear(year);
     }
 
     @PutMapping("/update/{id}")
