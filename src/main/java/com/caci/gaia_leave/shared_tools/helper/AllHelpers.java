@@ -5,6 +5,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,14 +17,20 @@ public class AllHelpers {
         return list;
     }
 
-    public static List<LocalDate> getWeekends(int year) {
-        List<LocalDate> weekends = new ArrayList<>();
+
+    public static List<String> getWeekends(int year, String pattern) {
+        List<String> weekends = new ArrayList<>();
         LocalDate date = LocalDate.of(year, 1, 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+
+
 
         while (date.getYear() == year) {
             if (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY) {
-                weekends.add(date);
+                String dateString = date.format(formatter);
+                weekends.add(dateString);
             }
+
             date = date.plusDays(1);
         }
         return weekends;

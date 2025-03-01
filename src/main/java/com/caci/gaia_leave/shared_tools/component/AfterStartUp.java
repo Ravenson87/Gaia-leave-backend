@@ -6,6 +6,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 import static com.caci.gaia_leave.shared_tools.helper.AllHelpers.*;
@@ -17,11 +19,10 @@ public class AfterStartUp {
     @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() {
 
-            int year = 2025;
-            List<LocalDate> weekends = getWeekends(year);
-            LocalDate today = getOrthodoxEasterDate(year);
+//            int year = 2025;
+//            List<String> weekends = getWeekends(year, "dd-MM-yyyy");
+//            weekends.forEach(System.out::println);
 
-            System.out.println("Easter: " + today);
 
     }
 
