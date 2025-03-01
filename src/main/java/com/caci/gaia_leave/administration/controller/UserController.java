@@ -17,7 +17,6 @@ import java.util.List;
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 public class UserController {
-    //TODO kad se profile updajtuje ne hashira se password pa pravi gresku
     private final UserService userService;
 
     @PostMapping("/create")
