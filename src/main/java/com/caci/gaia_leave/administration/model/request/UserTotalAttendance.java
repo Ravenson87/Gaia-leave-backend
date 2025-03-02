@@ -46,24 +46,4 @@ public class UserTotalAttendance extends Auditable implements Serializable{
     @Column(name = "total_working_hours")
     private Integer totalWorkingHours;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty("created_by")
-    @Column(name = "created_by")
-    private String createdBy;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty("last_modified_by")
-    @Column(name = "last_modified_by")
-    private String lastModifiedBy;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonProperty("created_date")
-    @Column(name = "created_date")
-    private Date createdDate;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonProperty("last_modified_date")
-    @Column(name = "last_modified_date")
-    private Date lastModifiedDate;
-
 }
