@@ -95,7 +95,8 @@ public class LeaveDaysService {
         if (leaveDaysRepository.findByYear(model.getYear())) {
             throw new CustomException("Year already exists");
         }
-        List<String> weekends = AllHelpers.getWeekends(LocalDate.now().getYear(), pattern) ;
+        List<String> weekends = AllHelpers.getWeekends(LocalDate.now().getYear(), pattern);
+
 
         return null;
     }
