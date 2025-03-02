@@ -1,5 +1,6 @@
 package com.caci.gaia_leave.shared_tools.component;
 
+import com.caci.gaia_leave.shared_tools.model.WorikingDayType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -18,6 +19,7 @@ public class AfterStartUp {
 
     @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() {
+
 
 //            int year = 2025;
 //            List<String> weekends = getWeekends(year, "dd-MM-yyyy");
