@@ -12,4 +12,5 @@ public interface LeaveDaysRepository extends CrudRepository<LeaveDays, Integer> 
     boolean existsByDate(Date date);
 
     Optional<LeaveDays> findByDate(Date date);
+    boolean findByYear(int year);
 }

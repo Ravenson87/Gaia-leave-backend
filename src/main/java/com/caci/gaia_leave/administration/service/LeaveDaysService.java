@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -88,5 +90,15 @@ public class LeaveDaysService {
             throw new CustomException(e.getMessage());
         }
     }
+
+    public List<LeaveDays> populate(LeaveDays model, String pattern) {
+        if (leaveDaysRepository.findByYear(model.getYear())) {
+            throw new CustomException("Year already exists");
+        }
+        List<String> weekends = AllHelpers.getWeekends(LocalDate.now().getYear(), pattern) ;
+
+        return null;
+    }
+
 
 }
