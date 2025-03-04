@@ -69,9 +69,6 @@ public class OvertimeHoursResponse implements Serializable {
     private Date lastModifiedDate;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "calendar_id", referencedColumnName = "id")
-    private Calendar calendar;
-
-
-
+    @JoinColumn(name = "id", referencedColumnName = "calendar_id")
+    private Calendar calendars;
 }

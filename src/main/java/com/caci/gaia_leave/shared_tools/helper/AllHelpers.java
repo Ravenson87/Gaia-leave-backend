@@ -1,13 +1,14 @@
 package com.caci.gaia_leave.shared_tools.helper;
 
+import com.caci.gaia_leave.administration.model.request.Calendar;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class AllHelpers {
 
@@ -15,6 +16,12 @@ public class AllHelpers {
         List<T> list = new ArrayList<>();
         iterable.forEach(list::add);
         return list;
+    }
+
+    public static Date convertToDateViaInstant(LocalDate dateToConvert) {
+        return java.util.Date.from(dateToConvert.atStartOfDay()
+                .atZone(ZoneId.systemDefault())
+                .toInstant());
     }
 
 

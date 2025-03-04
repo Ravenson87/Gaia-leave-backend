@@ -98,6 +98,10 @@ public class UserResponse implements Serializable {
     @Column(name = "last_modified_date")
     private Date lastModifiedDate;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id", referencedColumnName = "role_id")
+    private RoleResponse role;
+
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(
             name = "user_id", referencedColumnName = "id")

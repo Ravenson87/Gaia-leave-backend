@@ -68,7 +68,7 @@ public class UserUsedFreeDaysResponse implements Serializable {
     private Date lastModifiedDate;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "calendar_id", referencedColumnName = "id")
+    @JoinColumn(name = "id", referencedColumnName = "calendar_id")
     private Calendar calendar;
 
 }
