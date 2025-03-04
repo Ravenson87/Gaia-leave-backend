@@ -1,12 +1,12 @@
 package com.caci.gaia_leave.administration.model.response;
 
-import com.caci.gaia_leave.shared_tools.model.WorikingDayType;
+import com.caci.gaia_leave.administration.model.request.Calendar;
+import com.caci.gaia_leave.shared_tools.model.FreeDayType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,33 +22,30 @@ import java.util.Date;
 @ToString
 @Entity
 @JsonInclude(JsonInclude.Include.USE_DEFAULTS)
-@Table(name = "calendar")
-public class CalendarResponse implements Serializable {
-
+@Table(name = "user_used_free_days")
+public class UserUsedFreeDaysResponse implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     @Column(name = "id")
     private Integer id;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @JsonProperty("date")
-    @Column(name = "date")
-    private Date date;
+    @NotNull(message = "user_id cannot be empty")
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+    @JsonProperty("user_id")
+    @Column(name = "user_id")
+    private Integer userId;
 
-    @NotEmpty(message = "days cannot be empty")
-    @NotNull(message = "days cannot be empty")
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty("days")
-    @Column(name = "days")
-    private String days;
+    @NotNull(message = "calendar_id cannot be empty")
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+    @JsonProperty("calendar_id")
+    @Column(name = "calendar_id")
+    private Integer calendarId;
 
-    //Expected problems, look what type and value are variables in Enum
-    @NotNull(message = "days cannot be empty")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty("type")
-    @Column(name = "type")
-    private WorikingDayType type;
+    @JsonProperty("free_day_type")
+    @Column(name = "free_day_type")
+    private FreeDayType freeDayType;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("created_by")
@@ -69,4 +66,9 @@ public class CalendarResponse implements Serializable {
     @JsonProperty("last_modified_date")
     @Column(name = "last_modified_date")
     private Date lastModifiedDate;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "calendar_id", referencedColumnName = "id")
+    private Calendar calendar;
+
 }

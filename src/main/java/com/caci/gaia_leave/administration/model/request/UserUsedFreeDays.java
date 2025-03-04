@@ -1,13 +1,12 @@
 package com.caci.gaia_leave.administration.model.request;
 
 import com.caci.gaia_leave.shared_tools.model.Auditable;
-import com.caci.gaia_leave.shared_tools.model.WorkingDayType;
+import com.caci.gaia_leave.shared_tools.model.FreeDayType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +14,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -23,8 +21,8 @@ import java.util.Date;
 @ToString
 @Entity
 @JsonInclude(JsonInclude.Include.USE_DEFAULTS)
-@Table(name = "calendar")
-public class Calendar implements Serializable {
+@Table(name = "user_used_free_days")
+public class UserUsedFreeDays extends Auditable implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,24 +30,20 @@ public class Calendar implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @JsonProperty("date")
-    @Column(name = "date")
-    private Date date;
+    @NotNull(message = "user_id cannot be empty")
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+    @JsonProperty("user_id")
+    @Column(name = "user_id")
+    private Integer userId;
 
-    @NotEmpty(message = "days cannot be empty")
-    @NotNull(message = "days cannot be empty")
+    @NotNull(message = "calendar_id cannot be empty")
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+    @JsonProperty("calendar_id")
+    @Column(name = "calendar_id")
+    private Integer calendarId;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty("days")
-    @Column(name = "days")
-    private String days;
-
-    //Expected problems, look for Enums
-    @NotNull(message = "days cannot be empty")
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty("type")
-    @Column(name = "type")
-    private WorkingDayType type;
-
-
+    @JsonProperty("free_day_type")
+    @Column(name = "free_day_type")
+    private FreeDayType freeDayType;
 }

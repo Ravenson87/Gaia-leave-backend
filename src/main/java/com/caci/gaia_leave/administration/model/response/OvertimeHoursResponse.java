@@ -1,5 +1,6 @@
 package com.caci.gaia_leave.administration.model.response;
 
+import com.caci.gaia_leave.administration.model.request.Calendar;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -13,6 +14,7 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -65,4 +67,11 @@ public class OvertimeHoursResponse implements Serializable {
     @JsonProperty("last_modified_date")
     @Column(name = "last_modified_date")
     private Date lastModifiedDate;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "calendar_id", referencedColumnName = "id")
+    private Calendar calendar;
+
+
+
 }

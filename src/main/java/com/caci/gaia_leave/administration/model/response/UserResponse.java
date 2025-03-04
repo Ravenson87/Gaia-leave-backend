@@ -11,6 +11,7 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -97,7 +98,24 @@ public class UserResponse implements Serializable {
     @Column(name = "last_modified_date")
     private Date lastModifiedDate;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(
+            name = "user_id", referencedColumnName = "id")
+    @Column(insertable = false,
+            updatable = false)
+    private List<OvertimeHoursResponse> overtimeHours;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(
+            name = "user_id", referencedColumnName = "id")
+    @Column(insertable = false,
+            updatable = false)
+    private List<UserUsedFreeDaysResponse> userUsedFreeDays;
+
+    //Moguci problemi -zasto je ovde "name=id" a "referencedColumnName=user_id", a ne obratno kao u @OneToMany relaciji
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id", referencedColumnName = "role_id")
-    private RoleResponse role;
+    @JoinColumn(name = "id", referencedColumnName = "user_id")
+    private UserTotalAttendanceResponse userTotalAttendance;
+
+
 }

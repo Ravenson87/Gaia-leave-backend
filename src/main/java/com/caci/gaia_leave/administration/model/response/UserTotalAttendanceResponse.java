@@ -64,4 +64,6 @@ public class UserTotalAttendanceResponse implements Serializable {
     @JsonProperty("last_modified_date")
     @Column(name = "last_modified_date")
     private Date lastModifiedDate;
+
+
 }
