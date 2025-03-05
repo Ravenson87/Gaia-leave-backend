@@ -1,9 +1,9 @@
 package com.caci.gaia_leave.shared_tools.model;
 
 public enum WorkingDayType {
-    WEEKEND("0"),
-    NATIONAL_HOLIDAY("1"),
-    WORKING_DAY("2");
+    WEEKEND("weekend"),
+    NATIONAL_HOLIDAY("national_holiday"),
+    WORKING_DAY("working_day");
 
     public final String type;
     WorkingDayType(String type) {

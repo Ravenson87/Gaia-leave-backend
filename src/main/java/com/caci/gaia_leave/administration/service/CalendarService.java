@@ -12,10 +12,9 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.time.ZoneId;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,40 +23,52 @@ public class CalendarService {
     private final CalendarRepository calendarRepository;
 
     public void populateCalendar() {
-        Date today = new Date();
+        int currentYear = LocalDate.now().getYear();
         Set<Calendar> calendarSet = new LinkedHashSet<>();
+        List<Date> existedDays= new ArrayList<>();
 
-        LocalDate date = LocalDate.of(today.getYear(), Month.JANUARY, 1);
+        LocalDate startDate = LocalDate.of(currentYear, Month.JANUARY, 1);
+        LocalDate endDate = LocalDate.of(currentYear, Month.DECEMBER, 31);
 
-        while (date.getYear() == today.getYear()) {
+        calendarRepository.findAll().forEach(calendar -> {
+            existedDays.add(calendar.getDate());
+        });
+
+        while (startDate.isBefore(endDate)) {
             Calendar calendar = new Calendar();
-            boolean weekend = date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY;
-            Date convertedDate = AllHelpers.convertToDateViaInstant(date);
+            boolean weekend = startDate.getDayOfWeek() == DayOfWeek.SATURDAY || startDate.getDayOfWeek() == DayOfWeek.SUNDAY;
+            Date convertedDate = AllHelpers.convertToDateViaInstant(startDate);
 
-            System.out.println("Converted date: " + convertedDate);
-            System.out.println("Weekend: " + (weekend ? WorkingDayType.WEEKEND : WorkingDayType.WORKING_DAY));
             calendar.setDate(convertedDate);
-            DayOfWeek daysOfWeek = date.getDayOfWeek();
+            DayOfWeek daysOfWeek = startDate.getDayOfWeek();
             calendar.setDays(String.valueOf(daysOfWeek).toLowerCase());
             calendar.setType(weekend ? WorkingDayType.WEEKEND : WorkingDayType.WORKING_DAY);
 
-            date = date.plusDays(1);
-
-            System.out.println("Converted date: " + calendarRepository.existsByDate(convertedDate));
-            if (calendarRepository.existsByDate(convertedDate)) {
-                System.out.println("Calendar already exists");
-                continue;
-            }
-
+            startDate = startDate.plusDays(1);
             calendarSet.add(calendar);
         }
 
+        List<Calendar> diffDays = calendarSet.stream().filter(days -> !existedDays.contains(days) ).collect(Collectors.toList());
+
         try {
-            calendarRepository.saveAll(calendarSet);
+            diffDays.forEach(System.out::println);
+            calendarRepository.saveAll(diffDays);
         } catch (CustomException e) {
             throw new CustomException(e.getMessage());
         }
 
+    }
+
+    public void test() {
+        int currentYear = LocalDate.now().getYear();
+        LocalDate startDate = LocalDate.of(currentYear, 1, 1);
+        LocalDate endDate = LocalDate.of(currentYear, 12, 31);
+
+        while (!startDate.isAfter(endDate)) {
+            Date date = Date.from(startDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            System.out.println(date);
+            startDate = startDate.plusDays(1);
+        }
     }
 
 }
