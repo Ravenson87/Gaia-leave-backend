@@ -1,15 +1,31 @@
 package com.caci.gaia_leave.shared_tools.model;
 
-public enum WorkingDayType {
-    WEEKEND("weekend"),
-    NATIONAL_HOLIDAY("national_holiday"),
-    WORKING_DAY("working_day"),;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
-    public final String type;
-    WorkingDayType(String type) {
-        this.type = type;
+public enum WorkingDayType {
+    WEEKEND("WEEKEND"),
+    NATIONAL_HOLIDAY("NATIONAL_HOLIDAY"),
+    WORKING_DAY("WORKING_DAY");
+
+    public final String value;
+
+    WorkingDayType(String value) {
+        this.value = value;
     }
-    public String getType() {
-        return type;
+
+    @JsonValue
+    public String getValue() {
+        return value;
     }
+
+//    @JsonCreator
+//    public static WorkingDayType fromString(String value) {
+//        for (WorkingDayType type : WorkingDayType.values()) {
+//            if (type.value.equalsIgnoreCase(value)) {
+//                return type;
+//            }
+//        }
+//        throw new IllegalArgumentException("Unknown enum value: " + value);
+//    }
 }

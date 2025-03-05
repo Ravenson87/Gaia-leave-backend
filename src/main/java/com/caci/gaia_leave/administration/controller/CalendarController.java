@@ -4,6 +4,7 @@ package com.caci.gaia_leave.administration.controller;
 import com.caci.gaia_leave.administration.model.request.Calendar;
 
 
+import com.caci.gaia_leave.administration.model.response.CalendarResponse;
 import com.caci.gaia_leave.administration.service.CalendarService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,22 +24,22 @@ public class CalendarController {
     private final CalendarService calendarService;
 
     @GetMapping("/read")
-    public ResponseEntity<List<Calendar>> read() {
+    public ResponseEntity<List<CalendarResponse>> read() {
         return calendarService.read();
     }
 
     @GetMapping("/read-by-id")
-    public ResponseEntity<Calendar> readById(@Valid @RequestParam("id") Integer id) {
+    public ResponseEntity<CalendarResponse> readById(@Valid @RequestParam("id") Integer id) {
         return calendarService.readById(id);
     }
 
     @GetMapping("/read-all-by-type")
-    public ResponseEntity<List<Calendar>> readAllByType(@Valid @RequestParam("type") String type) {
+    public ResponseEntity<List<CalendarResponse>> readAllByType(@Valid @RequestParam("type") String type) {
         return calendarService.readAllByType(type);
     }
 
     @GetMapping("read-by-date")
-    public ResponseEntity<Calendar> readByDate(@Valid @RequestParam("date") Date date) {
+    public ResponseEntity<CalendarResponse> readByDate(@Valid @RequestParam("date") Date date) {
         return calendarService.readByDate(date);
     }
 
