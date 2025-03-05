@@ -32,13 +32,14 @@ public class Calendar implements Serializable {
     @Column(name = "id")
     private Integer id;
 
+    @NotNull(message = "days cannot be null")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @JsonProperty("date")
     @Column(name = "date")
     private Date date;
 
     @NotEmpty(message = "days cannot be empty")
-    @NotNull(message = "days cannot be empty")
+    @NotNull(message = "days cannot be null")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("days")
     @Column(name = "days")

@@ -13,7 +13,7 @@ public class AfterStartUp {
     private final CalendarService calendarService;
     @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() {
-        calendarService.populateCalendar();
+//        calendarService.populateCalendar();
     }
 
 }

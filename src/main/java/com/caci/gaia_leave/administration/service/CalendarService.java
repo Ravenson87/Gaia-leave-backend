@@ -16,6 +16,8 @@ import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.caci.gaia_leave.shared_tools.helper.AllHelpers.listConverter;
+
 @Service
 @RequiredArgsConstructor
 public class CalendarService {
@@ -59,16 +61,83 @@ public class CalendarService {
 
     }
 
-    public void test() {
-        int currentYear = LocalDate.now().getYear();
-        LocalDate startDate = LocalDate.of(currentYear, 1, 1);
-        LocalDate endDate = LocalDate.of(currentYear, 12, 31);
 
-        while (!startDate.isAfter(endDate)) {
-            Date date = Date.from(startDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            System.out.println(date);
-            startDate = startDate.plusDays(1);
+    public ResponseEntity<List<Calendar>> read(){
+        List<Calendar> result = listConverter(calendarRepository.findAll());
+        return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);
+
+    }
+
+    public ResponseEntity<Calendar> readById(Integer id) {
+        Optional<Calendar> result = calendarRepository.findById(id);
+        return result.map(calendar -> ResponseEntity.ok().body(calendar)).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    public ResponseEntity<List<Calendar>> readAllByType(String type) {
+        WorkingDayType workingDayType = WorkingDayType.valueOf(type);
+        List<Calendar> result = listConverter(calendarRepository.findAllByType(workingDayType));
+        return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);
+    }
+
+    public ResponseEntity<Calendar> readByDate(Date date) {
+        Optional<Calendar> result = calendarRepository.findByDate(date);
+        return result.map(calendar -> ResponseEntity.ok().body(calendar)).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    public ResponseEntity<String> update(Integer id, Calendar model) {
+        if(!calendarRepository.existsById(id)) {
+            throw new CustomException("Day with " + id + "does not exist in calendar");
+        }
+        try{
+            calendarRepository.save(model);
+            return ResponseEntity.ok().body("Successfully updated");
+        }catch(Exception e){
+            throw new CustomException(e.getMessage());
+        }
+
+    }
+    public ResponseEntity<String> updateByType(Integer id, String type) {
+        WorkingDayType workingDayType = getWorkingDayType(type);
+        Optional<Calendar> result = calendarRepository.findById(id);
+        Calendar model = result.orElseThrow(() -> new CustomException("Day with " + id + "does not exist in calendar"));
+        try {
+            model.setType(workingDayType);
+            calendarRepository.save(model);
+            return ResponseEntity.ok().body("Successfully updated");
+        }catch(Exception e){
+            throw new CustomException(e.getMessage());
         }
     }
+
+    public ResponseEntity<String> delete(Integer id) {
+        if(!calendarRepository.existsById(id)) {
+            throw new CustomException("Day with " + id + "does not exist in calendar");
+        }
+        try{
+            calendarRepository.deleteById(id);
+            return ResponseEntity.ok().body("Successfully deleted");
+        }catch(Exception e){
+            throw new CustomException(e.getMessage());
+        }
+    }
+
+    public ResponseEntity<String> findByYear(Integer year) {
+        LocalDate localDate = LocalDate.of(year, Month.JANUARY, 1);
+        if(!calendarRepository.existsByDate(AllHelpers.convertToDateViaInstant(localDate))){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body("Successfully found");
+    }
+
+
+    public static WorkingDayType getWorkingDayType(String type) {
+        return switch (type) {
+            case "weekend" -> WorkingDayType.WEEKEND;
+            case "weekday" -> WorkingDayType.WORKING_DAY;
+            case "national_holiday" -> WorkingDayType.NATIONAL_HOLIDAY;
+            default -> throw new CustomException("Invalid type");
+        };
+    }
+
 
 }

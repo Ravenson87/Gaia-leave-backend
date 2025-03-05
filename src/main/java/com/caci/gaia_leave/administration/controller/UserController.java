@@ -21,7 +21,6 @@ public class UserController {
 
     @PostMapping("/create")
     public ResponseEntity<String> createUser(@Valid @RequestBody User model) {
-        System.out.println("Creating user: " + model);
         return userService.create(model);
     }
 
