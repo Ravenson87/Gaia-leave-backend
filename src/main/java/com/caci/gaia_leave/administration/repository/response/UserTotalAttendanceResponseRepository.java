@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserTotalAttendanceResponseRepository extends CrudRepository<UserTotalAttendanceResponse, Integer> {
+    boolean existById(Integer id);
 }

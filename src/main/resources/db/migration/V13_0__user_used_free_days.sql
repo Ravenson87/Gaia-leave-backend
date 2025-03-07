@@ -2,7 +2,7 @@ CREATE TABLE `user_used_free_days` (
                             `id` INT ( 11 ) NOT NULL AUTO_INCREMENT,
                             `user_id` INT (11) NOT NULL,
                             `calendar_id` INT (11) NOT NULL,
-                            `free_day_type` ENUM ( 'vacation_leave', 'sick_leave ', 'time_off_in_lieu'),
+                            `free_day_type` ENUM ( 'VACATION_LEAVE', 'SICK_LEAVE', 'TOIL'),
                             `created_by` VARCHAR (255) DEFAULT NULL,
                             `last_modified_by` VARCHAR (255) DEFAULT NULL,
                             `created_date` datetime DEFAULT  NULL,
