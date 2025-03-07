@@ -36,9 +36,10 @@ public class RoleEndpointResponse {
     @Column(name = "endpoint_id")
     private String endpointId;
 
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(
-            name = "id", referencedColumnName = "endpoint_id")
+    @JoinColumn(name = "endpoint_id", referencedColumnName = "id"
+            ,insertable=false, updatable=false)
     private EndpointResponse endpoint;
 
 }

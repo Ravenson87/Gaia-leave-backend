@@ -20,7 +20,7 @@ public class UserTotalAttendanceController {
     private final UserTotalAttendanceService userTotalAttendanceService;
 
     @PostMapping("/create")
-    public ResponseEntity<UserTotalAttendanceResponse> createRole(@Valid @RequestBody UserTotalAttendance model) {
+    public ResponseEntity<UserTotalAttendanceResponse> create(@Valid @RequestBody UserTotalAttendance model) {
         return userTotalAttendanceService.create(model);
     }
 

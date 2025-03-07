@@ -4,7 +4,9 @@ import com.caci.gaia_leave.administration.model.response.UserTotalAttendanceResp
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface UserTotalAttendanceResponseRepository extends CrudRepository<UserTotalAttendanceResponse, Integer> {
-    boolean existById(Integer id);
+    Optional<UserTotalAttendanceResponse> findByUserId(Integer userId);
 }

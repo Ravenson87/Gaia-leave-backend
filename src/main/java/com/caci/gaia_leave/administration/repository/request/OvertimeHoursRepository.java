@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OvertimeHoursRepository extends CrudRepository<OvertimeHours, Integer> {
+    boolean existsByUserIdAndCalendarId(Integer userId, Integer calendarId);
 }

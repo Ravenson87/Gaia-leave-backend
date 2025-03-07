@@ -59,6 +59,7 @@ public class RoleResponse implements Serializable {
     @Column(name = "last_modified_date")
     private Date lastModifiedDate;
 
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(
             name = "role_id", referencedColumnName = "id")
@@ -66,6 +67,7 @@ public class RoleResponse implements Serializable {
             updatable = false)
     private List<RoleEndpointResponse> roleEndpoints;
 
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(
             name = "role_id", referencedColumnName = "id")

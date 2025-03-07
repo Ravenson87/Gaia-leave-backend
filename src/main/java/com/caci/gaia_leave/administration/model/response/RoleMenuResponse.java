@@ -37,8 +37,9 @@ public class RoleMenuResponse implements Serializable {
     @Column(name = "menu_id")
     private Integer menuId;
 
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(
-            name = "id", referencedColumnName = "menu_id")
+    @JoinColumn(name = "menu_id", referencedColumnName = "id",
+            insertable=false, updatable=false)
     private MenuResponse menu;
 }

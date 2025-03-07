@@ -50,8 +50,12 @@ public class UserTotalAttendanceService {
 
     public ResponseEntity<String> update(Integer id, UserTotalAttendance model) {
 
-        if (!userTotalAttendanceRepository.existsById(model.getId())) {
+        if (!userTotalAttendanceRepository.existsById(id)) {
             throw new CustomException("User Total Attendance With ID Not Found");
+        }
+        Optional<UserTotalAttendanceResponse> unique = userTotalAttendanceResponseRepository.findByUserId(model.getUserId());
+        if (unique.isPresent() && !unique.get().getId().equals(id)) {
+            throw new CustomException("User Total Attendance `" + model.getUserId() + "` already exists.");
         }
 
         try {

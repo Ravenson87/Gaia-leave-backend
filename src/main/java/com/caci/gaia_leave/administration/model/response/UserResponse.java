@@ -98,10 +98,13 @@ public class UserResponse implements Serializable {
     @Column(name = "last_modified_date")
     private Date lastModifiedDate;
 
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id", referencedColumnName = "role_id")
+    @JoinColumn(name = "role_id", referencedColumnName = "id",
+            insertable = false, updatable = false)
     private RoleResponse role;
 
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(
             name = "user_id", referencedColumnName = "id")
@@ -109,6 +112,7 @@ public class UserResponse implements Serializable {
             updatable = false)
     private List<OvertimeHoursResponse> overtimeHours;
 
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(
             name = "user_id", referencedColumnName = "id")
@@ -117,8 +121,10 @@ public class UserResponse implements Serializable {
     private List<UserUsedFreeDaysResponse> userUsedFreeDays;
 
     //Moguci problemi -zasto je ovde "name=id" a "referencedColumnName=user_id", a ne obratno kao u @OneToMany relaciji
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id", referencedColumnName = "user_id")
+    @JoinColumn(name = "id", referencedColumnName = "user_id",
+            insertable = false, updatable = false)
     private UserTotalAttendanceResponse userTotalAttendance;
 
 
