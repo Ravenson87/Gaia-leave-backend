@@ -1,6 +1,7 @@
 package com.caci.gaia_leave.administration.service;
 
 import com.caci.gaia_leave.administration.model.request.Calendar;
+import com.caci.gaia_leave.administration.model.request.JobPosition;
 import com.caci.gaia_leave.administration.model.response.CalendarResponse;
 import com.caci.gaia_leave.administration.repository.request.CalendarRepository;
 import com.caci.gaia_leave.administration.repository.response.CalendarResponseRepository;
@@ -30,7 +31,7 @@ public class CalendarService {
     public void populateCalendar() {
         int currentYear = LocalDate.now().getYear();
         Set<Calendar> calendarSet = new LinkedHashSet<>();
-        List<Date> existedDays= new ArrayList<>();
+        List<Date> existedDays = new ArrayList<>();
 
         LocalDate startDate = LocalDate.of(currentYear, Month.JANUARY, 1);
         LocalDate endDate = LocalDate.of(currentYear, Month.DECEMBER, 31);
@@ -53,7 +54,7 @@ public class CalendarService {
             calendarSet.add(calendar);
         }
 
-        List<Calendar> diffDays = calendarSet.stream().filter(days -> !existedDays.contains(days) ).collect(Collectors.toList());
+        List<Calendar> diffDays = calendarSet.stream().filter(days -> !existedDays.contains(days)).collect(Collectors.toList());
 
         try {
             diffDays.forEach(System.out::println);
@@ -65,7 +66,7 @@ public class CalendarService {
     }
 
 
-    public ResponseEntity<List<CalendarResponse>> read(){
+    public ResponseEntity<List<CalendarResponse>> read() {
         List<CalendarResponse> result = listConverter(calendarResponseRepository.findAll());
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);
     }
@@ -87,47 +88,60 @@ public class CalendarService {
     }
 
     public ResponseEntity<String> update(Integer id, Calendar model) {
-        if(!calendarResponseRepository.existsById(id)) {
+
+        if (!calendarResponseRepository.existsById(id)) {
             throw new CustomException("Day with " + id + "does not exist in calendar");
         }
-        try{
+
+        Optional<Calendar> unique = calendarRepository.findByDate(model.getDate());
+        if (unique.isPresent() && !unique.get().getId().equals(id)) {
+            throw new CustomException("Date`" + model.getDate() + "` already exists.");
+        }
+
+        try {
+            model.setId(id);
             calendarRepository.save(model);
             return ResponseEntity.ok().body("Successfully updated");
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
 
     }
+
     public ResponseEntity<String> updateByType(Integer id, String type) {
         WorkingDayType workingDayType = getWorkingDayType(type);
         Optional<CalendarResponse> result = calendarResponseRepository.findById(id);
         CalendarResponse model = result.orElseThrow(() -> new CustomException("Day with " + id + "does not exist in calendar"));
         try {
+            model.setId(id);
             model.setType(workingDayType);
             calendarResponseRepository.save(model);
             return ResponseEntity.ok().body("Successfully updated");
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
     }
 
     public ResponseEntity<String> delete(Integer id) {
-        if(!calendarResponseRepository.existsById(id)) {
+        if (!calendarResponseRepository.existsById(id)) {
             throw new CustomException("Day with " + id + "does not exist in calendar");
         }
-        try{
+        try {
             calendarRepository.deleteById(id);
             return ResponseEntity.ok().body("Successfully deleted");
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
     }
 
     public ResponseEntity<String> findByYear(Integer year) {
-        LocalDate localDate = LocalDate.of(year, Month.JANUARY, 1);
-        if(!calendarResponseRepository.existsByDate(AllHelpers.convertToDateViaInstant(localDate))){
+        LocalDate startDate = LocalDate.of(year, Month.JANUARY, 1);
+        LocalDate endDate = LocalDate.of(year, Month.DECEMBER, 31);
+
+        if (calendarResponseRepository.findByDateBetween(AllHelpers.convertToDateViaInstant(startDate), AllHelpers.convertToDateViaInstant(endDate)).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+
         return ResponseEntity.ok().body("Successfully found");
     }
 

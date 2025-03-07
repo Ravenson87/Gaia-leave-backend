@@ -24,6 +24,11 @@ public class AllHelpers {
                 .toInstant());
     }
 
+    public static Date convertedStringToDate(String dateToConvert) {
+        LocalDate date = LocalDate.parse(dateToConvert);
+        Date convertedDate = AllHelpers.convertToDateViaInstant(date);
+        return convertedDate;
+    };
 
     public static List<String> getWeekends(int year, String pattern) {
         List<String> weekends = new ArrayList<>();

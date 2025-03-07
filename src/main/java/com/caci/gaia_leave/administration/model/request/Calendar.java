@@ -32,7 +32,7 @@ public class Calendar implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @NotNull(message = "days cannot be null")
+    @NotNull(message = "date cannot be null")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @JsonProperty("date")
     @Column(name = "date")
@@ -46,7 +46,7 @@ public class Calendar implements Serializable {
     private String days;
 
     //Expected problems, look for Enums
-    @NotNull(message = "days cannot be empty")
+    @NotNull(message = "type cannot be empty")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @Enumerated(EnumType.STRING)
     @JsonProperty("type")

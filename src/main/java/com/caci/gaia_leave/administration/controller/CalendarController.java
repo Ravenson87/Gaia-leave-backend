@@ -8,6 +8,7 @@ import com.caci.gaia_leave.administration.model.response.CalendarResponse;
 import com.caci.gaia_leave.administration.service.CalendarService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -39,7 +40,7 @@ public class CalendarController {
     }
 
     @GetMapping("read-by-date")
-    public ResponseEntity<CalendarResponse> readByDate(@Valid @RequestParam("date") Date date) {
+    public ResponseEntity<CalendarResponse> readByDate(@Valid @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
         return calendarService.readByDate(date);
     }
 
