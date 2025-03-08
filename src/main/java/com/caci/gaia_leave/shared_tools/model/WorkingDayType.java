@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum WorkingDayType {
     WEEKEND("WEEKEND"),
     NATIONAL_HOLIDAY("NATIONAL_HOLIDAY"),
+    RELIGIOUS_HOLIDAY("RELIGIOUS_HOLIDAY"),
     WORKING_DAY("WORKING_DAY");
 
     public final String value;

@@ -1,7 +1,6 @@
 package com.caci.gaia_leave.administration.model.response;
 
-import com.caci.gaia_leave.administration.model.request.Calendar;
-import com.caci.gaia_leave.administration.model.request.FreeDayType;
+import com.caci.gaia_leave.shared_tools.model.Auditable;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -22,30 +21,24 @@ import java.util.Date;
 @ToString
 @Entity
 @JsonInclude(JsonInclude.Include.USE_DEFAULTS)
-@Table(name = "user_used_free_days")
-public class UserUsedFreeDaysResponse implements Serializable {
+@Table(name = "free_day_type")
+public class FreeDayTypeResponse implements Serializable {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonProperty("id")
     @Column(name = "id")
     private Integer id;
 
-    @NotNull(message = "user_id cannot be empty")
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
-    @JsonProperty("user_id")
-    @Column(name = "user_id")
-    private Integer userId;
-
-    @NotNull(message = "calendar_id cannot be empty")
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
-    @JsonProperty("calendar_id")
-    @Column(name = "calendar_id")
-    private Integer calendarId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonProperty("type")
+    @Column(name = "type")
+    private Integer type;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty("free_day_type_id")
-    @Column(name = "free_day_type_id")
-    private Integer freeDayTypeId;
+    @JsonProperty("description")
+    @Column(name = "description")
+    private Integer description;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("created_by")
@@ -66,16 +59,4 @@ public class UserUsedFreeDaysResponse implements Serializable {
     @JsonProperty("last_modified_date")
     @Column(name = "last_modified_date")
     private Date lastModifiedDate;
-
-    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "calendar_id", referencedColumnName = "id",
-            insertable=false, updatable=false)
-    private Calendar calendar;
-
-    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "free_day_type", referencedColumnName = "id",
-            insertable=false, updatable=false)
-    private FreeDayType freeDayType;
 }

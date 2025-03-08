@@ -1,7 +1,6 @@
 package com.caci.gaia_leave.administration.model.request;
 
 import com.caci.gaia_leave.shared_tools.model.Auditable;
-import com.caci.gaia_leave.shared_tools.model.FreeDayType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -21,8 +20,8 @@ import java.io.Serializable;
 @ToString
 @Entity
 @JsonInclude(JsonInclude.Include.USE_DEFAULTS)
-@Table(name = "user_used_free_days")
-public class UserUsedFreeDays extends Auditable implements Serializable {
+@Table(name = "free_day_type")
+public class FreeDayType extends Auditable implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,20 +29,14 @@ public class UserUsedFreeDays extends Auditable implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @NotNull(message = "user_id cannot be empty")
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
-    @JsonProperty("user_id")
-    @Column(name = "user_id")
-    private Integer userId;
+    @NotNull(message = "type cannot be empty")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonProperty("type")
+    @Column(name = "type")
+    private Integer type;
 
-    @NotNull(message = "calendar_id cannot be empty")
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
-    @JsonProperty("calendar_id")
-    @Column(name = "calendar_id")
-    private Integer calendarId;
-
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
-    @JsonProperty("free_day_type_id")
-    @Column(name = "free_day_type_id")
-    private Integer freeDayTypeId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonProperty("description")
+    @Column(name = "description")
+    private Integer description;
 }

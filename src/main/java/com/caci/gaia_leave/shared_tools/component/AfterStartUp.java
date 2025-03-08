@@ -10,7 +10,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
 @Component
 @RequiredArgsConstructor
 public class AfterStartUp {
@@ -18,10 +17,6 @@ public class AfterStartUp {
     @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() throws ParseException {
 //        calendarService.populateCalendar();
-        String pattern = "MM-dd-yyyy";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        Date date = simpleDateFormat.parse("12-01-2018");
-        System.out.println(date);
     }
 
 }

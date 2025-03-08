@@ -40,7 +40,7 @@ public class CalendarService {
             existedDays.add(calendar.getDate());
         });
 
-        while (startDate.isBefore(endDate)) {
+        while (!startDate.isAfter(endDate)) {
             Calendar calendar = new Calendar();
             boolean weekend = startDate.getDayOfWeek() == DayOfWeek.SATURDAY || startDate.getDayOfWeek() == DayOfWeek.SUNDAY;
             Date convertedDate = AllHelpers.convertToDateViaInstant(startDate);
