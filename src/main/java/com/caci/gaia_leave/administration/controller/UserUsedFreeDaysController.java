@@ -1,0 +1,46 @@
+package com.caci.gaia_leave.administration.controller;
+
+import com.caci.gaia_leave.administration.model.request.UserUsedFreeDays;
+import com.caci.gaia_leave.administration.model.response.UserUsedFreeDaysResponse;
+import com.caci.gaia_leave.administration.service.UserUsedFreeDaysService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@Validated
+@RequestMapping("/api/v1/user-used-free-days")
+@RequiredArgsConstructor
+public class UserUsedFreeDaysController {
+
+    private final UserUsedFreeDaysService userUsedFreeDaysService;
+
+    @PostMapping("/create")
+    public ResponseEntity<UserUsedFreeDaysResponse> create(@Valid @RequestBody UserUsedFreeDays model) {
+        return userUsedFreeDaysService.create(model);
+    }
+
+    @GetMapping("/read")
+    public ResponseEntity<List<UserUsedFreeDaysResponse>> read() {
+        return userUsedFreeDaysService.read();
+    }
+
+    @GetMapping("/read-by-id")
+    public ResponseEntity<UserUsedFreeDaysResponse> read(@Valid @RequestParam Integer id) {
+        return userUsedFreeDaysService.readById(id);
+    }
+
+    @PutMapping("update/{id}")
+    public ResponseEntity<String> update(@Valid @PathVariable("id") Integer id, @RequestBody UserUsedFreeDays model) {
+        return userUsedFreeDaysService.update(id, model);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> delete(@Valid @RequestParam Integer id) {
+        return userUsedFreeDaysService.delete(id);
+    }
+}
