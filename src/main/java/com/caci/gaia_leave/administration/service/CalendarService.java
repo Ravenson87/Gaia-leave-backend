@@ -57,7 +57,6 @@ public class CalendarService {
         List<Calendar> diffDays = calendarSet.stream().filter(days -> !existedDays.contains(days)).collect(Collectors.toList());
 
         try {
-            diffDays.forEach(System.out::println);
             calendarRepository.saveAll(diffDays);
         } catch (CustomException e) {
             throw new CustomException(e.getMessage());

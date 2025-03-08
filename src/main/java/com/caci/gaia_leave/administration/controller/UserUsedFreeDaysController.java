@@ -20,8 +20,8 @@ public class UserUsedFreeDaysController {
     private final UserUsedFreeDaysService userUsedFreeDaysService;
 
     @PostMapping("/create")
-    public ResponseEntity<UserUsedFreeDaysResponse> create(@Valid @RequestBody UserUsedFreeDays model) {
-        return userUsedFreeDaysService.create(model);
+    public ResponseEntity<List<UserUsedFreeDaysResponse>> create(@Valid @RequestBody List<UserUsedFreeDays> models) {
+        return userUsedFreeDaysService.create(models);
     }
 
     @GetMapping("/read")

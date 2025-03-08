@@ -14,8 +14,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.function.EntityResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,36 +30,38 @@ public class UserUsedFreeDaysService {
     private final CalendarRepository calendarRepository;
     private final UserRepository userRepository;
 
-    public ResponseEntity<UserUsedFreeDaysResponse> create(UserUsedFreeDays model) {
+    @Transactional(rollbackFor = {Exception.class, CustomException.class})
+    public ResponseEntity<List<UserUsedFreeDaysResponse>> create(List<UserUsedFreeDays> models) {
 
-        if (userUsedFreeDaysRepository.existsByUserIdAndCalendarId(model.getUserId(), model.getCalendarId())) {
-            throw new CustomException("User and calendar needs to be unique");
-        }
+        models.forEach(model -> {
+            if (userUsedFreeDaysRepository.existsByUserIdAndCalendarId(model.getUserId(), model.getCalendarId())) {
+                throw new CustomException("User with " + model.getUserId() + " and calendar needs to be unique");
+            }
+            if (!calendarRepository.existsById(model.getCalendarId())) {
+                throw new CustomException("Calendar with id: `" + model.getCalendarId() + "` not found");
+            }
 
-        if (!calendarRepository.existsById(model.getCalendarId())) {
-            throw new CustomException("Calendar with id: `" + model.getCalendarId() + "` not found");
-        }
+            if (!userRepository.existsById(model.getUserId())) {
+                throw new CustomException("User with id: `" + model.getUserId() + "` not found");
+            }
+        });
 
-        if (!userRepository.existsById(model.getUserId())) {
-            throw new CustomException("User with id: `" + model.getUserId() + "` not found");
-        }
-
-        if (weekendChecker(model)) {
-            throw new CustomException("This day is a weekend in calendar");
-        }
 
         try {
-            userUsedFreeDaysRepository.save(model);
-            Optional<UserUsedFreeDaysResponse> result = userUsedFreeDaysResponseRepository.findById(model.getUserId());
-            return result
-                    .map(response -> ResponseEntity.status(HttpStatus.CREATED).body(response))
-                    .orElseGet(() -> ResponseEntity.noContent().build());
+             Iterable<UserUsedFreeDays> save = userUsedFreeDaysRepository.saveAll(models);
+             List<Integer> ids = new ArrayList<>();
+             save.forEach( model -> ids.add(model.getId()));
+             List<UserUsedFreeDaysResponse> result = AllHelpers.listConverter(userUsedFreeDaysResponseRepository.findAllById(ids));
+
+
+            return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(result);
 
         } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
 
     }
+
 
     public ResponseEntity<List<UserUsedFreeDaysResponse>> read() {
         List<UserUsedFreeDaysResponse> result = AllHelpers.listConverter(userUsedFreeDaysResponseRepository.findAll());
