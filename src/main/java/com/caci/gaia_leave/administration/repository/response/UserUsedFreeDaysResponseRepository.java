@@ -4,6 +4,9 @@ import com.caci.gaia_leave.administration.model.response.UserUsedFreeDaysRespons
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface UserUsedFreeDaysResponseRepository extends CrudRepository<UserUsedFreeDaysResponse, Integer> {
+    Optional<UserUsedFreeDaysResponse> findByUserIdAndCalendarId(Integer userId, Integer calendarId);
 }

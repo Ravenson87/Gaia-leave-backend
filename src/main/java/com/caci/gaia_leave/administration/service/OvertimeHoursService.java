@@ -28,6 +28,13 @@ public class OvertimeHoursService {
         if(overtimeHoursRepository.existsByUserIdAndCalendarId(model.getUserId(), model.getCalendarId())){
             throw new CustomException("Overtime hours for that date and that user already exists.");
         }
+
+        if(!userRepository.existsById(model.getUserId())){
+            throw new CustomException("User Id " + model.getUserId() + " does not exist.");
+        }
+        if(!calendarRepository.existsById(model.getCalendarId())){
+            throw new CustomException("Calendar Id " + model.getCalendarId() + " does not exist.");
+        }
         try{
             overtimeHoursRepository.save(model);
             Optional<OvertimeHoursResponse> result = overtimeHoursResponseRepository.findById(model.getId());

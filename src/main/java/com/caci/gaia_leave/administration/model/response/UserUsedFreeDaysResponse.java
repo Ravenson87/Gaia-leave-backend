@@ -44,6 +44,7 @@ public class UserUsedFreeDaysResponse implements Serializable {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("free_day_type")
+    @Enumerated(EnumType.STRING)
     @Column(name = "free_day_type")
     private FreeDayType freeDayType;
 

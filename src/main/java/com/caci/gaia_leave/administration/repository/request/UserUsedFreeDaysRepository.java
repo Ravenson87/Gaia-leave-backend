@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface UserUsedFreeDaysRepository extends CrudRepository<UserUsedFreeDays, Integer> {
     boolean existsByUserIdAndCalendarId(Integer userId, Integer calendarId);
-    Optional<UserUsedFreeDaysResponse> findByUserIdAndCalendarId(Integer userId, Integer calendarId);
+
 }

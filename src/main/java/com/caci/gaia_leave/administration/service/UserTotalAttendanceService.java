@@ -3,6 +3,7 @@ package com.caci.gaia_leave.administration.service;
 import com.caci.gaia_leave.administration.model.request.UserTotalAttendance;
 import com.caci.gaia_leave.administration.model.response.RoleResponse;
 import com.caci.gaia_leave.administration.model.response.UserTotalAttendanceResponse;
+import com.caci.gaia_leave.administration.repository.request.UserRepository;
 import com.caci.gaia_leave.administration.repository.request.UserTotalAttendanceRepository;
 import com.caci.gaia_leave.administration.repository.response.UserTotalAttendanceResponseRepository;
 import com.caci.gaia_leave.shared_tools.exception.CustomException;
@@ -21,8 +22,12 @@ public class UserTotalAttendanceService {
 
     private final UserTotalAttendanceRepository userTotalAttendanceRepository;
     private final UserTotalAttendanceResponseRepository userTotalAttendanceResponseRepository;
+    private final UserRepository userRepository;
 
     public ResponseEntity<UserTotalAttendanceResponse> create(UserTotalAttendance model) {
+        if (!userRepository.existsById(model.getUserId())) {
+            throw new CustomException("User with id: `" + model.getUserId() + "` not found");
+        }
         try {
             UserTotalAttendance save = userTotalAttendanceRepository.save(model);
             Optional<UserTotalAttendanceResponse> result = userTotalAttendanceResponseRepository.findById(save.getId());
@@ -56,6 +61,9 @@ public class UserTotalAttendanceService {
         Optional<UserTotalAttendanceResponse> unique = userTotalAttendanceResponseRepository.findByUserId(model.getUserId());
         if (unique.isPresent() && !unique.get().getId().equals(id)) {
             throw new CustomException("User Total Attendance `" + model.getUserId() + "` already exists.");
+        }
+        if (!userRepository.existsById(model.getUserId())) {
+            throw new CustomException("User with id: `" + model.getUserId() + "` not found");
         }
 
         try {

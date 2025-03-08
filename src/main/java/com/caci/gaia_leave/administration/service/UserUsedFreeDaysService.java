@@ -1,5 +1,6 @@
 package com.caci.gaia_leave.administration.service;
 
+import com.caci.gaia_leave.administration.model.request.Calendar;
 import com.caci.gaia_leave.administration.model.request.UserUsedFreeDays;
 import com.caci.gaia_leave.administration.model.response.UserUsedFreeDaysResponse;
 import com.caci.gaia_leave.administration.repository.request.CalendarRepository;
@@ -8,6 +9,7 @@ import com.caci.gaia_leave.administration.repository.request.UserUsedFreeDaysRep
 import com.caci.gaia_leave.administration.repository.response.UserUsedFreeDaysResponseRepository;
 import com.caci.gaia_leave.shared_tools.exception.CustomException;
 import com.caci.gaia_leave.shared_tools.helper.AllHelpers;
+import com.caci.gaia_leave.shared_tools.model.WorkingDayType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,18 @@ public class UserUsedFreeDaysService {
 
         if (userUsedFreeDaysRepository.existsByUserIdAndCalendarId(model.getUserId(), model.getCalendarId())) {
             throw new CustomException("User and calendar needs to be unique");
+        }
+
+        if (!calendarRepository.existsById(model.getCalendarId())) {
+            throw new CustomException("Calendar with id: `" + model.getCalendarId() + "` not found");
+        }
+
+        if (!userRepository.existsById(model.getUserId())) {
+            throw new CustomException("User with id: `" + model.getUserId() + "` not found");
+        }
+
+        if (weekendChecker(model)) {
+            throw new CustomException("This day is a weekend in calendar");
         }
 
         try {
@@ -64,7 +78,7 @@ public class UserUsedFreeDaysService {
             throw new CustomException("Column by id: `" + id + "` not found");
         }
 
-        Optional<UserUsedFreeDaysResponse> unique = userUsedFreeDaysRepository.findByUserIdAndCalendarId(model.getUserId(), model.getCalendarId());
+        Optional<UserUsedFreeDaysResponse> unique = userUsedFreeDaysResponseRepository.findByUserIdAndCalendarId(model.getUserId(), model.getCalendarId());
         if (unique.isPresent() && !unique.get().getUserId().equals(id)) {
             throw new CustomException("User and calendar needs to be unique");
         }
@@ -73,8 +87,12 @@ public class UserUsedFreeDaysService {
             throw new CustomException("Calendar with id: `" + model.getCalendarId() + "` not found");
         }
 
-        if (!userRepository.existsById(id)) {
-            throw new CustomException("User with id: `" + id + "` not found");
+        if (!userRepository.existsById(model.getUserId())) {
+            throw new CustomException("User with id: `" + model.getUserId() + "` not found");
+        }
+
+        if (weekendChecker(model)) {
+            throw new CustomException("This day is a weekend in calendar");
         }
 
         try {
@@ -97,6 +115,11 @@ public class UserUsedFreeDaysService {
         } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
+    }
+
+    public boolean weekendChecker(UserUsedFreeDays model){
+        Optional<Calendar> weekendCheck = calendarRepository.findById(model.getCalendarId());
+        return weekendCheck.isPresent() && weekendCheck.get().getType().equals(WorkingDayType.WEEKEND);
     }
 
 }
