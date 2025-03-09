@@ -1,12 +1,10 @@
 package com.caci.gaia_leave.administration.service;
 
 import com.caci.gaia_leave.administration.model.request.User;
-import com.caci.gaia_leave.administration.model.response.RoleResponse;
 import com.caci.gaia_leave.administration.model.response.UserResponse;
 import com.caci.gaia_leave.administration.repository.request.UserRepository;
 import com.caci.gaia_leave.administration.repository.response.UserResponseRepository;
 import com.caci.gaia_leave.shared_tools.exception.CustomException;
-import com.caci.gaia_leave.shared_tools.helper.AllHelpers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -9,5 +9,6 @@ import java.util.Optional;
 @Repository
 public interface OvertimeHoursResponseRepository extends CrudRepository<OvertimeHoursResponse, Integer> {
     boolean existsByUserIdAndCalendarId(Integer userId, Integer calendarId);
+
     Optional<OvertimeHoursResponse> findByUserIdAndCalendarId(Integer userId, Integer calendarId);
 }

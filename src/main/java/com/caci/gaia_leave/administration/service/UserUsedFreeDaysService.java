@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.servlet.function.EntityResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,10 +47,10 @@ public class UserUsedFreeDaysService {
 
 
         try {
-             Iterable<UserUsedFreeDays> save = userUsedFreeDaysRepository.saveAll(models);
-             List<Integer> ids = new ArrayList<>();
-             save.forEach( model -> ids.add(model.getId()));
-             List<UserUsedFreeDaysResponse> result = AllHelpers.listConverter(userUsedFreeDaysResponseRepository.findAllById(ids));
+            Iterable<UserUsedFreeDays> save = userUsedFreeDaysRepository.saveAll(models);
+            List<Integer> ids = new ArrayList<>();
+            save.forEach(model -> ids.add(model.getId()));
+            List<UserUsedFreeDaysResponse> result = AllHelpers.listConverter(userUsedFreeDaysResponseRepository.findAllById(ids));
 
 
             return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(result);
@@ -121,7 +120,7 @@ public class UserUsedFreeDaysService {
         }
     }
 
-    public boolean weekendChecker(UserUsedFreeDays model){
+    public boolean weekendChecker(UserUsedFreeDays model) {
         Optional<Calendar> weekendCheck = calendarRepository.findById(model.getCalendarId());
         return weekendCheck.isPresent() && weekendCheck.get().getType().equals(WorkingDayType.WEEKEND);
     }

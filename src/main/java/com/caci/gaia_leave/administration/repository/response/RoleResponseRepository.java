@@ -11,6 +11,8 @@ import java.util.Optional;
 public interface RoleResponseRepository extends CrudRepository<RoleResponse, Integer> {
 
     Optional<RoleResponse> findByName(String name);
+
     List<RoleResponse> findByIdGreaterThan(Integer id);
+
     boolean existsByName(String name);
 }

@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -39,7 +37,7 @@ public class RoleEndpointResponse {
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "endpoint_id", referencedColumnName = "id"
-            ,insertable=false, updatable=false)
+            , insertable = false, updatable = false)
     private EndpointResponse endpoint;
 
 }

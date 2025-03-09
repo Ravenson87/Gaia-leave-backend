@@ -6,9 +6,11 @@ public enum FreeDayType {
     TOIL("TOIL");
 
     public final String type;
+
     FreeDayType(String type) {
         this.type = type;
     }
+
     public String getType() {
         return type;
     }

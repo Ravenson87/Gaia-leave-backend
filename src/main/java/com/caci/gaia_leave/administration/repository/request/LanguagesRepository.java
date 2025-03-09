@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LanguagesRepository extends CrudRepository<Languages, Integer> {
     boolean existsByNameIgnoreCase(String name);
+
     boolean existsByCodeIgnoreCase(String code);
 
 }

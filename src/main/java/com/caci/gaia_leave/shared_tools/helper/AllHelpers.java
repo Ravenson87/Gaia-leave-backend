@@ -1,14 +1,12 @@
 package com.caci.gaia_leave.shared_tools.helper;
 
-import com.caci.gaia_leave.administration.model.request.Calendar;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class AllHelpers {
 
@@ -20,21 +18,22 @@ public class AllHelpers {
 
     public static Date convertToDateViaInstant(LocalDate dateToConvert) {
         return java.util.Date.from(dateToConvert.atStartOfDay()
-                .atZone(ZoneId.systemDefault())
-                .toInstant());
+                                           .atZone(ZoneId.systemDefault())
+                                           .toInstant());
     }
 
     public static Date convertedStringToDate(String dateToConvert) {
         LocalDate date = LocalDate.parse(dateToConvert);
         Date convertedDate = AllHelpers.convertToDateViaInstant(date);
         return convertedDate;
-    };
+    }
+
+    ;
 
     public static List<String> getWeekends(int year, String pattern) {
         List<String> weekends = new ArrayList<>();
         LocalDate date = LocalDate.of(year, 1, 1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-
 
 
         while (date.getYear() == year) {

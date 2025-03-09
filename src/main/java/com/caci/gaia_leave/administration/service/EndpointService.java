@@ -13,7 +13,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -33,6 +36,7 @@ public class EndpointService {
             "DELETE", "delete",
             "PATCH", "update"
     );
+
     @Transactional(rollbackOn = {Exception.class, CustomException.class})
     public void populate() {
         mappingService.getActuator(appProperties.getMsApplicationName());
@@ -91,7 +95,7 @@ public class EndpointService {
         if (!diffEndpoints.isEmpty()) {
             try {
                 endpointRepository.deleteAllById(diffEndpoints);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 throw new CustomException(e.getMessage());
             }
         }

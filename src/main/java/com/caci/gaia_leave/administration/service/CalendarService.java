@@ -1,7 +1,6 @@
 package com.caci.gaia_leave.administration.service;
 
 import com.caci.gaia_leave.administration.model.request.Calendar;
-import com.caci.gaia_leave.administration.model.request.JobPosition;
 import com.caci.gaia_leave.administration.model.response.CalendarResponse;
 import com.caci.gaia_leave.administration.repository.request.CalendarRepository;
 import com.caci.gaia_leave.administration.repository.response.CalendarResponseRepository;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 

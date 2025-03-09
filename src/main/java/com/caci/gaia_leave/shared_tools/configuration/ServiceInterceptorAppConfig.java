@@ -13,7 +13,7 @@ public class ServiceInterceptorAppConfig implements WebMvcConfigurer {
     private final ServiceInterceptor serviceInterceptor;
 
     @Override
-    public void addInterceptors(InterceptorRegistry registry){
+    public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(serviceInterceptor).
                 excludePathPatterns(appProperties.getExcludedRoutes());
     }

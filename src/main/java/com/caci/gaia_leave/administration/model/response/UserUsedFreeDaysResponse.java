@@ -70,12 +70,12 @@ public class UserUsedFreeDaysResponse implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "calendar_id", referencedColumnName = "id",
-            insertable=false, updatable=false)
+            insertable = false, updatable = false)
     private Calendar calendar;
 
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "free_day_type", referencedColumnName = "id",
-            insertable=false, updatable=false)
+            insertable = false, updatable = false)
     private FreeDayType freeDayType;
 }

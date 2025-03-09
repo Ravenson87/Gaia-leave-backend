@@ -1,7 +1,7 @@
 package com.caci.gaia_leave.shared_tools.service;
 
-import com.caci.gaia_leave.shared_tools.configuration.AppProperties;
 import com.caci.gaia_leave.shared_tools.component.UserValidation;
+import com.caci.gaia_leave.shared_tools.configuration.AppProperties;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class ServiceInterceptor implements HandlerInterceptor {
         String endpoint = mappingService.endpoint(request);
         // Exclude basic auth endpoints
         if (!endpoint.equals("/**")
-                && !Arrays.asList(appProperties.getExcludedRoutes()).contains(endpoint)) {
+            && !Arrays.asList(appProperties.getExcludedRoutes()).contains(endpoint)) {
 
             return userValidation.validate(request, endpoint);
         }

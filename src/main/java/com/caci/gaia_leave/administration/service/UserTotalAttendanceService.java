@@ -1,7 +1,6 @@
 package com.caci.gaia_leave.administration.service;
 
 import com.caci.gaia_leave.administration.model.request.UserTotalAttendance;
-import com.caci.gaia_leave.administration.model.response.RoleResponse;
 import com.caci.gaia_leave.administration.model.response.UserTotalAttendanceResponse;
 import com.caci.gaia_leave.administration.repository.request.UserRepository;
 import com.caci.gaia_leave.administration.repository.request.UserTotalAttendanceRepository;

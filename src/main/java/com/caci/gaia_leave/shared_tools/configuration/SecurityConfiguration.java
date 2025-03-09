@@ -4,12 +4,10 @@ import com.caci.gaia_leave.shared_tools.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
@@ -18,7 +16,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
@@ -51,12 +48,12 @@ public class SecurityConfiguration {
         try {
             http
                     .authorizeHttpRequests(authorizeRequests ->
-                            authorizeRequests
-                                    // Secure actuator and basic authentication endpoints
-                                    .requestMatchers(actuatorEndpoints).authenticated()
-                                    .requestMatchers(basicAuthEndpoints).authenticated()
-                                    // Allow all other endpoints without authentication
-                                    .requestMatchers(antMatcher("/**")).permitAll())
+                                                   authorizeRequests
+                                                           // Secure actuator and basic authentication endpoints
+                                                           .requestMatchers(actuatorEndpoints).authenticated()
+                                                           .requestMatchers(basicAuthEndpoints).authenticated()
+                                                           // Allow all other endpoints without authentication
+                                                           .requestMatchers(antMatcher("/**")).permitAll())
                     // Set session management to stateless (no session persistence)
                     .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     // Disable CSRF protection (not needed for stateless APIs)

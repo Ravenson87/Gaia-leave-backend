@@ -25,7 +25,7 @@ public class UserTotalAttendanceController {
     }
 
     @GetMapping("/read")
-    public ResponseEntity<List<UserTotalAttendanceResponse>> read(){
+    public ResponseEntity<List<UserTotalAttendanceResponse>> read() {
 
         return userTotalAttendanceService.read();
     }
@@ -36,7 +36,8 @@ public class UserTotalAttendanceController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<String> update(@Valid @PathVariable("id") Integer id, @RequestBody UserTotalAttendance model) {
+    public ResponseEntity<String> update(
+            @Valid @PathVariable("id") Integer id, @RequestBody UserTotalAttendance model) {
         return userTotalAttendanceService.update(id, model);
     }
 

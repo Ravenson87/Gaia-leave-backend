@@ -24,34 +24,34 @@ public class OvertimeHoursService {
     private final UserRepository userRepository;
     private final CalendarRepository calendarRepository;
 
-    public ResponseEntity<OvertimeHoursResponse> create(OvertimeHours model){
-        if(overtimeHoursRepository.existsByUserIdAndCalendarId(model.getUserId(), model.getCalendarId())){
+    public ResponseEntity<OvertimeHoursResponse> create(OvertimeHours model) {
+        if (overtimeHoursRepository.existsByUserIdAndCalendarId(model.getUserId(), model.getCalendarId())) {
             throw new CustomException("Overtime hours for that date and that user already exists.");
         }
 
-        if(!userRepository.existsById(model.getUserId())){
+        if (!userRepository.existsById(model.getUserId())) {
             throw new CustomException("User Id " + model.getUserId() + " does not exist.");
         }
-        if(!calendarRepository.existsById(model.getCalendarId())){
+        if (!calendarRepository.existsById(model.getCalendarId())) {
             throw new CustomException("Calendar Id " + model.getCalendarId() + " does not exist.");
         }
-        try{
+        try {
             overtimeHoursRepository.save(model);
             Optional<OvertimeHoursResponse> result = overtimeHoursResponseRepository.findById(model.getId());
             return result
                     .map(response -> ResponseEntity.status(HttpStatus.CREATED).body(response))
                     .orElseGet(() -> ResponseEntity.noContent().build());
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
     }
 
-    public ResponseEntity<List<OvertimeHoursResponse>> read(){
+    public ResponseEntity<List<OvertimeHoursResponse>> read() {
         List<OvertimeHoursResponse> result = AllHelpers.listConverter(overtimeHoursResponseRepository.findAll());
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);
     }
 
-    public ResponseEntity<OvertimeHoursResponse> readById(Integer id){
+    public ResponseEntity<OvertimeHoursResponse> readById(Integer id) {
         Optional<OvertimeHoursResponse> result = overtimeHoursResponseRepository.findById(id);
         return result
                 .map(response -> ResponseEntity.ok().body(response))
@@ -63,13 +63,13 @@ public class OvertimeHoursService {
             throw new CustomException("Overtime hours for that date and that user does not exist.");
         }
         Optional<OvertimeHoursResponse> unique = overtimeHoursResponseRepository.findByUserIdAndCalendarId(model.getUserId(), model.getCalendarId());
-        if(unique.isPresent() && !unique.get().getId().equals(id)){
+        if (unique.isPresent() && !unique.get().getId().equals(id)) {
             throw new CustomException("Overtime hours for that date and that user does not exists.");
         }
-        if(!userRepository.existsById(model.getUserId())){
+        if (!userRepository.existsById(model.getUserId())) {
             throw new CustomException("User Id " + model.getUserId() + " does not exist.");
         }
-        if(!calendarRepository.existsById(model.getCalendarId())){
+        if (!calendarRepository.existsById(model.getCalendarId())) {
             throw new CustomException("Calendar Id " + model.getCalendarId() + " does not exist.");
         }
         try {
@@ -82,13 +82,13 @@ public class OvertimeHoursService {
     }
 
     public ResponseEntity<HttpStatus> delete(Integer id) {
-        if(!overtimeHoursResponseRepository.existsById(id)){
+        if (!overtimeHoursResponseRepository.existsById(id)) {
             throw new CustomException("Overtime hours for that date and that user does not exist.");
         }
-        try{
+        try {
             overtimeHoursResponseRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).build();
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
     }

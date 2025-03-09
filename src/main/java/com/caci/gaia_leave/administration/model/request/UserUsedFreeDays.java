@@ -1,7 +1,6 @@
 package com.caci.gaia_leave.administration.model.request;
 
 import com.caci.gaia_leave.shared_tools.model.Auditable;
-import com.caci.gaia_leave.shared_tools.model.FreeDayType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;

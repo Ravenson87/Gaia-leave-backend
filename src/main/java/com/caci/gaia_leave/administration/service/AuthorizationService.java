@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.Optional;
 
-import static com.caci.gaia_leave.shared_tools.component.AppConst.EXPIRATION_TIME;
 import static com.caci.gaia_leave.shared_tools.component.AppConst.REFRESH_TOKEN_EXPIRATION_TIME;
 
 @Service

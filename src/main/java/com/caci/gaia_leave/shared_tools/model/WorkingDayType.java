@@ -1,6 +1,5 @@
 package com.caci.gaia_leave.shared_tools.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum WorkingDayType {

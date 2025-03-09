@@ -14,7 +14,6 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
@@ -71,6 +70,6 @@ public class OvertimeHoursResponse implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "calendar_id", referencedColumnName = "id",
-            insertable=false, updatable=false)
+            insertable = false, updatable = false)
     private Calendar calendars;
 }

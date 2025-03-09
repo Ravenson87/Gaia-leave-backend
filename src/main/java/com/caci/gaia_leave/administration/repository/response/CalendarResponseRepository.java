@@ -12,6 +12,8 @@ import java.util.Optional;
 @Repository
 public interface CalendarResponseRepository extends CrudRepository<CalendarResponse, Integer> {
     Optional<CalendarResponse> findByDate(Date date);
+
     List<CalendarResponse> findAllByType(WorkingDayType type);
+
     List<CalendarResponse> findByDateBetween(Date start, Date end);
 }

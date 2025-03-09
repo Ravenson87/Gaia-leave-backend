@@ -11,11 +11,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
-
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
@@ -35,7 +33,6 @@ public class JwtService {
     private static final String TOKEN_PREFIX = "Bearer ";
     public static final String SUPER_ADMIN = "super_admin";
     private final AppProperties appProperties;
-
 
 
     public String generateToken(UserResponse model) {
@@ -101,18 +98,19 @@ public class JwtService {
     }
 
     public String getFullName(HttpServletRequest request) {
-        return getValue(request, "first_name") + " " +  getValue(request, "last_name");
+        return getValue(request, "first_name") + " " + getValue(request, "last_name");
 
     }
 
     public Integer getRoleId(HttpServletRequest request) {
-        return Integer.parseInt(getValue(request,"role_id"));
+        return Integer.parseInt(getValue(request, "role_id"));
 
     }
 
     private String getValue(HttpServletRequest request, String key) {
         return jwsToken(request).get(key).toString();
     }
+
     public boolean superAdmin(HttpServletRequest request) {
         return getValue(request, "role").equals(SUPER_ADMIN);
     }

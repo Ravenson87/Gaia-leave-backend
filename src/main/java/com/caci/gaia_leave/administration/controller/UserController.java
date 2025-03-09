@@ -46,14 +46,17 @@ public class UserController {
     }
 
     @PutMapping("/update-password/{id}")
-    public ResponseEntity<String> updatePassword(@Valid @PathVariable("id") Integer id,
-                                                 @RequestParam("old_password") String oldPassword,
-                                                 @RequestParam("new_password") String newPassword) {
+    public ResponseEntity<String> updatePassword(
+            @Valid @PathVariable("id") Integer id,
+            @RequestParam("old_password") String oldPassword,
+            @RequestParam("new_password") String newPassword
+    ) {
         return userService.updatePassword(id, oldPassword, newPassword);
     }
 
     @PutMapping("/update-status/{id}")
-    public ResponseEntity<String> updateStatus(@Valid @PathVariable("id") Integer id, @RequestParam("status") Boolean status) {
+    public ResponseEntity<String> updateStatus(
+            @Valid @PathVariable("id") Integer id, @RequestParam("status") Boolean status) {
         return userService.updateStatus(id, status);
     }
 

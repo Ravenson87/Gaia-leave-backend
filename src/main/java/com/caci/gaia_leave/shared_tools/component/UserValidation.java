@@ -21,28 +21,28 @@ public class UserValidation {
 
 
     public boolean validate(HttpServletRequest request, String endpoint) {
-    String fullName = jwtService.getFullName(request);
+        String fullName = jwtService.getFullName(request);
 
-    if(jwtService.superAdmin(request)){
-        appProperties.setSuperAdminEnabled(true);
-        appProperties.setAdminFullName(fullName);
-        return true;
-    }
-    Integer roleId = jwtService.getRoleId(request);
-    Optional<RoleResponse> roleResponse = roleResponseRepository.findById(roleId);
-    if(roleResponse.isEmpty()){
-        return false;
-    }
+        if (jwtService.superAdmin(request)) {
+            appProperties.setSuperAdminEnabled(true);
+            appProperties.setAdminFullName(fullName);
+            return true;
+        }
+        Integer roleId = jwtService.getRoleId(request);
+        Optional<RoleResponse> roleResponse = roleResponseRepository.findById(roleId);
+        if (roleResponse.isEmpty()) {
+            return false;
+        }
 
-    Set<String> allowedEndpoints = roleResponse.get().getRoleEndpoints().stream()
-            .map(roleEndpoints -> roleEndpoints.getEndpoint().getEndpoint())
-            .collect(Collectors.toSet());
+        Set<String> allowedEndpoints = roleResponse.get().getRoleEndpoints().stream()
+                .map(roleEndpoints -> roleEndpoints.getEndpoint().getEndpoint())
+                .collect(Collectors.toSet());
 
-    if(allowedEndpoints.contains(endpoint)){
-        appProperties.setSuperAdminEnabled(false);
-        appProperties.setAdminFullName(fullName);
-        return true;
-    }
+        if (allowedEndpoints.contains(endpoint)) {
+            appProperties.setSuperAdminEnabled(false);
+            appProperties.setAdminFullName(fullName);
+            return true;
+        }
 
         return false;
     }

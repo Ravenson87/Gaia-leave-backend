@@ -1,6 +1,5 @@
 package com.caci.gaia_leave.shared_tools.component;
 
-import com.caci.gaia_leave.administration.model.request.Endpoint;
 import com.caci.gaia_leave.administration.service.CalendarService;
 import com.caci.gaia_leave.administration.service.EndpointService;
 import lombok.RequiredArgsConstructor;

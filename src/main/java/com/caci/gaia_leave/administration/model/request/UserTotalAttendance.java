@@ -13,7 +13,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -22,7 +21,7 @@ import java.util.Date;
 @Entity
 @JsonInclude(JsonInclude.Include.USE_DEFAULTS)
 @Table(name = "user_total_attendance")
-public class UserTotalAttendance extends Auditable implements Serializable{
+public class UserTotalAttendance extends Auditable implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

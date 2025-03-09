@@ -10,7 +10,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Getter
 @Setter
@@ -40,6 +39,6 @@ public class RoleMenuResponse implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "menu_id", referencedColumnName = "id",
-            insertable=false, updatable=false)
+            insertable = false, updatable = false)
     private MenuResponse menu;
 }

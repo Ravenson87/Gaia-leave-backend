@@ -12,7 +12,10 @@ import java.util.Optional;
 @Repository
 public interface CalendarRepository extends CrudRepository<Calendar, Integer> {
     boolean existsByDate(Date date);
+
     boolean existsByType(WorkingDayType type);
+
     Optional<Calendar> findByDate(Date date);
+
     List<Calendar> findAllByType(WorkingDayType type);
 }

@@ -26,7 +26,7 @@ public class RoleController {
     }
 
     @GetMapping("/read")
-    public ResponseEntity<List<RoleResponse>> read(){
+    public ResponseEntity<List<RoleResponse>> read() {
 
         return roleService.read();
     }

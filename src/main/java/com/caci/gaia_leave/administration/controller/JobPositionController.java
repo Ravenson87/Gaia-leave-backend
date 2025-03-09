@@ -21,27 +21,27 @@ public class JobPositionController {
     private final JobPositionService jobPositionService;
 
     @PostMapping("/create")
-    public ResponseEntity<String> create(@Valid @RequestBody JobPosition model){
+    public ResponseEntity<String> create(@Valid @RequestBody JobPosition model) {
         return jobPositionService.create(model);
     }
 
     @GetMapping("/read")
-    public ResponseEntity<List<JobPositionResponse>> read(){
+    public ResponseEntity<List<JobPositionResponse>> read() {
         return jobPositionService.read();
     }
 
     @GetMapping("/read-by-id")
-    public ResponseEntity<JobPositionResponse> readById(@Valid @RequestParam("id") Integer id){
+    public ResponseEntity<JobPositionResponse> readById(@Valid @RequestParam("id") Integer id) {
         return jobPositionService.readById(id);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<String> update(@Valid @PathVariable("id") Integer id, @RequestBody JobPosition model){
+    public ResponseEntity<String> update(@Valid @PathVariable("id") Integer id, @RequestBody JobPosition model) {
         return jobPositionService.update(id, model);
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<HttpStatus> deleteById(@Valid @RequestParam("id") Integer id){
+    public ResponseEntity<HttpStatus> deleteById(@Valid @RequestParam("id") Integer id) {
         return jobPositionService.delete(id);
     }
 }
