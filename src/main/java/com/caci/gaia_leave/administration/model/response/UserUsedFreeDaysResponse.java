@@ -75,7 +75,7 @@ public class UserUsedFreeDaysResponse implements Serializable {
 
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "free_day_type", referencedColumnName = "id",
+    @JoinColumn(name = "free_day_type_id", referencedColumnName = "id",
             insertable = false, updatable = false)
     private FreeDayType freeDayType;
 }
