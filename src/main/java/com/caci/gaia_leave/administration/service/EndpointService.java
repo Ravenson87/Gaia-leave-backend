@@ -1,16 +1,19 @@
 package com.caci.gaia_leave.administration.service;
 
 import com.caci.gaia_leave.administration.model.request.Endpoint;
+import com.caci.gaia_leave.administration.model.response.EndpointResponse;
 import com.caci.gaia_leave.administration.repository.request.EndpointRepository;
 import com.caci.gaia_leave.administration.repository.response.EndpointResponseRepository;
 import com.caci.gaia_leave.shared_tools.configuration.AppProperties;
 import com.caci.gaia_leave.shared_tools.exception.CustomException;
+import com.caci.gaia_leave.shared_tools.helper.AllHelpers;
 import com.caci.gaia_leave.shared_tools.model.Mapping;
 import com.caci.gaia_leave.shared_tools.model.MappingServiceWrapper;
 import com.caci.gaia_leave.shared_tools.service.MappingService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -99,5 +102,10 @@ public class EndpointService {
                 throw new CustomException(e.getMessage());
             }
         }
+    }
+
+    public ResponseEntity<List<EndpointResponse>> read() {
+    List<EndpointResponse> result = AllHelpers.listConverter(endpointResponseRepository.findAll());
+        return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);
     }
 }

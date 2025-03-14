@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,22 +26,22 @@ public class RoleMenuService {
     private final RoleRepository roleRepository;
     private final MenuRepository menuRepository;
 
-    public ResponseEntity<RoleMenuResponse> create(RoleMenu model){
+    public ResponseEntity<String> create(List<RoleMenu> models){
+        // TODO Optimise this (with other list, or maybe query)
+        models.forEach(model -> {
+            if (!roleRepository.existsById(model.getRoleId())) {
+                throw new CustomException("Role with id: `" + model.getRoleId() + "` not found");
+            }
 
-        if (!roleRepository.existsById(model.getRoleId())) {
-            throw new CustomException("Role with id: `" + model.getRoleId() + "` not found");
-        }
+            if(!menuRepository.existsById(model.getMenuId())) {
+                throw new CustomException("Menu with id: `" + model.getMenuId() + "` not found");
 
-        if(!menuRepository.existsById(model.getMenuId())) {
-            throw new CustomException("Menu with id: `" + model.getMenuId() + "` not found");
+            }
+        } );
 
-        }
         try{
-            RoleMenu save = roleMenuRepository.save(model);
-            Optional<RoleMenuResponse> result = roleMenuResponseRepository.findById(model.getRoleId());
-            return result
-                    .map(response -> ResponseEntity.status(HttpStatus.CREATED).body(response))
-                    .orElseGet(() -> ResponseEntity.noContent().build());
+            roleMenuRepository.saveAll(models);
+            return ResponseEntity.ok().body("Successfully created");
         }catch(Exception e){
             throw new CustomException(e.getMessage());
         }

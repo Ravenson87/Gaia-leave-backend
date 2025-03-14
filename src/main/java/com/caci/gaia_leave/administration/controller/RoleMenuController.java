@@ -1,9 +1,7 @@
 package com.caci.gaia_leave.administration.controller;
 
 import com.caci.gaia_leave.administration.model.request.RoleMenu;
-import com.caci.gaia_leave.administration.model.request.UserTotalAttendance;
 import com.caci.gaia_leave.administration.model.response.RoleMenuResponse;
-import com.caci.gaia_leave.administration.model.response.UserTotalAttendanceResponse;
 import com.caci.gaia_leave.administration.service.RoleMenuService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +19,8 @@ public class RoleMenuController {
     private final RoleMenuService roleMenuService;
 
     @PostMapping("/create")
-    public ResponseEntity<RoleMenuResponse> create(@Valid @RequestBody RoleMenu model) {
-        return roleMenuService.create(model);
+    public ResponseEntity<String> create(@Valid @RequestBody List<RoleMenu> models) {
+        return roleMenuService.create(models);
     }
 
     @GetMapping("/read")

@@ -38,5 +38,5 @@ public class RoleEndpoint implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("endpoint_id")
     @Column(name = "endpoint_id")
-    private Integer endpointId;
+    private String endpointId;
 }
