@@ -41,4 +41,5 @@ public class RoleMenuResponse implements Serializable {
     @JoinColumn(name = "menu_id", referencedColumnName = "id",
             insertable = false, updatable = false)
     private MenuResponse menu;
+
 }
