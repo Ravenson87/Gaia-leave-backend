@@ -45,4 +45,9 @@ public class RoleEndpointController {
     public ResponseEntity<String> deleteById(@Valid @RequestParam("id") Integer id) {
         return roleEndpointService.delete(id);
     }
+
+    @DeleteMapping("/delete-by-ids")
+    public ResponseEntity<String> deleteByIds(@Valid @RequestParam("ids") List<Integer> ids) {
+        return roleEndpointService.deleteByIds(ids);
+    }
 }
