@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RoleEndpointRepository extends CrudRepository<RoleEndpoint, Integer> {
+    boolean existsByRoleIdAndEndpointId(Integer roleId, String endpointId);
 }

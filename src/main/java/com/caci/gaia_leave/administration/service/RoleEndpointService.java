@@ -24,24 +24,31 @@ public class RoleEndpointService {
     private final RoleRepository roleRepository;
     private final EndpointRepository endpointRepository;
 
-    public ResponseEntity<String> create(List<RoleEndpoint> models){
+    public ResponseEntity<String> create(List<RoleEndpoint> models) {
         models.forEach(model -> {
             if (!roleRepository.existsById(model.getRoleId())) {
                 throw new CustomException("Role with id: `" + model.getRoleId() + "` not found");
             }
-            if(!endpointRepository.existsById(model.getEndpointId()));
+            if (!endpointRepository.existsById(model.getEndpointId())) {
+                throw new CustomException("Endpoint with id: `" + model.getEndpointId() + "` not found");
+            }
+
+            if (roleEndpointRepository.existsByRoleIdAndEndpointId(model.getRoleId(), model.getEndpointId())) {
+                throw new CustomException("Model with role id: `" + model.getRoleId() + "` and endpoint id `" + model.getEndpointId() + "` already exists");
+            }
+
         });
 
-        try{
+        try {
             roleEndpointRepository.saveAll(models);
             return ResponseEntity.ok().body("Successfully created");
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
 
     }
 
-    public ResponseEntity<List<RoleEndpointResponse>> read(){
+    public ResponseEntity<List<RoleEndpointResponse>> read() {
         List<RoleEndpointResponse> result = AllHelpers.listConverter(roleEndpointResponseRepository.findAll());
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);
     }
@@ -54,26 +61,26 @@ public class RoleEndpointService {
     }
 
     public ResponseEntity<String> update(Integer id, RoleEndpoint model) {
-        if(!roleEndpointRepository.existsById(id)) {
+        if (!roleEndpointRepository.existsById(id)) {
             throw new CustomException("RoleEndpoint with id: `" + id + "` not found");
         }
-        try{
+        try {
             model.setId(id);
             roleEndpointRepository.save(model);
             return ResponseEntity.ok().body("Successfully update");
-        }catch(CustomException e){
+        } catch (CustomException e) {
             throw new CustomException(e.getMessage());
         }
     }
 
     public ResponseEntity<String> delete(Integer id) {
-        if(!roleEndpointRepository.existsById(id)) {
+        if (!roleEndpointRepository.existsById(id)) {
             throw new CustomException("RoleEndpoint with id: `" + id + "` not found");
         }
         try {
             roleEndpointRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).build();
-        }catch(CustomException e){
+        } catch (CustomException e) {
             throw new CustomException(e.getMessage());
         }
     }

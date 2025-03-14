@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,62 +25,65 @@ public class RoleMenuService {
     private final RoleRepository roleRepository;
     private final MenuRepository menuRepository;
 
-    public ResponseEntity<String> create(List<RoleMenu> models){
+    public ResponseEntity<String> create(List<RoleMenu> models) {
         // TODO Optimise this (with other list, or maybe query)
         models.forEach(model -> {
             if (!roleRepository.existsById(model.getRoleId())) {
                 throw new CustomException("Role with id: `" + model.getRoleId() + "` not found");
             }
 
-            if(!menuRepository.existsById(model.getMenuId())) {
+            if (!menuRepository.existsById(model.getMenuId())) {
                 throw new CustomException("Menu with id: `" + model.getMenuId() + "` not found");
-
             }
-        } );
 
-        try{
+            if(roleMenuRepository.existsByRoleIdAndMenuId(model.getRoleId(), model.getMenuId())) {
+                throw new CustomException("Model with role id: `" + model.getRoleId() + "` and menu id `" + model.getMenuId() + "` already exists");
+            }
+        });
+
+        try {
             roleMenuRepository.saveAll(models);
             return ResponseEntity.ok().body("Successfully created");
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
 
     }
 
-    public ResponseEntity<List<RoleMenuResponse>> read(){
+    public ResponseEntity<List<RoleMenuResponse>> read() {
         List<RoleMenuResponse> result = AllHelpers.listConverter(roleMenuResponseRepository.findAll());
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);
     }
 
-    public ResponseEntity<RoleMenuResponse> readById(Integer roleId){
+    public ResponseEntity<RoleMenuResponse> readById(Integer roleId) {
         Optional<RoleMenuResponse> result = roleMenuResponseRepository.findById(roleId);
         return result
                 .map(response -> ResponseEntity.ok().body(response))
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
-    public ResponseEntity<String> update(Integer id, RoleMenu model){
-        if(!roleMenuRepository.existsById(id)) {
+    public ResponseEntity<String> update(Integer id, RoleMenu model) {
+        if (!roleMenuRepository.existsById(id)) {
             throw new CustomException("RoleMenu with id: `" + id + "` not found");
         }
 
-        try{
+        try {
             model.setId(id);
             roleMenuRepository.save(model);
             return ResponseEntity.ok().body("Successfully update");
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
     }
 
-    public ResponseEntity<String> delete(Integer id){
-        if(!roleMenuRepository.existsById(id)) {
+    public ResponseEntity<String> delete(Integer id) {
+        if (!roleMenuRepository.existsById(id)) {
             throw new CustomException("RoleMenu with id: `" + id + "` not found");
         }
-        try{
+        try {
             roleMenuRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).build();
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
     }
