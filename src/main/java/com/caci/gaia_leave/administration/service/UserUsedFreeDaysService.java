@@ -118,6 +118,17 @@ public class UserUsedFreeDaysService {
         } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
+
+
+    }
+
+    public ResponseEntity<String> deleteByIds(List<Integer> ids) {
+        try{
+            userUsedFreeDaysRepository.deleteAllById(ids);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            throw new CustomException(e.getMessage());
+        }
     }
 
     public boolean weekendChecker(UserUsedFreeDays model) {

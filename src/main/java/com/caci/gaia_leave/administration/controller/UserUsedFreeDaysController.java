@@ -43,4 +43,9 @@ public class UserUsedFreeDaysController {
     public ResponseEntity<String> delete(@Valid @RequestParam Integer id) {
         return userUsedFreeDaysService.delete(id);
     }
+
+    @DeleteMapping("/delete-by-ids")
+    public ResponseEntity<String> deleteByIds(@Valid @RequestParam("ids") List<Integer> ids) {
+        return userUsedFreeDaysService.deleteByIds(ids);
+    }
 }
