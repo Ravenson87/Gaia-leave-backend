@@ -51,4 +51,5 @@ public class Calendar implements Serializable {
     @JsonProperty("type")
     @Column(name = "type")
     private WorkingDayType type;
+
 }
