@@ -33,12 +33,12 @@ public class FreeDayTypeResponse implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("type")
     @Column(name = "type")
-    private Integer type;
+    private String type;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("description")
     @Column(name = "description")
-    private Integer description;
+    private String description;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("created_by")

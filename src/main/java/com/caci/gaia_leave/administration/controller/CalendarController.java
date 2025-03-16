@@ -21,6 +21,11 @@ import java.util.List;
 public class CalendarController {
     private final CalendarService calendarService;
 
+    @PostMapping("/create")
+    public void create() {
+        calendarService.populateCalendar();
+    }
+
     @GetMapping("/read")
     public ResponseEntity<List<CalendarResponse>> read() {
         return calendarService.read();

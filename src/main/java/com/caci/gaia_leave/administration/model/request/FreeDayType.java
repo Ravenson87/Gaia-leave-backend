@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,14 +30,15 @@ public class FreeDayType extends Auditable implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @NotNull(message = "type cannot be empty")
+    @NotBlank(message = "type must be provided")
+    @NotNull(message = "type must be provided")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("type")
     @Column(name = "type")
-    private Integer type;
+    private String type;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("description")
     @Column(name = "description")
-    private Integer description;
+    private String description;
 }

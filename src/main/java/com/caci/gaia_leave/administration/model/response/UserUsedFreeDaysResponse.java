@@ -42,7 +42,7 @@ public class UserUsedFreeDaysResponse implements Serializable {
     @Column(name = "calendar_id")
     private Integer calendarId;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     @JsonProperty("free_day_type_id")
     @Column(name = "free_day_type_id")
     private Integer freeDayTypeId;
