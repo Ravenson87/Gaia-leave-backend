@@ -86,4 +86,5 @@ public class UserTotalAttendanceService {
             throw new CustomException(e.getMessage());
         }
     }
+
 }
