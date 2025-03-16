@@ -44,4 +44,9 @@ public class RoleMenuController {
     public ResponseEntity<String> deleteById(@Valid @RequestParam("id") Integer id) {
         return roleMenuService.delete(id);
     }
+
+    @DeleteMapping("/delete-by-ids")
+    public ResponseEntity<String> deleteByIds(@Valid @RequestParam("ids") List<Integer> ids) {
+        return roleMenuService.deleteByIds(ids);
+    }
 }

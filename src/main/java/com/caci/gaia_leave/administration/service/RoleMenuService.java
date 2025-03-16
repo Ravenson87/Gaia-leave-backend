@@ -87,4 +87,13 @@ public class RoleMenuService {
             throw new CustomException(e.getMessage());
         }
     }
+
+    public ResponseEntity<String> deleteByIds(List<Integer> roleIds) {
+        try{
+            roleMenuRepository.deleteAllById(roleIds);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            throw new CustomException(e.getMessage());
+        }
+    }
 }
