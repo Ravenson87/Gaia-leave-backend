@@ -48,6 +48,11 @@ public class OvertimeHoursResponse implements Serializable {
     private Integer overtimeHours;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonProperty("overtime_compensation")
+    @Column(name = "overtime_compensation")
+    private String overtimeCompensation;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("created_by")
     @Column(name = "created_by")
     private String createdBy;

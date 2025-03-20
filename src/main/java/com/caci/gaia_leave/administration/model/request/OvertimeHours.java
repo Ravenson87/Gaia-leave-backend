@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,5 +46,11 @@ public class OvertimeHours extends Auditable implements Serializable {
     @JsonProperty("overtime_hours")
     @Column(name = "overtime_hours")
     private Integer overtimeHours;
+
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonProperty("overtime_compensation")
+    @Column(name = "overtime_compensation")
+    private String overtimeCompensation;
 
 }

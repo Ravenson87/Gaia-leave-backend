@@ -1,5 +1,6 @@
 package com.caci.gaia_leave.shared_tools.helper;
 
+import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -24,8 +25,12 @@ public class AllHelpers {
 
     public static Date convertedStringToDate(String dateToConvert) {
         LocalDate date = LocalDate.parse(dateToConvert);
-        Date convertedDate = AllHelpers.convertToDateViaInstant(date);
-        return convertedDate;
+        return AllHelpers.convertToDateViaInstant(date);
+    }
+
+    public static String formatDate(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(date);
     }
 
     ;

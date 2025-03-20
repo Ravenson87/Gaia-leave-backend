@@ -28,7 +28,7 @@ public class CalendarResponse implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Belgrade")
     @JsonProperty("date")
     @Column(name = "date")
     private Date date;

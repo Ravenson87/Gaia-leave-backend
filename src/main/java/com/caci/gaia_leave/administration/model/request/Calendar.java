@@ -27,12 +27,11 @@ public class Calendar implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     @Column(name = "id")
     private Integer id;
 
     @NotNull(message = "date cannot be null")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Belgrade")
     @JsonProperty("date")
     @Column(name = "date")
     private Date date;

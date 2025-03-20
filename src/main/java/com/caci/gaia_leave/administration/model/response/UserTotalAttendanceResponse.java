@@ -25,7 +25,6 @@ public class UserTotalAttendanceResponse implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     @Column(name = "id")
     private Integer id;
 
@@ -44,6 +43,11 @@ public class UserTotalAttendanceResponse implements Serializable {
     @JsonProperty("total_working_hours")
     @Column(name = "total_working_hours")
     private Integer totalWorkingHours;
+
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+    @JsonProperty("overtime_hours_sum")
+    @Column(name = "overtime_hours_sum")
+    private Integer overtimeHoursSum;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("created_by")
