@@ -33,7 +33,6 @@ public class UserTotalAttendanceController {
 
     @GetMapping("/read")
     public ResponseEntity<List<UserTotalAttendanceResponse>> read() {
-
         return userTotalAttendanceService.read();
     }
 

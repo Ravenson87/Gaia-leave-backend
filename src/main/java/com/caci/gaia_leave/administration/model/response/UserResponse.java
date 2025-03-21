@@ -122,10 +122,8 @@ public class UserResponse implements Serializable {
 
     //Moguci problemi -zasto je ovde "name=id" a "referencedColumnName=user_id", a ne obratno kao u @OneToMany relaciji
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id", referencedColumnName = "user_id",
             insertable = false, updatable = false)
     private UserTotalAttendanceResponse userTotalAttendance;
-
-
 }
