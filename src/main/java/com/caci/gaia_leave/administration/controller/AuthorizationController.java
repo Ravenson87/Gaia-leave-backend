@@ -3,6 +3,8 @@ package com.caci.gaia_leave.administration.controller;
 import com.caci.gaia_leave.administration.service.AuthorizationService;
 import com.caci.gaia_leave.shared_tools.model.AuthorizationTokenDTO;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,12 +20,27 @@ public class AuthorizationController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthorizationTokenDTO> login(
-            @Valid @RequestParam("user") String user, @RequestParam("password") String password) {
+            @Valid
+            @RequestParam("user")
+            @NotNull(message = "User can not be null")
+            @NotBlank(message = "User can not be empty")
+            String user,
+            @RequestParam("password")
+            @NotNull(message = "Password can not be null")
+            @NotBlank(message = "Password can not be empty")
+            String password
+    ) {
         return authorizationService.login(user, password);
     }
 
     @GetMapping("/refresh_token")
-    public ResponseEntity<AuthorizationTokenDTO> refresh(@Valid @RequestParam("refresh_token") String refreshToken) {
+    public ResponseEntity<AuthorizationTokenDTO> refresh(
+            @Valid
+            @RequestParam("refresh_token")
+            @NotNull(message = "Refresh Token can not be null")
+            @NotBlank(message = "Refresh Token can not be empty")
+            String refreshToken
+    ) {
         return authorizationService.refreshToken(refreshToken);
     }
 }

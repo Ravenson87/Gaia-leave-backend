@@ -1,10 +1,12 @@
 package com.caci.gaia_leave.administration.service;
 
 import com.caci.gaia_leave.administration.model.request.OvertimeHours;
+import com.caci.gaia_leave.administration.model.request.UserTotalAttendance;
 import com.caci.gaia_leave.administration.model.response.OvertimeHoursResponse;
 import com.caci.gaia_leave.administration.repository.request.CalendarRepository;
 import com.caci.gaia_leave.administration.repository.request.OvertimeHoursRepository;
 import com.caci.gaia_leave.administration.repository.request.UserRepository;
+import com.caci.gaia_leave.administration.repository.request.UserTotalAttendanceRepository;
 import com.caci.gaia_leave.administration.repository.response.OvertimeHoursResponseRepository;
 import com.caci.gaia_leave.shared_tools.exception.CustomException;
 import com.caci.gaia_leave.shared_tools.helper.AllHelpers;
@@ -23,6 +25,7 @@ public class OvertimeHoursService {
     private final OvertimeHoursResponseRepository overtimeHoursResponseRepository;
     private final UserRepository userRepository;
     private final CalendarRepository calendarRepository;
+    private final UserTotalAttendanceRepository userTotalAttendanceRepository;
 
     public ResponseEntity<OvertimeHoursResponse> create(OvertimeHours model) {
         if (overtimeHoursRepository.existsByUserIdAndCalendarId(model.getUserId(), model.getCalendarId())) {
@@ -35,6 +38,17 @@ public class OvertimeHoursService {
         if (!calendarRepository.existsById(model.getCalendarId())) {
             throw new CustomException("Calendar Id " + model.getCalendarId() + " does not exist.");
         }
+
+        Optional<UserTotalAttendance> userTotalAttendance = userTotalAttendanceRepository.findByUserId(model.getUserId());
+        if (userTotalAttendance.isEmpty()) {
+            throw new CustomException("User Id " + model.getUserId() + " does not exist.");
+        }
+        int maxOvertimeHours = 24 - userTotalAttendance.get().getTotalWorkingHours();
+
+        if(model.getOvertimeHours() > maxOvertimeHours) {
+            throw new CustomException("Overtime hours can not exceed 24 hours.");
+        }
+
         try {
             overtimeHoursRepository.save(model);
             Optional<OvertimeHoursResponse> result = overtimeHoursResponseRepository.findById(model.getId());

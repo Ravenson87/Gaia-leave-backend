@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface UserTotalAttendanceRepository extends CrudRepository<UserTotalAttendance, Integer> {
    Optional<UserTotalAttendance> findByUserId(Integer userId);
+   boolean existsByUserId(Integer userId);
 }

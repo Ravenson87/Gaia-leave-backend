@@ -2,6 +2,8 @@ package com.caci.gaia_leave.administration.controller;
 
 import com.caci.gaia_leave.administration.service.WorkingHoursService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,7 +21,15 @@ public class WorkingHoursController {
     private final WorkingHoursService workingHoursService;
 
     @PutMapping("/update")
-    public ResponseEntity<String> assignOvertimeAsFreeDays(@Valid @RequestParam("user_id") Integer userId, @RequestParam("working_hours") Integer workingHours){
-       return workingHoursService.assignOvertimeAsFreeDays(userId, workingHours);
+    public ResponseEntity<String> assignOvertimeAsFreeDays(
+            @Valid
+            @RequestParam("user_id")
+            @NotNull(message = "User Id can not be null")
+            Integer userId,
+            @RequestParam("working_hours")
+            @Max(value = 24, message = "Working hours can not be greater then 24")
+            Integer workingHours
+    ) {
+        return workingHoursService.assignOvertimeAsFreeDays(userId, workingHours);
     }
 }

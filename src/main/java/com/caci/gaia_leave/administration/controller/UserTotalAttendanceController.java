@@ -4,6 +4,8 @@ import com.caci.gaia_leave.administration.model.request.UserTotalAttendance;
 import com.caci.gaia_leave.administration.model.response.UserTotalAttendanceResponse;
 import com.caci.gaia_leave.administration.service.UserTotalAttendanceService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,7 +22,12 @@ public class UserTotalAttendanceController {
     private final UserTotalAttendanceService userTotalAttendanceService;
 
     @PostMapping("/create")
-    public ResponseEntity<UserTotalAttendanceResponse> create(@Valid @RequestBody UserTotalAttendance model) {
+    public ResponseEntity<UserTotalAttendanceResponse> create(
+            @Valid
+            @RequestBody
+            @NotNull(message = "Model can not be null")
+            UserTotalAttendance model
+    ) {
         return userTotalAttendanceService.create(model);
     }
 
@@ -31,18 +38,38 @@ public class UserTotalAttendanceController {
     }
 
     @GetMapping("/read-by-id")
-    public ResponseEntity<UserTotalAttendanceResponse> readById(@Valid @RequestParam("id") Integer id) {
+    public ResponseEntity<UserTotalAttendanceResponse> readById(
+            @Valid
+            @RequestParam("id")
+            @NotNull(message = "Id can not be null")
+            @Min(value = 1, message = "Id can not be less than zero")
+            Integer id
+    ) {
         return userTotalAttendanceService.readById(id);
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<String> update(
-            @Valid @PathVariable("id") Integer id, @RequestBody UserTotalAttendance model) {
+            @Valid
+            @PathVariable("id")
+            @NotNull(message = "Id can not be null")
+            @Min(value = 1, message = "Id can not be less than zero")
+            Integer id,
+            @RequestBody
+            @NotNull(message = "Model can not be null")
+            UserTotalAttendance model
+    ) {
         return userTotalAttendanceService.update(id, model);
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteById(@Valid @RequestParam("id") Integer id) {
+    public ResponseEntity<String> deleteById(
+            @Valid
+            @RequestParam("id")
+            @NotNull(message = "Id can not be null")
+            @Min(value = 1, message = "Id can not be less than zero")
+            Integer id
+    ) {
         return userTotalAttendanceService.delete(id);
     }
 }

@@ -4,6 +4,8 @@ import com.caci.gaia_leave.administration.model.request.Role;
 import com.caci.gaia_leave.administration.model.response.RoleResponse;
 import com.caci.gaia_leave.administration.service.RoleService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +23,12 @@ public class RoleController {
     private final RoleService roleService;
 
     @PostMapping("/create")
-    public ResponseEntity<RoleResponse> createRole(@Valid @RequestBody Role model) {
+    public ResponseEntity<RoleResponse> createRole(
+            @Valid
+            @RequestBody
+            @NotNull(message = "Model can not be null")
+            Role model
+    ) {
         return roleService.create(model);
     }
 
@@ -32,17 +39,38 @@ public class RoleController {
     }
 
     @GetMapping("/read-by-id")
-    public ResponseEntity<RoleResponse> readById(@Valid @RequestParam("id") Integer id) {
+    public ResponseEntity<RoleResponse> readById(
+            @Valid
+            @RequestParam("id")
+            @NotNull(message = "Id can not be null")
+            @Min(value = 1, message = "Id can not be less than zero")
+            Integer id
+    ) {
         return roleService.readById(id);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<String> update(@Valid @PathVariable("id") Integer id, @RequestBody Role model) {
+    public ResponseEntity<String> update(
+            @Valid
+            @PathVariable("id")
+            @NotNull(message = "Id can not be null")
+            @Min(value = 1, message = "Id can not be less than zero")
+            Integer id,
+            @RequestBody
+            @NotNull(message = "Model can not be null")
+            Role model
+    ) {
         return roleService.update(id, model);
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<HttpStatus> deleteById(@Valid @RequestParam("id") Integer id) {
+    public ResponseEntity<HttpStatus> deleteById(
+            @Valid
+            @RequestParam("id")
+            @NotNull(message = "Id can not be null")
+            @Min(value = 1, message = "Id can not be less than zero")
+            Integer id
+    ) {
         return roleService.delete(id);
     }
 }

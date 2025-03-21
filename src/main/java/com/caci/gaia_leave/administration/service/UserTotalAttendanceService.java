@@ -27,6 +27,9 @@ public class UserTotalAttendanceService {
         if (!userRepository.existsById(model.getUserId())) {
             throw new CustomException("User with id: `" + model.getUserId() + "` not found");
         }
+        if(userTotalAttendanceRepository.existsByUserId(model.getUserId())) {
+            throw new CustomException("User with id: `" + model.getUserId() + "` already exists");
+        }
         try {
             UserTotalAttendance save = userTotalAttendanceRepository.save(model);
             Optional<UserTotalAttendanceResponse> result = userTotalAttendanceResponseRepository.findById(save.getId());

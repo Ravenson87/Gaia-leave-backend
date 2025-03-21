@@ -4,6 +4,8 @@ import com.caci.gaia_leave.administration.model.request.Calendar;
 import com.caci.gaia_leave.administration.model.request.FreeDayType;
 import com.caci.gaia_leave.administration.service.HolidayService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -23,8 +25,13 @@ public class HolidaysController {
     private final HolidayService holidayService;
 
     @PutMapping("/update")
-    public ResponseEntity<String>  updateHolidays(@Valid @RequestBody List<Calendar> holidays){
-       return holidayService.updateHolidays(holidays);
+    public ResponseEntity<String> updateHolidays(
+            @Valid
+            @RequestBody
+            @NotEmpty(message = "List can not be null or empty")
+            List<Calendar> holidays
+    ) {
+        return holidayService.updateHolidays(holidays);
 
     }
 }
