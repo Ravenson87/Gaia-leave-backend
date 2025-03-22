@@ -28,8 +28,10 @@ public class WorkingHoursController {
             Integer userId,
             @RequestParam("working_hours")
             @Max(value = 24, message = "Working hours can not be greater then 24")
-            Integer workingHours
+            Integer workingHours,
+            @RequestParam("as_free_days")
+            boolean asFreeDays
     ) {
-        return workingHoursService.assignOvertimeAsFreeDays(userId, workingHours);
+        return workingHoursService.assignOvertimeHours(userId, workingHours, asFreeDays);
     }
 }

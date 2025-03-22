@@ -63,6 +63,11 @@ public class UserResponse implements Serializable {
     @Column(name = "password")
     private String password;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonProperty("profile_image")
+    @Column(name = "profile_image")
+    private String profileImage;
+
     @JsonFormat(shape = JsonFormat.Shape.BOOLEAN)
     @JsonProperty("status")
     @Column(name = "status")

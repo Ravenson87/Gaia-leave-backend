@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -103,6 +104,20 @@ public class UserController {
             Boolean status
     ) {
         return userService.updateStatus(id, status);
+    }
+
+    @PostMapping("/upload-image")
+    public ResponseEntity<String> uploadImage(
+            @Valid
+            @RequestParam("file")
+            @NotNull
+            MultipartFile file,
+            @RequestParam("user_id")
+            @NotNull
+            @Min(value = 1, message = "Id can not be less than zero")
+            Integer userId
+    ) {
+        return userService.uploadImage(file, userId);
     }
 
 }

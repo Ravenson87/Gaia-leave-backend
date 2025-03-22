@@ -21,6 +21,8 @@ public class AppProperties {
 
     private boolean superAdminEnabled = false;
 
+
+
     /**
      * Excluded packets from mapping.
      */
@@ -69,4 +71,12 @@ public class AppProperties {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
+    @Value("${upload.image.path}")
+    private String uploadImagePath;
+
+    @Value("${domain.name}")
+    private String domainName;
+
+    @Value("${img.storage.gaia.leave}")
+    private String imageStorageGaiaLeave;
 }

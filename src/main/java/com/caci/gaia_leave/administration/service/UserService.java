@@ -4,16 +4,31 @@ import com.caci.gaia_leave.administration.model.request.User;
 import com.caci.gaia_leave.administration.model.response.UserResponse;
 import com.caci.gaia_leave.administration.repository.request.UserRepository;
 import com.caci.gaia_leave.administration.repository.response.UserResponseRepository;
+import com.caci.gaia_leave.shared_tools.component.ImageHandler;
+import com.caci.gaia_leave.shared_tools.configuration.AppProperties;
 import com.caci.gaia_leave.shared_tools.exception.CustomException;
+import com.caci.gaia_leave.shared_tools.helper.AllHelpers;
 import lombok.RequiredArgsConstructor;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Optional;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
+import static com.caci.gaia_leave.shared_tools.component.AppConst.PROFILE_IMG_MAX_SIZE;
 import static com.caci.gaia_leave.shared_tools.helper.AllHelpers.listConverter;
 
 @Service
@@ -21,6 +36,8 @@ import static com.caci.gaia_leave.shared_tools.helper.AllHelpers.listConverter;
 public class UserService {
     private final UserRepository userRepository;
     private final UserResponseRepository userResponseRepository;
+    private final ImageHandler imageHandler;
+
 
     public ResponseEntity<String> create(User model) {
 
@@ -128,4 +145,41 @@ public class UserService {
         }
         return ResponseEntity.ok().body("Successfully updated status");
     }
+
+    public ResponseEntity<String> uploadImage(MultipartFile file, Integer userId) {
+        String fileType = file.getContentType();
+
+
+        if (!"image/jpeg".equals(fileType) && !"image/png".equals(fileType)) {
+            throw new CustomException("Allowed types are jpeg and pgn");
+        }
+
+        String filePath = imageHandler.storeImage("profile_image",file);
+
+        try (FileOutputStream fos = new FileOutputStream(filePath)) {
+            fos.write(file.getBytes());
+        } catch (Exception e) {
+            throw new CustomException(e.getMessage());
+        }
+
+        Optional<User> imageUser = userRepository.findById(userId);
+        if (imageUser.isEmpty()) {
+            throw new CustomException("User with id `" + userId + "` does not exist.");
+        }
+
+        try {
+            imageUser.get().setProfileImage(filePath);
+            userRepository.save(imageUser.get());
+        } catch (Exception e) {
+            throw new CustomException(e.getMessage());
+        }
+
+
+        return ResponseEntity.ok().body("Image uploaded");
+
+    }
+
+
+
+
 }

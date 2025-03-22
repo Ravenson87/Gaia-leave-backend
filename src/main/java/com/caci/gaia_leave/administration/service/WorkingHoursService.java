@@ -24,7 +24,7 @@ public class WorkingHoursService {
     private final OvertimeHoursRepository overtimeHoursRepository;
     private final CalendarRepository calendarRepository;
 
-    public ResponseEntity<String> assignOvertimeAsFreeDays(Integer userId, Integer workingHours) {
+    public ResponseEntity<String> assignOvertimeHours(Integer userId, Integer overTimeWorkingHours, boolean asFreeDays) {
         Optional<OvertimeHours> overtimeHoursEntity = overtimeHoursRepository.findById(userId);
         if (overtimeHoursEntity.isEmpty()) {
             throw new CustomException("User id " + userId + " not found");
@@ -35,22 +35,32 @@ public class WorkingHoursService {
         }
 
         Integer userTotalWorkingHours = userTotalAttendance.get().getTotalWorkingHours();
-        int freeDays = workingHours / userTotalWorkingHours;
-        Integer remainderWorkingHours = workingHours % userTotalWorkingHours;
-        if (workingHours < 8) {
-            throw new CustomException(remainderWorkingHours + " is not enough workingHours for free day");
+        int freeDays = overTimeWorkingHours / userTotalWorkingHours;
+        Integer remainderWorkingHours = overTimeWorkingHours % userTotalWorkingHours;
+
+        if(overTimeWorkingHours <= 0) {
+            throw new CustomException("User dont have overtime hours");
         }
 
         int totalFreeDays = userTotalAttendance.get().getTotalFreeDays();
-        int hoursToSubtract = freeDays * userTotalAttendance.get().getTotalWorkingHours();
-        int overtimeHoursToSubtract = userTotalAttendance.get().getOvertimeHoursSum() - hoursToSubtract;
-        try {
-            userTotalAttendance.get().setTotalFreeDays(totalFreeDays + freeDays);
-            userTotalAttendance.get().setOvertimeHoursSum(overtimeHoursToSubtract);
-            userTotalAttendanceRepository.save(userTotalAttendance.get());
+        int hoursToSubtractAsDays = freeDays * userTotalAttendance.get().getTotalWorkingHours();
+        int overtimeHoursToSubtract = userTotalAttendance.get().getOvertimeHoursSum() - hoursToSubtractAsDays;
 
-        } catch (Exception e) {
-            throw new CustomException(e.getMessage());
+        if(asFreeDays) {
+            if (overTimeWorkingHours < userTotalAttendance.get().getTotalWorkingHours()) {
+                throw new CustomException(remainderWorkingHours + " is not enough overtime working hours for free day");
+            }
+            try {
+                userTotalAttendance.get().setTotalFreeDays(totalFreeDays + freeDays);
+                userTotalAttendance.get().setOvertimeHoursSum(overtimeHoursToSubtract);
+                userTotalAttendanceRepository.save(userTotalAttendance.get());
+
+            } catch (Exception e) {
+                throw new CustomException(e.getMessage());
+            }
+        } else {
+            userTotalAttendance.get().setOvertimeHoursSum(userTotalAttendance.get().getOvertimeHoursSum() - overTimeWorkingHours);
+            userTotalAttendanceRepository.save(userTotalAttendance.get());
         }
 
         return ResponseEntity.ok().body("Successfully updated");
@@ -75,4 +85,5 @@ public class WorkingHoursService {
         Integer overtimeHoursSum = overtimeHoursRepository.sumOvertimeWorkingHours(userId, startDate, endDate);
         return ResponseEntity.ok().body(overtimeHoursSum);
     }
+
 }
