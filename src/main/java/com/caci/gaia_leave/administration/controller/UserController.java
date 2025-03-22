@@ -106,7 +106,7 @@ public class UserController {
         return userService.updateStatus(id, status);
     }
 
-    @PostMapping("/upload-image")
+    @PutMapping("/upload-image")
     public ResponseEntity<String> uploadImage(
             @Valid
             @RequestParam("file")

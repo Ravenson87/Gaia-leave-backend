@@ -104,4 +104,5 @@ public class User extends Auditable implements Serializable {
     @JsonProperty("refresh_token_expire_time")
     @Column(name = "refresh_token_expire_time")
     private Date refreshTokenExpireTime;
+
 }

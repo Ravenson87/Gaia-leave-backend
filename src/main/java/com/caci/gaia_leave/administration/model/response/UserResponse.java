@@ -131,4 +131,11 @@ public class UserResponse implements Serializable {
     @JoinColumn(name = "id", referencedColumnName = "user_id",
             insertable = false, updatable = false)
     private UserTotalAttendanceResponse userTotalAttendance;
+
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "id",
+            insertable = false, updatable = false)
+    private List<UserDocumentsResponse> userDocuments;
+
 }
