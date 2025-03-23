@@ -91,7 +91,7 @@ public class UserDocumentsService {
             throw new CustomException("User with id `" + userId + "` does not exist.");
         }
 
-        String filePath = documentHandler.storeDocument("profile_image", file, AppConst.DOCUMENT_TYPE);
+        String filePath = documentHandler.storeDocument("user_document", file, AppConst.DOCUMENT_TYPE);
 
        Optional<UserDocuments> result = userDocumentsRepository.findById(documentId);
        if (result.isEmpty()) {
@@ -104,7 +104,7 @@ public class UserDocumentsService {
         }catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
-        return ResponseEntity.ok().body("Documents successfully uploaded");
+        return ResponseEntity.ok().body("Document successfully uploaded");
     }
 
 }

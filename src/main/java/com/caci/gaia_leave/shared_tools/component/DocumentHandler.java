@@ -7,10 +7,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,6 +16,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+
+import static com.caci.gaia_leave.shared_tools.helper.AllHelpers.checkOs;
 
 @Component
 @RequiredArgsConstructor
@@ -33,8 +31,8 @@ public class DocumentHandler {
         String newFileName =
                 prefix + "_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + "." + fileExtension;
         List<String> allowedExtensionsList = Arrays.asList(allowedExtensions);
-        if(!allowedExtensionsList.contains(fileExtension)){
-            throw new CustomException("Invalid image extension");
+        if (!allowedExtensionsList.contains(fileExtension)) {
+            throw new CustomException("Invalid document extension");
         }
 
         try {
@@ -56,14 +54,5 @@ public class DocumentHandler {
         return appProperties.getDomainName() + appProperties.getImageStorageGaiaLeave() + newFileName;
     }
 
-    private String checkOs() {
-        String os = System.getProperty("os.name").toLowerCase();
-        if (os.contains("win")) {
-            return "windows";
-        } else if (os.contains("nux") || os.contains("nix")) {
-            return "linux";
-        } else {
-            return null;
-        }
-    }
+
 }

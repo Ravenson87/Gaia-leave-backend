@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.caci.gaia_leave.shared_tools.component.AppConst.PROFILE_IMG_MAX_SIZE;
+import static com.caci.gaia_leave.shared_tools.helper.AllHelpers.checkOs;
 
 @Component
 @RequiredArgsConstructor
@@ -79,14 +80,5 @@ public class ImageHandler {
         }
     }
 
-    private String checkOs() {
-        String os = System.getProperty("os.name").toLowerCase();
-        if (os.contains("win")) {
-            return "windows";
-        } else if (os.contains("nux") || os.contains("nix")) {
-            return "linux";
-        } else {
-            return null;
-        }
-    }
+
 }

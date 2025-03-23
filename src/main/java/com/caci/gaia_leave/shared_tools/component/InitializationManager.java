@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
+
+import static com.caci.gaia_leave.shared_tools.helper.AllHelpers.checkOs;
 
 
 @Component
@@ -23,6 +26,12 @@ public class InitializationManager {
     Path path = Paths.get(dir);
     try{
     Files.createDirectories(path);
+
+        if (Objects.requireNonNull(checkOs()).equalsIgnoreCase("linux")) {
+            ProcessBuilder processBuilder = new ProcessBuilder();
+            processBuilder.command("bash", "-c", "sudo chmod 777 " + dir);
+            processBuilder.start();
+        }
     }catch(Exception e){
         throw new CustomException(e.getMessage());
     }

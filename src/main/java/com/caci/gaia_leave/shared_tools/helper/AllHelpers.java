@@ -118,4 +118,15 @@ public class AllHelpers {
         return LocalDate.of(year, 4, f + 4);
     }
 
+    public static String checkOs() {
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.contains("win")) {
+            return "windows";
+        } else if (os.contains("nux") || os.contains("nix")) {
+            return "linux";
+        } else {
+            return null;
+        }
+    }
+
 }
