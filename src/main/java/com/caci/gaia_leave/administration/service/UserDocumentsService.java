@@ -28,11 +28,15 @@ public class UserDocumentsService {
     private final UserRepository userRepository;
     private final DocumentHandler documentHandler;
 
-    public ResponseEntity<UserDocuments> create(UserDocuments userDocuments) {
+    public ResponseEntity<UserDocuments> create(UserDocuments userDocuments, MultipartFile file) {
         if(!userRepository.existsById(userDocuments.getId())) {
             throw new CustomException("User with id `" + userDocuments.getId() + "` does not exist.");
         }
+
+        String filePath = documentHandler.storeDocument("user_document", file, AppConst.DOCUMENT_TYPE);
+
         try{
+            userDocuments.setDocumentPath(filePath);
             UserDocuments save = userDocumentsRepository.save(userDocuments);
             Optional<UserDocuments> result = userDocumentsRepository.findById(save.getId());
             return result
@@ -86,25 +90,21 @@ public class UserDocumentsService {
 
     }
 
-    public ResponseEntity<String> uploadDocument(MultipartFile file, Integer userId, Integer documentId) {
-        if (!userRepository.existsById(userId)) {
-            throw new CustomException("User with id `" + userId + "` does not exist.");
-        }
-
-        String filePath = documentHandler.storeDocument("user_document", file, AppConst.DOCUMENT_TYPE);
-
-       Optional<UserDocuments> result = userDocumentsRepository.findById(documentId);
-       if (result.isEmpty()) {
-           throw new CustomException("Document does not exist.");
-       }
-        try{
-        result.get().setId(documentId);
-        result.get().setDocumentPath(filePath);
-        userDocumentsRepository.save(result.get());
-        }catch (Exception e) {
-            throw new CustomException(e.getMessage());
-        }
-        return ResponseEntity.ok().body("Document successfully uploaded");
-    }
+//    public ResponseEntity<String> uploadDocument(MultipartFile file, Integer userId) {
+//        if (!userRepository.existsById(userId)) {
+//            throw new CustomException("User with id `" + userId + "` does not exist.");
+//        }
+//
+//        String filePath = documentHandler.storeDocument("user_document", file, AppConst.DOCUMENT_TYPE);
+//
+//
+//        try{
+//
+//
+//        }catch (Exception e) {
+//            throw new CustomException(e.getMessage());
+//        }
+//        return ResponseEntity.ok().body("Document successfully uploaded");
+//    }
 
 }

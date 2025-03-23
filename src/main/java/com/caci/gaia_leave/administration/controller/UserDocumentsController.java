@@ -28,9 +28,13 @@ public class UserDocumentsController {
             @Valid
             @RequestBody
             @NotNull(message = "Model can not be null")
-            UserDocuments model
+            UserDocuments model,
+            @Valid
+            @RequestParam("file")
+            @NotNull(message = "File must be provided")
+            MultipartFile file
     ) {
-        return userDocumentsService.create(model);
+        return userDocumentsService.create(model, file);
     }
 
     @GetMapping("/read")
@@ -75,22 +79,22 @@ public class UserDocumentsController {
         return userDocumentsService.delete(id);
     }
 
-    @PostMapping("/upload-document")
-    public ResponseEntity<String> uploadDocument(
-            @Valid
-            @RequestParam("file")
-            @NotNull
-            MultipartFile file,
-            @RequestParam("user_id")
-            @NotNull
-            @Min(value = 1, message = "User id can not be less than zero")
-            Integer userId,
-            @RequestParam("document_id")
-            @NotNull
-            @Min(value = 1, message = "Document id can not be less than zero")
-            Integer documentId
-
-    ){
-        return userDocumentsService.uploadDocument(file, userId, documentId);
-    }
+//    @PostMapping("/upload-document")
+//    public ResponseEntity<String> uploadDocument(
+//            @Valid
+//            @RequestParam("file")
+//            @NotNull
+//            MultipartFile file,
+//            @RequestParam("user_id")
+//            @NotNull
+//            @Min(value = 1, message = "User id can not be less than zero")
+//            Integer userId,
+//            @RequestParam("document_id")
+//            @NotNull
+//            @Min(value = 1, message = "Document id can not be less than zero")
+//            Integer documentId
+//
+//    ){
+//        return userDocumentsService.uploadDocument(file, userId, documentId);
+//    }
 }
