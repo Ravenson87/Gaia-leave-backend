@@ -26,15 +26,16 @@ public class UserDocumentsController {
     @PostMapping("/create")
     public ResponseEntity<UserDocuments> create(
             @Valid
-            @RequestBody
-            @NotNull(message = "Model can not be null")
-            UserDocuments model,
+            @RequestParam("user_id")
+            @NotNull(message = "User Id can not be null")
+            @Min(value = 1, message = "User Id can not be less than zero")
+            Integer userId,
             @Valid
             @RequestParam("file")
             @NotNull(message = "File must be provided")
             MultipartFile file
     ) {
-        return userDocumentsService.create(model, file);
+        return userDocumentsService.create(userId, file);
     }
 
     @GetMapping("/read")
@@ -61,11 +62,12 @@ public class UserDocumentsController {
             @NotNull(message = "Id can not be null")
             @Min(value = 1, message = "Id can not be less than zero")
             Integer id,
-            @RequestBody
-            @NotNull(message = "Model can not be null")
-            UserDocuments model
+            @Valid
+            @RequestParam("file")
+            @NotNull(message = "File must be provided")
+            MultipartFile file
     ) {
-        return userDocumentsService.update(id, model);
+        return userDocumentsService.update(id, file);
     }
 
     @DeleteMapping("/delete")

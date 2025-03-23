@@ -16,6 +16,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,14 +32,16 @@ public class UserDocumentsService {
     private final UserRepository userRepository;
     private final DocumentHandler documentHandler;
 
-    public ResponseEntity<UserDocuments> create(UserDocuments userDocuments, MultipartFile file) {
-        if(!userRepository.existsById(userDocuments.getId())) {
-            throw new CustomException("User with id `" + userDocuments.getId() + "` does not exist.");
+    public ResponseEntity<UserDocuments> create(Integer userId, MultipartFile file) {
+        if(!userRepository.existsById(userId)){
+            throw new CustomException("User with id `" + userId + "` does not exist.");
         }
 
         String filePath = documentHandler.storeDocument("user_document", file, AppConst.DOCUMENT_TYPE);
 
         try{
+            UserDocuments userDocuments = new UserDocuments();
+            userDocuments.setUserId(userId);
             userDocuments.setDocumentPath(filePath);
             UserDocuments save = userDocumentsRepository.save(userDocuments);
             Optional<UserDocuments> result = userDocumentsRepository.findById(save.getId());
@@ -61,15 +67,22 @@ public class UserDocumentsService {
 
     }
 
-    public ResponseEntity<String> update(Integer id, UserDocuments model){
+    public ResponseEntity<String> update(Integer id, MultipartFile file){
         if(!userDocumentsResponseRepository.existsById(id)){
             throw new CustomException("Document does not exist.");
         }
-        if(!userRepository.existsById(model.getId())) {
-            throw new CustomException("User with id `" + model.getId() + "` does not exist.");
-        }
+
         try{
+            UserDocuments model = userDocumentsRepository.findById(id).get();
+            String pathToDeleteString = model.getDocumentPath();
+            Path pathToDelete = Paths.get(pathToDeleteString);
+            System.out.println(pathToDelete);
+            System.out.println(Files.deleteIfExists(pathToDelete));
+
+            String filePath = documentHandler.storeDocument("user_document", file, AppConst.DOCUMENT_TYPE);
+
             model.setId(id);
+            model.setDocumentPath(filePath);
             userDocumentsRepository.save(model);
             return ResponseEntity.ok().body("Successfully update");
         }catch (Exception e) {
