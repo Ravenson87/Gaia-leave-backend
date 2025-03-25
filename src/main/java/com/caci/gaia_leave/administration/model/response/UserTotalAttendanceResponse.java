@@ -69,11 +69,4 @@ public class UserTotalAttendanceResponse implements Serializable {
     @Column(name = "last_modified_date")
     private Date lastModifiedDate;
 
-//    @OneToOne(mappedBy = "userTotalAttendance")
-//    private UserResponse user;
-//
-//    @OneToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "user_id",
-//            insertable = false, updatable = false)
-//    private UserResponse user;
 }

@@ -26,7 +26,6 @@ import java.util.Date;
 public class UserUsedFreeDaysResponse implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     @Column(name = "id")
     private Integer id;
 

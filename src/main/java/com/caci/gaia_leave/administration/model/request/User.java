@@ -72,8 +72,6 @@ public class User extends Auditable implements Serializable {
     @Column(name = "username")
     private String username;
 
-    @NotEmpty(message = "password cannot be empty")
-    @NotNull(message = "password cannot be empty")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @Column(name = "password")
     @Size(min = 8, message = "Incorrect password")

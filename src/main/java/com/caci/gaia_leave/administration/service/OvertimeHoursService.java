@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,34 +28,41 @@ public class OvertimeHoursService {
     private final CalendarRepository calendarRepository;
     private final UserTotalAttendanceRepository userTotalAttendanceRepository;
 
-    public ResponseEntity<OvertimeHoursResponse> create(OvertimeHours model) {
-        if (overtimeHoursRepository.existsByUserIdAndCalendarId(model.getUserId(), model.getCalendarId())) {
-            throw new CustomException("Overtime hours for that date and that user already exists.");
-        }
+    public ResponseEntity<List<OvertimeHoursResponse>> create(List<OvertimeHours> models) {
+        List<OvertimeHours> save = new ArrayList<>();
 
-        if (!userRepository.existsById(model.getUserId())) {
-            throw new CustomException("User Id " + model.getUserId() + " does not exist.");
-        }
-        if (!calendarRepository.existsById(model.getCalendarId())) {
-            throw new CustomException("Calendar Id " + model.getCalendarId() + " does not exist.");
-        }
+        models.forEach(model -> {
+            if (overtimeHoursRepository.existsByUserIdAndCalendarId(model.getUserId(), model.getCalendarId())) {
+                throw new CustomException("Overtime hours for that date and that user already exists.");
+            }
 
-        Optional<UserTotalAttendance> userTotalAttendance = userTotalAttendanceRepository.findByUserId(model.getUserId());
-        if (userTotalAttendance.isEmpty()) {
-            throw new CustomException("User Id " + model.getUserId() + " does not exist.");
-        }
-        int maxOvertimeHours = 24 - userTotalAttendance.get().getTotalWorkingHours();
+            if (!userRepository.existsById(model.getUserId())) {
+                throw new CustomException("User Id " + model.getUserId() + " does not exist.");
+            }
+            if (!calendarRepository.existsById(model.getCalendarId())) {
+                throw new CustomException("Calendar Id " + model.getCalendarId() + " does not exist.");
+            }
 
-        if(model.getOvertimeHours() > maxOvertimeHours) {
-            throw new CustomException("Overtime hours can not exceed 24 hours.");
-        }
+            Optional<UserTotalAttendance> userTotalAttendance = userTotalAttendanceRepository.findByUserId(model.getUserId());
+            if (userTotalAttendance.isEmpty()) {
+                throw new CustomException("User Id " + model.getUserId() + " does not exist.");
+            }
+            int maxOvertimeHours = 24 - userTotalAttendance.get().getTotalWorkingHours();
+
+            if(model.getOvertimeHours() > maxOvertimeHours) {
+                throw new CustomException("Overtime hours can not exceed 24 hours.");
+            }
+            save.add(model);
+
+        });
 
         try {
-            overtimeHoursRepository.save(model);
-            Optional<OvertimeHoursResponse> result = overtimeHoursResponseRepository.findById(model.getId());
-            return result
-                    .map(response -> ResponseEntity.status(HttpStatus.CREATED).body(response))
-                    .orElseGet(() -> ResponseEntity.noContent().build());
+            overtimeHoursRepository.saveAll(models);
+            List<Integer> ids = new ArrayList<>();
+            save.forEach(model -> ids.add(model.getId()));
+            List<OvertimeHoursResponse> result = AllHelpers.listConverter(overtimeHoursResponseRepository.findAllById(ids));
+            return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(result);
+
         } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }

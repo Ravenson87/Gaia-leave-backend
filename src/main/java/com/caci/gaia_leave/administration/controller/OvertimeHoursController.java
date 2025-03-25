@@ -6,6 +6,7 @@ import com.caci.gaia_leave.administration.service.OvertimeHoursService;
 import com.caci.gaia_leave.administration.service.WorkingHoursService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,13 +26,13 @@ public class OvertimeHoursController {
     private final WorkingHoursService workingHoursService;
 
     @PostMapping("/create")
-    public ResponseEntity<OvertimeHoursResponse> create(
+    public ResponseEntity<List<OvertimeHoursResponse>> create(
             @Valid
             @RequestBody
-            @NotNull(message = "Model can not be null")
-            OvertimeHours model
+            @NotEmpty(message = "List can not be empty or null")
+            List<OvertimeHours> models
     ) {
-        return overtimeHoursService.create(model);
+        return overtimeHoursService.create(models);
     }
 
     @GetMapping("/read")
