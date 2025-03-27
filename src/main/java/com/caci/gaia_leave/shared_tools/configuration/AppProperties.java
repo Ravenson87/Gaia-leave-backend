@@ -79,4 +79,7 @@ public class AppProperties {
 
     @Value("${img.storage.gaia.leave}")
     private String imageStorageGaiaLeave;
+
+    @Value("${spring.mail.send.from}")
+    private String sendMailFrom;
 }
