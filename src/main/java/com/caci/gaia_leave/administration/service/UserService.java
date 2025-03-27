@@ -67,22 +67,31 @@ public class UserService {
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
-    public ResponseEntity<String> update(Integer id, User model) {
+    public ResponseEntity<String> update(Integer id, Integer roleId, Integer jobPositionId,
+                                         String firstName, String lastName, String email, String username, Boolean status) {
+
         if (!userRepository.existsById(id)) {
             throw new CustomException("User with id `" + id + "` does not exist.");
         }
 
-        Optional<UserResponse> uniqueUsername = userResponseRepository.findByUsername(model.getUsername());
+        Optional<UserResponse> uniqueUsername = userResponseRepository.findByUsername(username);
         if (uniqueUsername.isPresent() && !uniqueUsername.get().getId().equals(id)) {
-            throw new CustomException("Username `" + model.getUsername() + " already exists.");
+            throw new CustomException("Username `" + username + " already exists.");
         }
-        Optional<UserResponse> uniqueEmail = userResponseRepository.findByEmail(model.getEmail());
+        Optional<UserResponse> uniqueEmail = userResponseRepository.findByEmail(email);
         if (uniqueEmail.isPresent() && !uniqueEmail.get().getId().equals(id)) {
-            throw new CustomException("Email `" + model.getEmail() + " already exists.");
+            throw new CustomException("Email `" + email + " already exists.");
         }
         try {
+            User model = userRepository.findById(id).get();
             model.setId(id);
-            model.setPassword(BCrypt.hashpw(model.getPassword(), BCrypt.gensalt()));
+            model.setRoleId(roleId);
+            model.setJobPositionId(jobPositionId);
+            model.setFirstName(firstName);
+            model.setLastName(lastName);
+            model.setEmail(email);
+            model.setUsername(username);
+            model.setStatus(status);
             userRepository.save(model);
             return ResponseEntity.ok().body("Successfully updated");
         } catch (Exception e) {

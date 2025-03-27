@@ -57,11 +57,40 @@ public class UserController {
             @NotNull(message = "Id can not be null")
             @Min(value = 1, message = "Id can not be less than zero")
             Integer id,
-            @RequestBody
-            @NotNull(message = "Model can not be null")
-            User model
+            @Valid
+            @RequestParam("role_id")
+            @NotNull(message = "Role id can not be null")
+            @Min(value = 1, message = "Role id can not be less than zero")
+            Integer roleId,
+            @Valid
+            @RequestParam("job_position_id")
+            @NotNull(message = "Job position Id can not be null")
+            @Min(value = 1, message = "Job position Id can not be less than zero")
+            Integer jobPositionId,
+            @Valid
+            @RequestParam("first_name")
+            @NotEmpty(message = "First name can not be empty")
+            @NotNull(message = "First name can not be empty")
+            String firstName,
+            @Valid
+            @RequestParam("last_name")
+            @NotEmpty(message = "Last name can not be empty")
+            @NotNull(message = "Last name can not be empty")
+            String lastName,
+            @Valid
+            @RequestParam("email")
+            @NotEmpty(message = "email can not be empty")
+            @NotNull(message = "email name can not be empty")
+            String email,
+            @Valid
+            @RequestParam("username")
+            @NotEmpty(message = "username can not be empty")
+            @NotNull(message = "username name can not be empty")
+            String username,
+            @RequestParam("status")
+            Boolean status
     ) {
-        return userService.update(id, model);
+        return userService.update(id, roleId, jobPositionId, firstName, lastName, email, username, status);
     }
 
     @DeleteMapping("/delete")
