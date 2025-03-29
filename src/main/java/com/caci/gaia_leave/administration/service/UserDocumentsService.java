@@ -1,6 +1,5 @@
 package com.caci.gaia_leave.administration.service;
 
-import com.caci.gaia_leave.administration.model.request.User;
 import com.caci.gaia_leave.administration.model.request.UserDocuments;
 import com.caci.gaia_leave.administration.model.response.UserDocumentsResponse;
 import com.caci.gaia_leave.administration.repository.request.UserDocumentsRepository;
@@ -19,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 

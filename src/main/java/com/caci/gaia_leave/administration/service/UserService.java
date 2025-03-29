@@ -14,10 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+import java.util.Optional;
 
-import java.util.*;
-
-import static com.caci.gaia_leave.shared_tools.component.AppConst.PROFILE_IMG_MAX_SIZE;
 import static com.caci.gaia_leave.shared_tools.helper.AllHelpers.listConverter;
 
 @Service

@@ -1,11 +1,9 @@
 package com.caci.gaia_leave.administration.controller;
 
 import com.caci.gaia_leave.administration.model.request.Calendar;
-import com.caci.gaia_leave.administration.model.request.FreeDayType;
 import com.caci.gaia_leave.administration.service.HolidayService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

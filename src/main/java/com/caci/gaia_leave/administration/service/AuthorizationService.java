@@ -1,7 +1,6 @@
 package com.caci.gaia_leave.administration.service;
 
 import com.caci.gaia_leave.administration.model.request.*;
-import com.caci.gaia_leave.administration.model.response.CalendarResponse;
 import com.caci.gaia_leave.administration.model.response.UserResponse;
 import com.caci.gaia_leave.administration.repository.request.*;
 import com.caci.gaia_leave.administration.repository.response.UserResponseRepository;

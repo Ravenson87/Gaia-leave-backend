@@ -1,31 +1,13 @@
 package com.caci.gaia_leave.shared_tools.helper;
 
-import com.caci.gaia_leave.shared_tools.configuration.AppProperties;
-import com.caci.gaia_leave.shared_tools.exception.CustomException;
-import lombok.RequiredArgsConstructor;
-import net.coobird.thumbnailator.Thumbnails;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
-
-import static com.caci.gaia_leave.shared_tools.component.AppConst.PROFILE_IMG_MAX_SIZE;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 public class AllHelpers {

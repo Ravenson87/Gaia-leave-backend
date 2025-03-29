@@ -12,7 +12,6 @@ import com.caci.gaia_leave.shared_tools.model.MappingServiceWrapper;
 import com.caci.gaia_leave.shared_tools.service.MappingService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
