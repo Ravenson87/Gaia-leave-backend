@@ -36,7 +36,6 @@ public class User extends Auditable implements Serializable {
     @Column(name = "role_id")
     private Integer roleId;
 
-
     @NotNull(message = "job_position_id cannot be empty")
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     @JsonProperty("job_position_id")
@@ -81,6 +80,20 @@ public class User extends Auditable implements Serializable {
     )
     private String password;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Belgrade")
+    @JsonProperty("date_of_birth")
+    @Column(name = "date_of_birth")
+    private Date dateOfBirth;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonProperty("phone")
+    @Column(name = "phone")
+    private String phone;
+
+    @JsonFormat(shape = JsonFormat.Shape.BOOLEAN)
+    @JsonProperty("verified")
+    @Column(name = "verified")
+    private Boolean verified;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("profile_image")

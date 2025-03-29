@@ -4,11 +4,15 @@ import com.caci.gaia_leave.administration.service.AuthorizationService;
 import com.caci.gaia_leave.shared_tools.model.AuthorizationTokenDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 @RestController
 @Validated
@@ -31,6 +35,31 @@ public class AuthorizationController {
             String password
     ) {
         return authorizationService.login(user, password);
+    }
+
+    @PutMapping("/validate-user")
+    public ResponseEntity<String> validateUser(
+            @Valid
+            @RequestParam("id")
+            @NotNull(message = "User id can not be null")
+            Integer id,
+            @RequestParam("password")
+            @NotEmpty(message = "Password can not be empty")
+            String password,
+            @RequestParam("date_of_birth")
+            @NotNull(message = "Date of birth can not be null")
+            @DateTimeFormat(pattern = "yyyy-MM-dd")
+            Date dateOfBirth,
+            @RequestParam("phone")
+            @NotEmpty(message = "Phone can not be null")
+            String phone,
+            @RequestParam("date_of_holiday")
+            @DateTimeFormat(pattern = "yyyy-MM-dd")
+            Date dateOfHoliday,
+            @RequestParam("holiday_description")
+            String holidayDescription
+    ) {
+        return authorizationService.validateUser(id, password, dateOfBirth, phone, dateOfHoliday, holidayDescription);
     }
 
     @GetMapping("/refresh_token")

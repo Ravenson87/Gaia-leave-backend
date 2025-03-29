@@ -1,0 +1,5 @@
+ALTER TABLE `user`
+    ADD COLUMN `verified` BOOLEAN DEFAULT false AFTER status,
+    ADD COLUMN `date_of_birth` DATE DEFAULT NULL AFTER password,
+    ADD COLUMN `phone` VARCHAR(150) DEFAULT NULL AFTER date_of_birth,
+    MODIFY COLUMN `password` VARCHAR (255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL;

@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface FreeDayTypeRepository extends CrudRepository<FreeDayType, Integer> {
     boolean existsByType(String type);
     Optional<FreeDayType> findByType(String type);
+    Optional<FreeDayType> findByDescriptionIgnoreCase(String description);
 }
