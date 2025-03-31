@@ -1,7 +1,9 @@
 package com.caci.gaia_leave.administration.service;
 
+import com.caci.gaia_leave.administration.model.request.MailHistory;
 import com.caci.gaia_leave.shared_tools.configuration.AppProperties;
 import com.caci.gaia_leave.shared_tools.exception.CustomException;
+import com.caci.gaia_leave.shared_tools.helper.AllHelpers;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +16,16 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
 public class MailService {
     private final AppProperties appProperties;
     private final JavaMailSender mailSender;
+    private final MailHistoryService mailHistoryService;
 
     public void sendEmail(String sendTo, String subject, String body, MultipartFile[] files) {
         String prepareAddresses = sendTo.trim().replaceAll("\\s+", "");
@@ -41,6 +47,7 @@ public class MailService {
                 }
             }
             mailSender.send(message);
+            createMailHistory(prepareAddresses,  body);
 
             if (fsr != null) {
                 try {
@@ -67,4 +74,14 @@ public class MailService {
         }
     }
 
+    private void createMailHistory(String prepareAddresses, String body) {
+        MailHistory model = new MailHistory();
+        LocalDate date = LocalDate.now();
+        Date convertedDate = AllHelpers.convertToDateViaInstant(date);
+
+        model.setAddresses(prepareAddresses);
+        model.setMessage(body);
+        model.setCreatedDate(convertedDate);
+        mailHistoryService.create(model);
+    }
 }

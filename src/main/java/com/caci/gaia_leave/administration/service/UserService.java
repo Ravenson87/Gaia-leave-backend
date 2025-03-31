@@ -8,12 +8,17 @@ import com.caci.gaia_leave.shared_tools.component.AppConst;
 import com.caci.gaia_leave.shared_tools.component.ImageHandler;
 import com.caci.gaia_leave.shared_tools.exception.CustomException;
 import lombok.RequiredArgsConstructor;
+import org.flywaydb.core.internal.resource.classpath.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +30,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserResponseRepository userResponseRepository;
     private final ImageHandler imageHandler;
-
+    private final ResourceLoader resourceLoader;
+    private final MailService mailService;
 
     public ResponseEntity<String> create(User model) {
 
@@ -40,7 +46,13 @@ public class UserService {
         try {
             String password = BCrypt.hashpw(model.getPassword(), BCrypt.gensalt());
             model.setPassword(password);
-            userRepository.save(model);
+//            userRepository.save(model);
+            String template = readFileAsString("registration_email.html");
+            System.out.println("Pre" + model.getUsername() + " " + model.getFirstName());
+            template = template.replace("{{userName}}", model.getUsername())
+                    .replace("{{firstName}}", model.getFirstName())
+                    .replace("{{lastName}}", model.getLastName());
+            mailService.sendEmail(model.getEmail(), "Activate your GaiaLeave account", template, null);
             return ResponseEntity.status(HttpStatus.CREATED).body("Successfully created");
         } catch (Exception e) {
             throw new CustomException(e.getMessage());
@@ -164,7 +176,14 @@ public class UserService {
 
     }
 
+    private String readFileAsString(String fileName) {
+        Resource resource = resourceLoader.getResource("classpath:static/" + fileName);
 
-
+        try (InputStream stream = resource.getInputStream()) {
+            return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            throw new CustomException(e.getMessage());
+        }
+    }
 
 }

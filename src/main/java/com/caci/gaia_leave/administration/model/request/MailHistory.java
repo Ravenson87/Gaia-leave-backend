@@ -13,6 +13,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -21,7 +22,7 @@ import java.io.Serializable;
 @Entity
 @JsonInclude(JsonInclude.Include.USE_DEFAULTS)
 @Table(name = "mail_history")
-public class MailHistory extends Auditable implements Serializable {
+public class MailHistory implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,33 +30,20 @@ public class MailHistory extends Auditable implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @NotEmpty(message = "Sender must be provided")
+    @NotEmpty(message = "addresses must be provided")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty("sender")
-    @Column(name = "sender")
-    private String sender;
+    @JsonProperty("addresses")
+    @Column(name = "addresses")
+    private String addresses;
 
-    @NotEmpty(message = "send_to must be provided")
+    @NotEmpty(message = "Message must be provided")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty("send_to")
-    @Column(name = "send_to")
-    private String sendTo;
+    @JsonProperty("message")
+    @Column(name = "message")
+    private String message;
 
-    @NotEmpty(message = "Subject must be provided")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty("subject")
-    @Column(name = "subject")
-    private String subject;
-
-    @NotEmpty(message = "Sender must be provided")
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty("service_name")
-    @Column(name = "service_name")
-    private String serviceName;
-
-    @NotEmpty(message = "Endpoint must be provided")
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty("endpoint")
-    @Column(name = "endpoint")
-    private String endpoint;
+    @JsonProperty("created_date")
+    @Column(name = "created_date")
+    private Date createdDate;
 }

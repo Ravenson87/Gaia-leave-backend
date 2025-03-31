@@ -27,36 +27,16 @@ public class MailHistoryResponse implements Serializable {
     private Integer id;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty("sender")
-    @Column(name = "sender")
-    private String sender;
+    @JsonProperty("addresses")
+    @Column(name = "addresses")
+    private String addresses;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty("send_to")
-    @Column(name = "send_to")
-    private String sendTo;
+    @JsonProperty("message")
+    @Column(name = "message")
+    private String message;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty("subject")
-    @Column(name = "subject")
-    private String subject;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty("service_name")
-    @Column(name = "service_name")
-    private String serviceName;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty("endpoint")
-    @Column(name = "endpoint")
-    private String endpoint;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty("created_by")
-    @Column(name = "created_by")
-    private String createdBy;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty("created_date")
     @Column(name = "created_date")
     private Date createdDate;
