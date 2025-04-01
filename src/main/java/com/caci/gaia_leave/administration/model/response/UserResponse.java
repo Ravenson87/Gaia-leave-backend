@@ -99,6 +99,16 @@ public class UserResponse implements Serializable {
     private Date refreshTokenExpireTime;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonProperty("hash")
+    @Column(name = "hash")
+    private String hash;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonProperty("link_expired")
+    @Column(name = "link_expired")
+    private Date linkExpired;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("created_by")
     @Column(name = "created_by")
     private String createdBy;

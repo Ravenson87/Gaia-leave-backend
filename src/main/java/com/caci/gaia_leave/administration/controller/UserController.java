@@ -50,6 +50,16 @@ public class UserController {
         return userService.readById(id);
     }
 
+    @GetMapping("/read-by-hash")
+    public ResponseEntity<Boolean> readByHash(
+            @Valid
+            @RequestParam("hash")
+            @NotNull(message = "Hash can not be null")
+            String hash
+    ) {
+        return userService.checkLinkExpired(hash);
+    }
+
     @PutMapping("/update/{id}")
     public ResponseEntity<String> update(
             @Valid

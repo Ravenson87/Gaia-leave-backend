@@ -18,6 +18,8 @@ public interface UserResponseRepository extends CrudRepository<UserResponse, Int
 
     Optional<UserResponse> findByEmail(String email);
 
+    Optional<UserResponse> findByHash(String hash);
+
     List<UserResponse> findByIdGreaterThan(Integer id);
 
     boolean existsByUsername(String username);

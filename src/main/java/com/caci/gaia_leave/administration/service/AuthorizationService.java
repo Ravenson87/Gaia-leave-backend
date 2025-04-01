@@ -117,8 +117,8 @@ public class AuthorizationService {
     }
 
     @Transactional
-    public ResponseEntity<String> validateUser(Integer userId, String password, Date dateOfBirth, String phone, Date religiousHoliday, String holidayDescription) {
-        Optional<User> user = userRepository.findById(userId);
+    public ResponseEntity<String> validateUser(String hash, String password, Date dateOfBirth, String phone, Date religiousHoliday, String holidayDescription) {
+        Optional<User> user = userRepository.findByHash(hash);
         if (user.isEmpty()) {
             throw new CustomException("User not found.");
         }
@@ -130,7 +130,7 @@ public class AuthorizationService {
         try {
             updateUserForValidation(user, password, dateOfBirth, phone);
             if (religiousHoliday != null) {
-                createPersonalHoliday(userId, religiousHoliday, holidayDescription);
+                createPersonalHoliday(user.get().getId(), religiousHoliday, holidayDescription);
             }
             return ResponseEntity.ok().body("Successfully updated");
         } catch (Exception e) {

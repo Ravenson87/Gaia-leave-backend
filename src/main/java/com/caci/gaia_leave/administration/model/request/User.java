@@ -116,4 +116,13 @@ public class User extends Auditable implements Serializable {
     @Column(name = "refresh_token_expire_time")
     private Date refreshTokenExpireTime;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonProperty("hash")
+    @Column(name = "hash")
+    private String hash;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonProperty("link_expired")
+    @Column(name = "link_expired")
+    private Date linkExpired;
 }

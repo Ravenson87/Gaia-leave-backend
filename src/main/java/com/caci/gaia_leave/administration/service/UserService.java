@@ -8,6 +8,8 @@ import com.caci.gaia_leave.shared_tools.component.AppConst;
 import com.caci.gaia_leave.shared_tools.component.ImageHandler;
 import com.caci.gaia_leave.shared_tools.exception.CustomException;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.flywaydb.core.internal.resource.classpath.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -19,9 +21,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static com.caci.gaia_leave.shared_tools.component.AppConst.LINK_EXPIRATION_TIME;
+import static com.caci.gaia_leave.shared_tools.component.AppConst.REFRESH_TOKEN_EXPIRATION_TIME;
 import static com.caci.gaia_leave.shared_tools.helper.AllHelpers.listConverter;
 
 @Service
@@ -44,14 +49,20 @@ public class UserService {
         }
 
         try {
-            String password = BCrypt.hashpw(model.getPassword(), BCrypt.gensalt());
-            model.setPassword(password);
-//            userRepository.save(model);
+//            String password = BCrypt.hashpw(model.getPassword(), BCrypt.gensalt());
+//            model.setPassword(password);
+            Date now = new Date();
+            Date newExpiryDate = DateUtils.addDays(now, LINK_EXPIRATION_TIME);
+            String hash = DigestUtils.md5Hex(model.getUsername() + model.getEmail());
+            model.setHash(hash);
+            model.setLinkExpired(newExpiryDate);
             String template = readFileAsString("registration_email.html");
             System.out.println("Pre" + model.getUsername() + " " + model.getFirstName());
             template = template.replace("{{userName}}", model.getUsername())
                     .replace("{{firstName}}", model.getFirstName())
-                    .replace("{{lastName}}", model.getLastName());
+                    .replace("{{lastName}}", model.getLastName())
+                    .replace("{{registrationForm}}", "http://localhost:3000/#/registartion?h=" + hash);
+            userRepository.save(model);
             mailService.sendEmail(model.getEmail(), "Activate your GaiaLeave account", template, null);
             return ResponseEntity.status(HttpStatus.CREATED).body("Successfully created");
         } catch (Exception e) {
@@ -105,18 +116,6 @@ public class UserService {
             model.setStatus(status);
             userRepository.save(model);
             return ResponseEntity.ok().body("Successfully updated");
-        } catch (Exception e) {
-            throw new CustomException(e.getMessage());
-        }
-    }
-
-    public ResponseEntity<HttpStatus> delete(Integer id) {
-        if (!userRepository.existsById(id)) {
-            throw new CustomException("User with id `" + id + "` does not exist.");
-        }
-        try {
-            userRepository.deleteById(id);
-            return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
@@ -176,6 +175,30 @@ public class UserService {
 
     }
 
+    public ResponseEntity<Boolean> checkLinkExpired(String hash) {
+        Optional<UserResponse> data = userResponseRepository.findByHash(hash);
+
+        if (data.isEmpty()) {
+            throw new CustomException("User does not exist.");
+        }
+        Date linkedExpired = data.get().getLinkExpired();
+        Date now = new Date();
+
+        return ResponseEntity.ok().body(linkedExpired.after(now));
+    }
+
+    public ResponseEntity<HttpStatus> delete(Integer id) {
+        if (!userRepository.existsById(id)) {
+            throw new CustomException("User with id `" + id + "` does not exist.");
+        }
+        try {
+            userRepository.deleteById(id);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            throw new CustomException(e.getMessage());
+        }
+    }
+
     private String readFileAsString(String fileName) {
         Resource resource = resourceLoader.getResource("classpath:static/" + fileName);
 
@@ -185,5 +208,4 @@ public class UserService {
             throw new CustomException(e.getMessage());
         }
     }
-
 }

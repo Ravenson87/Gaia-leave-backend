@@ -40,9 +40,9 @@ public class AuthorizationController {
     @PutMapping("/validate-user")
     public ResponseEntity<String> validateUser(
             @Valid
-            @RequestParam("id")
-            @NotNull(message = "User id can not be null")
-            Integer id,
+            @RequestParam("hash")
+            @NotNull(message = "Hash id can not be null")
+            String hash,
             @RequestParam("password")
             @NotEmpty(message = "Password can not be empty")
             String password,
@@ -59,7 +59,7 @@ public class AuthorizationController {
             @RequestParam("holiday_description")
             String holidayDescription
     ) {
-        return authorizationService.validateUser(id, password, dateOfBirth, phone, dateOfHoliday, holidayDescription);
+        return authorizationService.validateUser(hash, password, dateOfBirth, phone, dateOfHoliday, holidayDescription);
     }
 
     @GetMapping("/refresh_token")
