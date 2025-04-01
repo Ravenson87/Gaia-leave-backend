@@ -61,7 +61,7 @@ public class UserService {
             template = template.replace("{{userName}}", model.getUsername())
                     .replace("{{firstName}}", model.getFirstName())
                     .replace("{{lastName}}", model.getLastName())
-                    .replace("{{registrationForm}}", "http://localhost:3000/#/registartion?h=" + hash);
+                    .replace("{{registrationForm}}", "https://gaia.softmetrixgroup.com/#/registartion?h=" + hash);
             userRepository.save(model);
             mailService.sendEmail(model.getEmail(), "Activate your GaiaLeave account", template, null);
             return ResponseEntity.status(HttpStatus.CREATED).body("Successfully created");
