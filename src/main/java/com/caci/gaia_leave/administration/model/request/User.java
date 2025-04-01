@@ -93,7 +93,7 @@ public class User extends Auditable implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.BOOLEAN)
     @JsonProperty("verified")
     @Column(name = "verified")
-    private Boolean verified;
+    private Boolean verified = false;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("profile_image")

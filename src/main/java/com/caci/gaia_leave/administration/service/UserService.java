@@ -49,8 +49,6 @@ public class UserService {
         }
 
         try {
-//            String password = BCrypt.hashpw(model.getPassword(), BCrypt.gensalt());
-//            model.setPassword(password);
             Date now = new Date();
             Date newExpiryDate = DateUtils.addDays(now, LINK_EXPIRATION_TIME);
             String hash = DigestUtils.md5Hex(model.getUsername() + model.getEmail());
