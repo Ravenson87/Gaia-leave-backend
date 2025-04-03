@@ -102,6 +102,7 @@ public class User extends Auditable implements Serializable {
     @Column(name = "status")
     private Boolean status;
 
+
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("refresh_token")
     @Column(name = "refresh_token")

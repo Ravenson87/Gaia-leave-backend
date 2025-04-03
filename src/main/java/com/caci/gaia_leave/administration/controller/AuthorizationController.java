@@ -1,5 +1,6 @@
 package com.caci.gaia_leave.administration.controller;
 
+import com.caci.gaia_leave.administration.model.dto.UserValidation;
 import com.caci.gaia_leave.administration.service.AuthorizationService;
 import com.caci.gaia_leave.shared_tools.model.AuthorizationTokenDTO;
 import jakarta.validation.Valid;
@@ -40,26 +41,11 @@ public class AuthorizationController {
     @PutMapping("/validate-user")
     public ResponseEntity<String> validateUser(
             @Valid
-            @RequestParam("hash")
-            @NotNull(message = "Hash id can not be null")
-            String hash,
-            @RequestParam("password")
-            @NotEmpty(message = "Password can not be empty")
-            String password,
-            @RequestParam("date_of_birth")
-            @NotNull(message = "Date of birth can not be null")
-            @DateTimeFormat(pattern = "yyyy-MM-dd")
-            Date dateOfBirth,
-            @RequestParam("phone")
-            @NotEmpty(message = "Phone can not be null")
-            String phone,
-            @RequestParam("date_of_holiday")
-            @DateTimeFormat(pattern = "yyyy-MM-dd")
-            Date dateOfHoliday,
-            @RequestParam("holiday_description")
-            String holidayDescription
+            @RequestBody
+            @NotNull(message = "Model can not be null")
+            UserValidation model
     ) {
-        return authorizationService.validateUser(hash, password, dateOfBirth, phone, dateOfHoliday, holidayDescription);
+        return authorizationService.validateUser(model);
     }
 
     @GetMapping("/refresh_token")

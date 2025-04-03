@@ -1,5 +1,6 @@
 package com.caci.gaia_leave.administration.service;
 
+import com.caci.gaia_leave.administration.model.dto.UserValidation;
 import com.caci.gaia_leave.administration.model.request.*;
 import com.caci.gaia_leave.administration.model.response.UserResponse;
 import com.caci.gaia_leave.administration.repository.request.*;
@@ -31,6 +32,13 @@ public class AuthorizationService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
 
+    /**
+     * Check if user is validated, and give him a refresh token and refresh token expire time
+     *
+     * @param user String
+     * @param password String
+     * @return ResponseEntity<AuthorizationTokenDTO>
+     */
     public ResponseEntity<AuthorizationTokenDTO> login(String user, String password) {
         Optional<UserResponse> res = userResponseRepository.findByUsernameAndStatusIsTrueOrEmailAndStatusIsTrue(user, user);
 
@@ -79,8 +87,8 @@ public class AuthorizationService {
      * 8. Ako nije, onda generisemo novi token i refreshToken
      * 9. Vracamo novi token i refreshToken iz AuthorisationTokenDTO
      *
-     * @param refreshToken
-     * @return
+     * @param refreshToken String
+     * @return ResponseEntity<AuthorizationTokenDTO>
      */
     public ResponseEntity<AuthorizationTokenDTO> refreshToken(String refreshToken) {
         Optional<UserResponse> res = userResponseRepository.findByRefreshTokenAndStatusIsTrue(refreshToken);
@@ -116,9 +124,15 @@ public class AuthorizationService {
         return ResponseEntity.ok().body(authorizationTokenDTO);
     }
 
+    /**
+     * Validate user - update validation fields
+     *
+     * @param model UserValidation
+     * @return ResponseEntity<String>
+     */
     @Transactional
-    public ResponseEntity<String> validateUser(String hash, String password, Date dateOfBirth, String phone, Date religiousHoliday, String holidayDescription) {
-        Optional<User> user = userRepository.findByHash(hash);
+    public ResponseEntity<String> validateUser(UserValidation model) {
+        Optional<User> user = userRepository.findByHash(model.getHash());
         if (user.isEmpty()) {
             throw new CustomException("User not found.");
         }
@@ -128,9 +142,9 @@ public class AuthorizationService {
         }
 
         try {
-            updateUserForValidation(user, password, dateOfBirth, phone);
-            if (religiousHoliday != null) {
-                createPersonalHoliday(user.get().getId(), religiousHoliday, holidayDescription);
+            updateUserForValidation(user, model.getPassword(), model.getDateOfBirth(), model.getPhone());
+            if (model.getPersonalHoliday() != null) {
+                createPersonalHoliday(user.get().getId(), model.getPersonalHoliday(), model.getHolidayDescription());
             }
             return ResponseEntity.ok().body("Successfully updated");
         } catch (Exception e) {
@@ -138,6 +152,14 @@ public class AuthorizationService {
         }
     }
 
+    /**
+     * Update User
+     *
+     * @param user Optional<User>
+     * @param password String
+     * @param dateOfBirth Date
+     * @param phone Phone
+     */
     private void updateUserForValidation(Optional<User> user, String password, Date dateOfBirth, String phone) {
         user.get().setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
         user.get().setDateOfBirth(dateOfBirth);
@@ -147,6 +169,13 @@ public class AuthorizationService {
         userRepository.save(user.get());
     }
 
+    /**
+     * Create personal holiday for user
+     *
+     * @param userId Integer
+     * @param religiousHoliday Date
+     * @param holidayDescription String
+     */
     private void createPersonalHoliday(Integer userId, Date religiousHoliday, String holidayDescription) {
         Integer freeDayTypeId;
         Optional<Calendar> findDate = calendarRepository.findByDate(religiousHoliday);
@@ -169,6 +198,12 @@ public class AuthorizationService {
         }
     }
 
+    /**
+     * Create personal holiday free day type for user
+     *
+     * @param holidayDescription String
+     * @return
+     */
     private Integer crateFreeDayType(String holidayDescription) {
         try {
             FreeDayType freeDayTypeDTO = new FreeDayType();
@@ -181,6 +216,14 @@ public class AuthorizationService {
         }
     }
 
+    /**
+     * Create UserUsedFreeDays model
+     *
+     * @param userId Integer
+     * @param freeDayTypeId Integer
+     * @param calendarId Integer
+     * @return UserUsedFreeDays
+     */
     private UserUsedFreeDays UserUsedFreeDaysModel(Integer userId, Integer freeDayTypeId, Integer calendarId) {
         UserUsedFreeDays model = new UserUsedFreeDays();
         model.setUserId(userId);

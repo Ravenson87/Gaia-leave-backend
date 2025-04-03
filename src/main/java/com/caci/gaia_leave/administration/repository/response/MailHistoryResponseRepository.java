@@ -4,6 +4,7 @@ import com.caci.gaia_leave.administration.model.request.MailHistory;
 import com.caci.gaia_leave.administration.model.response.MailHistoryResponse;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 @Repository

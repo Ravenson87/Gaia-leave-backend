@@ -26,18 +26,24 @@ public class CalendarService {
     private final CalendarRepository calendarRepository;
     private final CalendarResponseRepository calendarResponseRepository;
 
+    /**
+     * Populet table Calendar in database
+     */
     public void populateCalendar() {
         int currentYear = LocalDate.now().getYear();
         Set<Calendar> calendarSet = new LinkedHashSet<>();
         List<Date> existedDays = new ArrayList<>();
 
+        // Set first and last day of the year
         LocalDate startDate = LocalDate.of(currentYear, Month.JANUARY, 1);
         LocalDate endDate = LocalDate.of(currentYear, Month.DECEMBER, 31);
 
+        //Add every calendar date to existedDays list
         calendarRepository.findAll().forEach(calendar -> {
             existedDays.add(calendar.getDate());
         });
 
+        // Create every day in calendar with date, day name and day type
         while (!startDate.isAfter(endDate)) {
             Calendar calendar = new Calendar();
             boolean weekend = startDate.getDayOfWeek() == DayOfWeek.SATURDAY || startDate.getDayOfWeek() == DayOfWeek.SUNDAY;
@@ -52,7 +58,10 @@ public class CalendarService {
             calendarSet.add(calendar);
         }
 
-        List<Calendar> diffDays = calendarSet.stream().filter(days -> !existedDays.contains(days)).collect(Collectors.toList());
+        // Check if day already exists in calendar
+        //There was an error: parametar in !existedDays.contains() was days, instead of days.getDate().
+        // That is the problem, because existedDays is list of existedDays is list of Date objects not Calendar objects
+        List<Calendar> diffDays = calendarSet.stream().filter(days -> !existedDays.contains(days.getDate())).collect(Collectors.toList());
 
         try {
             calendarRepository.saveAll(diffDays);

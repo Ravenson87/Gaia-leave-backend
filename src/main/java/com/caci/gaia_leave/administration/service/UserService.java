@@ -1,7 +1,7 @@
 package com.caci.gaia_leave.administration.service;
 
 import com.caci.gaia_leave.administration.model.request.User;
-import com.caci.gaia_leave.administration.model.request.UserUpdate;
+import com.caci.gaia_leave.administration.model.dto.UserUpdate;
 import com.caci.gaia_leave.administration.model.response.UserResponse;
 import com.caci.gaia_leave.administration.repository.request.UserRepository;
 import com.caci.gaia_leave.administration.repository.response.UserResponseRepository;
@@ -11,7 +11,6 @@ import com.caci.gaia_leave.shared_tools.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.time.DateUtils;
-import org.flywaydb.core.internal.resource.classpath.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
@@ -27,7 +26,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.caci.gaia_leave.shared_tools.component.AppConst.LINK_EXPIRATION_TIME;
-import static com.caci.gaia_leave.shared_tools.component.AppConst.REFRESH_TOKEN_EXPIRATION_TIME;
 import static com.caci.gaia_leave.shared_tools.helper.AllHelpers.listConverter;
 
 @Service
