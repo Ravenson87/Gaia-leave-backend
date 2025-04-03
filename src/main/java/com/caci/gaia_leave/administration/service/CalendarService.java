@@ -71,28 +71,56 @@ public class CalendarService {
 
     }
 
-
+    /**
+     * Read all from Calendar table
+     *
+     * @return ResponseEntity<List<CalendarResponse>>
+     */
     public ResponseEntity<List<CalendarResponse>> read() {
         List<CalendarResponse> result = listConverter(calendarResponseRepository.findAll());
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);
     }
 
+    /**
+     * Read Calendar by id
+     *
+     * @param id Integer
+     * @return ResponseEntity<CalendarResponse>
+     */
     public ResponseEntity<CalendarResponse> readById(Integer id) {
         Optional<CalendarResponse> result = calendarResponseRepository.findById(id);
         return result.map(calendar -> ResponseEntity.ok().body(calendar)).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    /**
+     * Read Calendar by type
+     * @param type String
+     * @return ResponseEntity<List<CalendarResponse>>
+     */
     public ResponseEntity<List<CalendarResponse>> readAllByType(String type) {
         WorkingDayType workingDayType = WorkingDayType.valueOf(type);
         List<CalendarResponse> result = listConverter(calendarResponseRepository.findAllByType(workingDayType));
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);
     }
 
+    /**
+     * Read Calendar by date
+     *
+     * @param date Date
+     * @return ResponseEntity<CalendarResponse>
+     */
     public ResponseEntity<CalendarResponse> readByDate(Date date) {
         Optional<CalendarResponse> result = calendarResponseRepository.findByDate(date);
         return result.map(calendar -> ResponseEntity.ok().body(calendar)).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    /**
+     * Update Calendar by id
+     *
+     * @param id Integer
+     * @param model Calendar
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> update(Integer id, Calendar model) {
 
         if (!calendarResponseRepository.existsById(id)) {
@@ -114,6 +142,13 @@ public class CalendarService {
 
     }
 
+    /**
+     * Update Calendar by type
+     *
+     * @param id Integer
+     * @param type String
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> updateByType(Integer id, String type) {
         WorkingDayType workingDayType = getWorkingDayType(type);
         Optional<CalendarResponse> result = calendarResponseRepository.findById(id);
@@ -128,6 +163,12 @@ public class CalendarService {
         }
     }
 
+    /**
+     * Delete Calendar by id
+     *
+     * @param id Integer
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> delete(Integer id) {
         if (!calendarResponseRepository.existsById(id)) {
             throw new CustomException("Day with " + id + "does not exist in calendar");
@@ -140,6 +181,11 @@ public class CalendarService {
         }
     }
 
+    /**
+     * Find Calendar by year
+     * @param year Integer
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> findByYear(Integer year) {
         LocalDate startDate = LocalDate.of(year, Month.JANUARY, 1);
         LocalDate endDate = LocalDate.of(year, Month.DECEMBER, 31);
@@ -151,8 +197,13 @@ public class CalendarService {
         return ResponseEntity.ok().body("Successfully found");
     }
 
-
-    public static WorkingDayType getWorkingDayType(String type) {
+    /**
+     * Get WorkingDayType for every day
+     *
+     * @param type String
+     * @return WorkingDayType
+     */
+    public WorkingDayType getWorkingDayType(String type) {
         return switch (type) {
             case "WEEKEND" -> WorkingDayType.WEEKEND;
             case "WORKING_DAY" -> WorkingDayType.WORKING_DAY;

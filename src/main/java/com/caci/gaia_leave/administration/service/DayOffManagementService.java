@@ -19,14 +19,27 @@ public class DayOffManagementService {
     private final UserTotalAttendanceRepository userTotalAttendanceRepository;
     private final UserUsedFreeDaysRepository userUsedFreeDaysRepository;
 
+    /**
+     * Subtract or add free days form UserUsedFreeDays
+     *
+     * @param usersFreeDays List<UserUsedFreeDays>
+     * @param save Boolean
+     * @return ResponseEntity<String>
+     */
     @Transactional
     public ResponseEntity<String> subtractDaysFromFreeDays(List<UserUsedFreeDays> usersFreeDays, Boolean save) {
+        // Get ids from users, and then create map, grouping all the same ids together
+        // PITATI ZORANA DA TI JOS JEDNOM OBJASNI OVO GRUPISANJE JUZERA
         List<Integer> usersIds = usersFreeDays.stream().map(UserUsedFreeDays::getUserId).toList();
         Map<Integer, List<Integer>> groups = usersIds.stream().collect(Collectors.groupingBy(num -> num, LinkedHashMap::new, Collectors.toList()));
 
+        //Create List of grouped Ids
         List<List<Integer>> groupedList = new ArrayList<>(groups.values());
+        //Create list of models
         List<UserTotalAttendance> models = new ArrayList<>();
 
+        // For each grouped ids get first element, that is model id, and get size, that is quantity of free days
+        // If save is true, than saved days are used and subtract from TotalFreeDays, else add free days to TotalFreeDays
         groupedList.forEach(group -> {
             int userId = group.getFirst();
             int freeDays = group.size();
@@ -42,6 +55,7 @@ public class DayOffManagementService {
             models.add(check.get());
         });
 
+        // Save changes in TotalAttendance table
         try {
             updateUserUsedFreeDays(usersFreeDays, save);
             userTotalAttendanceRepository.saveAll(models);
@@ -51,12 +65,17 @@ public class DayOffManagementService {
         return ResponseEntity.ok().body("Successfully update");
     }
 
-
+    /**
+     * Update UserUsedFreeDays, if save is true then save, else delete
+     *
+     * @param userUsedFreeDays List<UserUsedFreeDays>
+     * @param save boolean
+     */
     public void updateUserUsedFreeDays(List<UserUsedFreeDays> userUsedFreeDays, boolean save) {
         if(save) {
             userUsedFreeDaysRepository.saveAll(userUsedFreeDays);
         } else {
-            //TODO optimise this with native querry
+            //TODO optimise this with native query
             userUsedFreeDays.forEach(userUsedFreeDay -> {
                 userUsedFreeDaysRepository.deleteByUserIdAndCalendarId(userUsedFreeDay.getUserId(), userUsedFreeDay.getCalendarId());
             });
