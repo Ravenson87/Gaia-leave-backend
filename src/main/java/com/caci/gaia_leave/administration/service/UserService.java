@@ -1,6 +1,7 @@
 package com.caci.gaia_leave.administration.service;
 
 import com.caci.gaia_leave.administration.model.request.User;
+import com.caci.gaia_leave.administration.model.request.UserUpdate;
 import com.caci.gaia_leave.administration.model.response.UserResponse;
 import com.caci.gaia_leave.administration.repository.request.UserRepository;
 import com.caci.gaia_leave.administration.repository.response.UserResponseRepository;
@@ -87,32 +88,37 @@ public class UserService {
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
-    public ResponseEntity<String> update(Integer id, Integer roleId, Integer jobPositionId,
-                                         String firstName, String lastName, String email, String username, Boolean status) {
+    public ResponseEntity<String> update(UserUpdate model) {
 
-        if (!userRepository.existsById(id)) {
-            throw new CustomException("User with id `" + id + "` does not exist.");
+        if (!userRepository.existsById(model.getId())) {
+            throw new CustomException("User with id `" + model.getId() + "` does not exist.");
         }
 
-        Optional<UserResponse> uniqueUsername = userResponseRepository.findByUsername(username);
-        if (uniqueUsername.isPresent() && !uniqueUsername.get().getId().equals(id)) {
-            throw new CustomException("Username `" + username + " already exists.");
+        Optional<UserResponse> uniqueUsername = userResponseRepository.findByUsername(model.getUsername());
+        if (uniqueUsername.isPresent() && !uniqueUsername.get().getId().equals(model.getId())) {
+            throw new CustomException("Username `" + model.getUsername() + " already exists.");
         }
-        Optional<UserResponse> uniqueEmail = userResponseRepository.findByEmail(email);
-        if (uniqueEmail.isPresent() && !uniqueEmail.get().getId().equals(id)) {
-            throw new CustomException("Email `" + email + " already exists.");
+        Optional<UserResponse> uniqueEmail = userResponseRepository.findByEmail(model.getEmail());
+        if (uniqueEmail.isPresent() && !uniqueEmail.get().getId().equals(model.getId())) {
+            throw new CustomException("Email `" + model.getEmail() + " already exists.");
         }
         try {
-            User model = userRepository.findById(id).get();
-            model.setId(id);
-            model.setRoleId(roleId);
-            model.setJobPositionId(jobPositionId);
-            model.setFirstName(firstName);
-            model.setLastName(lastName);
-            model.setEmail(email);
-            model.setUsername(username);
-            model.setStatus(status);
-            userRepository.save(model);
+            User userModel = userRepository.findById(model.getId()).get();
+            userModel.setId(model.getId());
+            userModel.setRoleId(model.getRoleId());
+            userModel.setJobPositionId(model.getJobPositionId());
+            userModel.setFirstName(model.getFirstName());
+            userModel.setLastName(model.getLastName());
+            userModel.setEmail(model.getEmail());
+            userModel.setUsername(model.getUsername());
+            userModel.setStatus(model.getStatus());
+            userModel.setDateOfBirth(model.getDateOfBirth());
+            userModel.setStatus(model.getStatus());
+            userModel.setPhone(model.getPhone());
+            userModel.setProfileImage(model.getProfileImage());
+            userModel.setHash(DigestUtils.md5Hex(model.getUsername() + model.getEmail()));
+
+            userRepository.save(userModel);
             return ResponseEntity.ok().body("Successfully updated");
         } catch (Exception e) {
             throw new CustomException(e.getMessage());

@@ -1,6 +1,6 @@
 package com.caci.gaia_leave.administration.model.request;
 
-import com.caci.gaia_leave.shared_tools.model.Auditable;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.io.Serializable;
 import java.util.Date;
 
 @Getter
@@ -22,8 +21,7 @@ import java.util.Date;
 @Entity
 @JsonInclude(JsonInclude.Include.USE_DEFAULTS)
 @Table(name = "user")
-public class User extends Auditable implements Serializable {
-
+public class UserUpdate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
@@ -86,16 +84,6 @@ public class User extends Auditable implements Serializable {
     @Column(name = "phone")
     private String phone;
 
-    @JsonFormat(shape = JsonFormat.Shape.BOOLEAN)
-    @JsonProperty("verified")
-    @Column(name = "verified")
-    private Boolean verified = false;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty("profile_image")
-    @Column(name = "profile_image")
-    private String profileImage;
-
     @NotNull(message = "status cannot be empty")
     @JsonFormat(shape = JsonFormat.Shape.BOOLEAN)
     @JsonProperty("status")
@@ -103,22 +91,7 @@ public class User extends Auditable implements Serializable {
     private Boolean status;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty("refresh_token")
-    @Column(name = "refresh_token")
-    private String refreshToken;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonProperty("refresh_token_expire_time")
-    @Column(name = "refresh_token_expire_time")
-    private Date refreshTokenExpireTime;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @JsonProperty("hash")
-    @Column(name = "hash")
-    private String hash;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonProperty("link_expired")
-    @Column(name = "link_expired")
-    private Date linkExpired;
+    @JsonProperty("profile_image")
+    @Column(name = "profile_image")
+    private String profileImage;
 }
