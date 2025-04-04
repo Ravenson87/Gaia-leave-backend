@@ -61,7 +61,7 @@ public class UserController {
         return userService.checkLinkExpired(hash);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/update")
     public ResponseEntity<String> update(
             @Valid
             @RequestBody

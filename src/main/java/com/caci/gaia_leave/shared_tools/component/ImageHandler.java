@@ -73,7 +73,7 @@ public class ImageHandler {
                 processBuilder.command("bash", "-c", "sudo chmod 777 " + filePath);
                 processBuilder.start();
             }
-
+            System.out.println(appProperties.getDomainName() + appProperties.getImageStorageGaiaLeave() + newFileName);
             return appProperties.getDomainName() + appProperties.getImageStorageGaiaLeave() + newFileName;
         } catch (Exception e) {
             throw new CustomException(e.getMessage());
