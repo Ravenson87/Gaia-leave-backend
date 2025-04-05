@@ -1,6 +1,7 @@
 package com.caci.gaia_leave.administration.controller;
 
 import com.caci.gaia_leave.administration.model.dto.FreeDaysBookingDTO;
+import com.caci.gaia_leave.administration.model.dto.FreeDaysBookingUpdateDTO;
 import com.caci.gaia_leave.administration.model.request.FreeDaysBooking;
 import com.caci.gaia_leave.administration.model.request.User;
 import com.caci.gaia_leave.administration.model.response.FreeDaysBookingResponse;
@@ -79,5 +80,15 @@ public class FreeDaysBookingController {
             String status
     ) {
         return freeDaysBookingService.readByDateRangeAndStatus(startDate, endDate, status);
+    }
+
+    @PostMapping("/acceptance")
+    public ResponseEntity<String> freeDaysAcceptance(
+            @Valid
+            @RequestBody
+            @NotNull(message = "Model can not be null")
+            List<FreeDaysBookingUpdateDTO> freeDaysBookingUpdateDTO
+    ) {
+        return freeDaysBookingService.freeDaysAcceptance(freeDaysBookingUpdateDTO);
     }
 }

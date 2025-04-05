@@ -53,9 +53,9 @@ public class FreeDaysBookingService {
         if (!checkUser) {
             throw new CustomException("User not found");
         }
-        FreeDaysBooking modelForWorkingDays = new FreeDaysBooking();
         // We are iterating through the input data to verify if a calendar with the specified ID exists.
         freeDaysBooking.forEach(model -> {
+            FreeDaysBooking modelForWorkingDays = new FreeDaysBooking();
             // if a match is found, we add to the model.
             if (calendarIds.contains(model.getCalendarId())) {
                 modelForWorkingDays.setCalendarId(model.getCalendarId());
@@ -114,21 +114,29 @@ public class FreeDaysBookingService {
      * @param start_date Date
      * @param end_date   Date
      * @param status     String
-     * @return ResponseEntity<List<FreeDaysBookingResponse>>
+     * @return ResponseEntity<List < FreeDaysBookingResponse>>
      */
     public ResponseEntity<List<FreeDaysBookingResponse>> readByDateRangeAndStatus(Date start_date, Date end_date, String status) {
         List<FreeDaysBookingResponse> result = freeDaysBookingResponseRepository.freeDaysTypeRequestByDateRangeAndStatus(start_date, end_date, status);
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-
+    /**
+     * Approve or reject free days request.
+     *
+     * @param freeDaysBookingUpdateDTO List<FreeDaysBookingUpdateDTO>
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> freeDaysAcceptance(List<FreeDaysBookingUpdateDTO> freeDaysBookingUpdateDTO) {
+        // Get ids from input parametar
         List<Integer> freeDaysCalendarIds = freeDaysBookingUpdateDTO.stream().map(FreeDaysBookingUpdateDTO::getId).toList();
+        // Find free days booking response by ids and saved in list
         List<FreeDaysBookingResponse> freeDaysBooking = listConverter(freeDaysBookingResponseRepository.findAllById(freeDaysCalendarIds));
         if (freeDaysBooking.isEmpty()) {
             throw new CustomException("FreeDaysBooking not found");
         }
 
+        // Update status for each found request recorded in the corresponding DTO object
         List<FreeDaysBookingResponse> updatedBookings = freeDaysBooking.stream()
                 .map(freeDaysBookingResponse -> {
                     freeDaysBookingResponse.setStatus(freeDaysBookingUpdateDTO.stream()
@@ -139,13 +147,13 @@ public class FreeDaysBookingService {
                     return freeDaysBookingResponse;
                 })
                 .collect(Collectors.toList());
-        try{
+        try {
             freeDaysBookingResponseRepository.saveAll(updatedBookings);
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body("FreeDays accepted");
-        }
+    }
 
 }
