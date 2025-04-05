@@ -1,5 +1,6 @@
 package com.caci.gaia_leave.administration.service;
 
+import com.caci.gaia_leave.administration.model.dto.FreeDaysBookingDTO;
 import com.caci.gaia_leave.administration.model.request.Calendar;
 import com.caci.gaia_leave.administration.model.request.FreeDaysBooking;
 import com.caci.gaia_leave.administration.model.response.CalendarResponse;
@@ -29,40 +30,34 @@ public class FreeDaysBookingService {
     private final CalendarRepository calendarRep;
     private final UserRepository userRepository;
 
-    public ResponseEntity<String> freeDaysRequest(List<FreeDaysBooking> freeDaysBooking) {
+    public ResponseEntity<String> freeDaysRequest(List<FreeDaysBookingDTO> freeDaysBooking, Integer userId) {
         List<FreeDaysBooking> workingDays = new ArrayList<>();
-        List<Integer> calendarIds = listConverter(calendarRep.findAll()).stream().map(Calendar::getId).toList();
-//        List<Integer> freeDaysBookingCalendarIds = freeDaysBooking.stream().map(FreeDaysBooking::getCalendarId).toList();
-        Set<Integer> userIds = freeDaysBooking.stream().map(FreeDaysBooking::getUserId).collect(Collectors.toSet());
-        if (userIds.size() != 1 && userIds.isEmpty()) {
-            throw new CustomException("Free Days Booking must have a single user");
+        List<Integer> freeDaysCalendarIds = freeDaysBooking.stream().map(FreeDaysBookingDTO::getCalendarId).collect(Collectors.toList());
+        List<Calendar> calendar = calendarRep.calendarRequestByIdsAndType(freeDaysCalendarIds, "WORKING_DAY");
+        List<Integer> calendarIds = calendar.stream().map(Calendar::getId).collect(Collectors.toList());
+        if (userId == null) {
+            throw new CustomException("User must be provided");
         }
 
-        boolean checkUser = userRepository.existsById(userIds.stream().findFirst().get());
+        boolean checkUser = userRepository.existsById(userId);
         if (!checkUser) {
             throw new CustomException("User not found");
         }
         freeDaysBooking.forEach(model -> {
-           if(!calendarIds.contains(model.getCalendarId())) {
-               throw new CustomException("Calendar not found");
-           }
-           if(Objects.equals(model.getCalendar().getType().getValue(), "WEEKEND") || Objects.equals(model.getCalendar().getType().getValue(), "NATIONAL_HOLIDAY")){
-               throw new CustomException("This day is already non working day");
-           }
-           //Pitaj za konstante Milicu ili Zorana!!!
-           model.setStatus(0);
-            workingDays.add(model);
+            if (calendarIds.contains(model.getCalendarId())) {
+                model.setStatus(0);
+                model.setUserId(userId)
+                workingDays.add(model);
+            }
         });
-
-        try{
-            freeDaysBookingRepository.saveAll(workingDays);
+        System.out.println(workingDays);
+        try {
+//            freeDaysBookingRepository.saveAll(workingDays);
             return ResponseEntity.status(HttpStatus.CREATED).body("Successfully created");
 
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
-
-//        List<Integer> diffCalendarIds = calendarIds.stream().filter(calendarId -> !freeDaysBookingCalendarIds.contains(calendarId)).toList();
 
     }
 }

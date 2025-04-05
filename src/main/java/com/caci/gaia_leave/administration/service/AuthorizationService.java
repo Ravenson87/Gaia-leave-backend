@@ -1,6 +1,6 @@
 package com.caci.gaia_leave.administration.service;
 
-import com.caci.gaia_leave.administration.model.dto.UserValidation;
+import com.caci.gaia_leave.administration.model.dto.UserValidationDTO;
 import com.caci.gaia_leave.administration.model.request.*;
 import com.caci.gaia_leave.administration.model.response.UserResponse;
 import com.caci.gaia_leave.administration.repository.request.*;
@@ -131,7 +131,7 @@ public class AuthorizationService {
      * @return ResponseEntity<String>
      */
     @Transactional
-    public ResponseEntity<String> validateUser(UserValidation model) {
+    public ResponseEntity<String> validateUser(UserValidationDTO model) {
         Optional<User> user = userRepository.findByHash(model.getHash());
         if (user.isEmpty()) {
             throw new CustomException("User not found.");

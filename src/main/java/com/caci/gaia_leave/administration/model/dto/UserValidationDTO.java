@@ -2,7 +2,6 @@ package com.caci.gaia_leave.administration.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -16,7 +15,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @ToString
-public class UserValidation {
+public class UserValidationDTO {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("hash")

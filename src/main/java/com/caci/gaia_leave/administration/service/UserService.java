@@ -1,7 +1,7 @@
 package com.caci.gaia_leave.administration.service;
 
 import com.caci.gaia_leave.administration.model.request.User;
-import com.caci.gaia_leave.administration.model.dto.UserUpdate;
+import com.caci.gaia_leave.administration.model.dto.UserUpdateDTO;
 import com.caci.gaia_leave.administration.model.response.UserResponse;
 import com.caci.gaia_leave.administration.repository.request.UserRepository;
 import com.caci.gaia_leave.administration.repository.response.UserResponseRepository;
@@ -86,7 +86,7 @@ public class UserService {
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
-    public ResponseEntity<String> update(UserUpdate model) {
+    public ResponseEntity<String> update(UserUpdateDTO model) {
 
         if (!userRepository.existsById(model.getId())) {
             throw new CustomException("User with id `" + model.getId() + "` does not exist.");

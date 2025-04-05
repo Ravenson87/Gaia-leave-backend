@@ -2,7 +2,9 @@ package com.caci.gaia_leave.administration.repository.request;
 
 import com.caci.gaia_leave.administration.model.request.Calendar;
 import com.caci.gaia_leave.shared_tools.model.WorkingDayType;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -18,4 +20,11 @@ public interface CalendarRepository extends CrudRepository<Calendar, Integer> {
     Optional<Calendar> findByDate(Date date);
 
     List<Calendar> findAllByType(WorkingDayType type);
+
+    @Query(
+            name = "Calendar.calendarRequestByIdsAndType",
+            nativeQuery = true
+    )
+    List<Calendar> calendarRequestByIdsAndType(@Param("ids") List<Integer> ids, @Param("type") String type);
+
 }

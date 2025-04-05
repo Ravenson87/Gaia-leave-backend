@@ -1,19 +1,15 @@
 package com.caci.gaia_leave.administration.controller;
 
-import com.caci.gaia_leave.administration.model.dto.UserValidation;
+import com.caci.gaia_leave.administration.model.dto.UserValidationDTO;
 import com.caci.gaia_leave.administration.service.AuthorizationService;
 import com.caci.gaia_leave.shared_tools.model.AuthorizationTokenDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
 
 @RestController
 @Validated
@@ -43,7 +39,7 @@ public class AuthorizationController {
             @Valid
             @RequestBody
             @NotNull(message = "Model can not be null")
-            UserValidation model
+            UserValidationDTO model
     ) {
         return authorizationService.validateUser(model);
     }

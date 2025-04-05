@@ -47,7 +47,6 @@ public class FreeDaysBooking extends Auditable implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @NotNull(message = "status cannot be empty")
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     @JsonProperty("status")
     @Column(name = "status")

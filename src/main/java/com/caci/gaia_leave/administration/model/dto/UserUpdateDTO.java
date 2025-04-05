@@ -15,7 +15,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @ToString
-public class UserUpdate {
+public class UserUpdateDTO {
 
     @NotNull(message = "Id cannot be null")
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
