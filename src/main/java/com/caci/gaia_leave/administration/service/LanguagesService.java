@@ -21,6 +21,12 @@ public class LanguagesService {
     private final LanguagesRepository languagesRepository;
     private final LanguagesResponseRepository languagesResponseRepository;
 
+    /**
+     * Create Languages in database
+     *
+     * @param model Languages
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> create(Languages model) {
 
         if (languagesRepository.existsByNameIgnoreCase(model.getName())) {
@@ -39,11 +45,23 @@ public class LanguagesService {
         }
     }
 
+    /**
+     * Read Languages from database
+     *
+     * @return ResponseEntity<List<LanguagesResponse>>
+     */
     public ResponseEntity<List<LanguagesResponse>> read() {
         List<LanguagesResponse> res = AllHelpers.listConverter(languagesResponseRepository.findAll());
         return res.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
+    /**
+     * Update Languages by id in database
+     *
+     * @param id Integer
+     * @param model Language
+     * @return Create Languages in database
+     */
     public ResponseEntity<String> update(Integer id, Languages model) {
 
         if (!languagesResponseRepository.existsById(id)) {
@@ -69,6 +87,12 @@ public class LanguagesService {
         }
     }
 
+    /**
+     * Delete Languages by id in database
+     *
+     * @param id Integer
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> delete(Integer id) {
         if (!languagesResponseRepository.existsById(id)) {
             throw new CustomException("Language with id doesn't exists");

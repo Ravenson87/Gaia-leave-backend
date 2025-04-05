@@ -21,6 +21,12 @@ public class FreeDayTypeService {
     private final FreeDayTypeRepository freeDayTypeRepository;
     private final FreeDayTypeResponseRepository freeDayTypeResponseRepository;
 
+    /**
+     * Create FreeDayType in database
+     *
+     * @param model FreeDayType
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> create(FreeDayType model) {
         if (freeDayTypeRepository.existsByType(model.getType())) {
             throw new CustomException("Free day type with type `" + model.getType() + "` already exists.");
@@ -34,11 +40,22 @@ public class FreeDayTypeService {
         }
     }
 
+    /**
+     * Read FreeDayType from database
+     *
+     * @return ResponseEntity<List<FreeDayTypeResponse>>
+     */
     public ResponseEntity<List<FreeDayTypeResponse>> read() {
         List<FreeDayTypeResponse> result = AllHelpers.listConverter(freeDayTypeResponseRepository.findAll());
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    /**
+     * Read FreeDayType by id from database
+     *
+     * @param id Integer
+     * @return ResponseEntity<FreeDayTypeResponse>
+     */
     public ResponseEntity<FreeDayTypeResponse> readById(Integer id) {
         Optional<FreeDayTypeResponse> result = freeDayTypeResponseRepository.findById(id);
         return result
@@ -47,6 +64,13 @@ public class FreeDayTypeService {
 
     }
 
+    /**
+     * Update FreeDayType by id in database
+     *
+     * @param id Integer
+     * @param model FreeDayType
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> update(Integer id, FreeDayType model) {
         if (!freeDayTypeRepository.existsById(id)) {
             throw new CustomException("FreeDayType with id `" + id + "` doesn't exists.");
@@ -64,6 +88,12 @@ public class FreeDayTypeService {
         }
     }
 
+    /**
+     * Delete FreeDayType by id from database
+     *
+     * @param id Integer
+     * @return ResponseEntity<HttpStatus>
+     */
     public ResponseEntity<HttpStatus> delete(Integer id) {
         if (!freeDayTypeRepository.existsById(id)) {
             throw new CustomException("FreeDayType with id `" + id + "` doesn't exists.");

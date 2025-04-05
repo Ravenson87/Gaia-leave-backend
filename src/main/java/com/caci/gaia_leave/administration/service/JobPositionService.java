@@ -20,6 +20,12 @@ public class JobPositionService {
     private final JobPositionRepository jobPositionRepository;
     private final JobPositionResponseRepository jobPositionResponseRepository;
 
+    /**
+     * Create JobPosition in database
+     *
+     * @param model JobPosition
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> create(JobPosition model) {
 
         if (jobPositionRepository.existsByTitle(model.getTitle())) {
@@ -35,11 +41,22 @@ public class JobPositionService {
         }
     }
 
+    /**
+     * Read JobPosition from database
+     *
+     * @return ResponseEntity<List<JobPositionResponse>>
+     */
     public ResponseEntity<List<JobPositionResponse>> read() {
         List<JobPositionResponse> result = jobPositionResponseRepository.findByIdGreaterThan(1);
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    /**
+     * Read JobPosition by id from database
+     *
+     * @param id Integer
+     * @return ResponseEntity<JobPositionResponse>
+     */
     public ResponseEntity<JobPositionResponse> readById(Integer id) {
 
         if (id == 1) {
@@ -52,6 +69,13 @@ public class JobPositionService {
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
+    /**
+     * Update JobPosition by id from database
+     *
+     * @param id Integer
+     * @param model JobPosition
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> update(Integer id, JobPosition model) {
 
         if (!jobPositionRepository.existsById(id)) {
@@ -72,6 +96,12 @@ public class JobPositionService {
         }
     }
 
+    /**
+     * Delete JobPosition by id from database
+     *
+     * @param id Integer
+     * @return ResponseEntity<HttpStatus>
+     */
     public ResponseEntity<HttpStatus> delete(Integer id) {
 
         if (!jobPositionRepository.existsById(id)) {

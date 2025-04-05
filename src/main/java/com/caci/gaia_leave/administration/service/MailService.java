@@ -73,6 +73,12 @@ public class MailService {
         }
     }
 
+    /**
+     * Create MailHistory in database
+     *
+     * @param prepareAddresses String
+     * @param body String
+     */
     private void createMailHistory(String prepareAddresses, String body) {
         MailHistory model = new MailHistory();
         LocalDate date = LocalDate.now();

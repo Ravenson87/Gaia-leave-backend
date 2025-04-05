@@ -19,6 +19,11 @@ public class MailHistoryService {
     private final MailHistoryRepository mailHistoryRepository;
     private final MailHistoryResponseRepository mailHistoryResponseRepository;
 
+    /**
+     * Create MailHistory in database
+     *
+     * @param model MailHistory
+     */
     public void create(MailHistory model) {
         try{
             mailHistoryRepository.save(model);
@@ -27,21 +32,44 @@ public class MailHistoryService {
         }
     }
 
+    /**
+     * Read MailHistory from database
+     *
+     * @return ResponseEntity<List<MailHistory>>
+     */
     public ResponseEntity<List<MailHistory>> read() {
         List<MailHistory> result = listConverter(mailHistoryRepository.findAll());
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);
     }
 
+    /**
+     * Read MailHistory by id from database
+     *
+     * @param id Integer
+     * @return ResponseEntity<MailHistory>
+     */
     public ResponseEntity<MailHistory> readById(Integer id) {
         Optional<MailHistory> result = mailHistoryRepository.findById(id);
         return result.map(mail -> ResponseEntity.ok().body(mail)).orElse(ResponseEntity.noContent().build());
     }
 
+    /**
+     * Read MailHistory by addresses from database
+     *
+     * @param addresses String
+     * @return ResponseEntity<List<MailHistory>>
+     */
     public ResponseEntity<List<MailHistory>> readByAddresses(String addresses) {
         List<MailHistory> result = listConverter(mailHistoryResponseRepository.findByAddresses(addresses));
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);
     }
 
+    /**
+     * Delete MailHistory by id from database
+     *
+     * @param message String
+     * @return ResponseEntity<List<MailHistory>>
+     */
     public ResponseEntity<List<MailHistory>> readByMessage(String message) {
         List<MailHistory> result = listConverter(mailHistoryResponseRepository.findByMessage(message));
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);

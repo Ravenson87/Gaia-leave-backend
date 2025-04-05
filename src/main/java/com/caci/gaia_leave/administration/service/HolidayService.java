@@ -21,7 +21,11 @@ import static com.caci.gaia_leave.shared_tools.helper.AllHelpers.formatDate;
 public class HolidayService {
     private final CalendarRepository calendarRepository;
 
-
+    /**
+     *
+     * @param holidays List<Calendar>
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> updateHolidays(List<Calendar> holidays) {
         //TODO Optimizovati tako sto ce se umesto "findAll()" koristiti "findAllById"
         List<Calendar> calendar = AllHelpers.listConverter(calendarRepository.findAll());
@@ -30,12 +34,12 @@ public class HolidayService {
             throw new CustomException("No days in calendar");
         }
 
-        // Kreiramo skup parova (ID, Date) iz prve liste
+        // Create set of pairs of id and date from calendar list
         Set<Map.Entry<Integer, String>> idDateSet = calendar.stream()
                 .map(o -> Map.entry(o.getId(), formatDate(o.getDate())))
                 .collect(Collectors.toSet());
 
-        // Filtriramo Kalendare koji postoje u oba skupa sa istim datumom
+        // Filter calendars witch exists in both list
         List<Calendar> holidaysToSave = holidays.stream()
                 .filter(o -> idDateSet.contains(Map.entry(o.getId(), formatDate(o.getDate()))))
                 .toList();
