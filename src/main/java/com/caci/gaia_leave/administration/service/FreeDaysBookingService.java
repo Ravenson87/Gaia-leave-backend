@@ -3,24 +3,20 @@ package com.caci.gaia_leave.administration.service;
 import com.caci.gaia_leave.administration.model.dto.FreeDaysBookingDTO;
 import com.caci.gaia_leave.administration.model.request.Calendar;
 import com.caci.gaia_leave.administration.model.request.FreeDaysBooking;
-import com.caci.gaia_leave.administration.model.response.CalendarResponse;
 import com.caci.gaia_leave.administration.model.response.FreeDaysBookingResponse;
-import com.caci.gaia_leave.administration.model.response.JobPositionResponse;
 import com.caci.gaia_leave.administration.repository.request.CalendarRepository;
 import com.caci.gaia_leave.administration.repository.request.FreeDaysBookingRepository;
 import com.caci.gaia_leave.administration.repository.request.UserRepository;
 import com.caci.gaia_leave.administration.repository.response.FreeDaysBookingResponseRepository;
 import com.caci.gaia_leave.shared_tools.exception.CustomException;
-import com.caci.gaia_leave.shared_tools.model.Mapping;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.caci.gaia_leave.shared_tools.helper.AllHelpers.listConverter;
 
 @Service
 @RequiredArgsConstructor
@@ -74,23 +70,40 @@ public class FreeDaysBookingService {
 
     }
 
+    /**
+     * Read free days by status
+     *
+     * @param status Integer
+     * @return ResponseEntity<List<FreeDaysBookingResponse>>
+     */
     public ResponseEntity<List<FreeDaysBookingResponse>> readByStatus(Integer status) {
         List<FreeDaysBookingResponse> result = freeDaysBookingResponseRepository.readByStatus(status);
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    /**
+     * Read free days by calendar id
+     *
+     * @param calendarId Integer
+     * @return ResponseEntity<List<FreeDaysBookingResponse>>
+     */
     public ResponseEntity<List<FreeDaysBookingResponse>> readByCalendarId(Integer calendarId) {
         List<FreeDaysBookingResponse> result = freeDaysBookingResponseRepository.readByCalendarId(calendarId);
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    /**
+     * Read free days by user id
+     *
+     * @param userId Integer
+     * @return ResponseEntity<List<FreeDaysBookingResponse>>
+     */
     public ResponseEntity<List<FreeDaysBookingResponse>> readByUserId(Integer userId) {
         List<FreeDaysBookingResponse> result = freeDaysBookingResponseRepository.readByUserId(userId);
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    public List<Calendar> jobPositionOccupation(Integer jobPositionId) {
 
-    }
+
 
 }
