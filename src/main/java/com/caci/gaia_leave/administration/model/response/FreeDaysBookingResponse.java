@@ -1,5 +1,7 @@
 package com.caci.gaia_leave.administration.model.response;
 
+import com.caci.gaia_leave.administration.model.request.Calendar;
+import com.caci.gaia_leave.administration.model.request.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -66,4 +68,16 @@ public class FreeDaysBookingResponse implements Serializable {
     @JsonProperty("last_modified_date")
     @Column(name = "last_modified_date")
     private Date lastModifiedDate;
+
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id", referencedColumnName = "user_id",
+            insertable = false, updatable = false)
+    private User user;
+
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id", referencedColumnName = "calendar_id",
+            insertable = false, updatable = false)
+    private Calendar calendar;
 }
