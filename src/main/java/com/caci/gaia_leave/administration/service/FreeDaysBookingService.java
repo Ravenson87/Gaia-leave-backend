@@ -80,6 +80,9 @@ public class FreeDaysBookingService {
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    public List<Calendar> jobPositionOccupation(Integer jobPositionId) {
+
+    }
 
 
 
