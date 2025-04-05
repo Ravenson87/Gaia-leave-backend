@@ -1,6 +1,7 @@
 package com.caci.gaia_leave.administration.service;
 
 import com.caci.gaia_leave.administration.model.dto.FreeDaysBookingDTO;
+import com.caci.gaia_leave.administration.model.dto.FreeDaysBookingUpdateDTO;
 import com.caci.gaia_leave.administration.model.request.Calendar;
 import com.caci.gaia_leave.administration.model.request.FreeDaysBooking;
 import com.caci.gaia_leave.administration.model.response.FreeDaysBookingResponse;
@@ -17,7 +18,10 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static com.caci.gaia_leave.shared_tools.helper.AllHelpers.listConverter;
 
 @Service
 @RequiredArgsConstructor
@@ -108,13 +112,40 @@ public class FreeDaysBookingService {
      * Read by date range and status
      *
      * @param start_date Date
-     * @param end_date Date
-     * @param status String
-     * @return
+     * @param end_date   Date
+     * @param status     String
+     * @return ResponseEntity<List<FreeDaysBookingResponse>>
      */
     public ResponseEntity<List<FreeDaysBookingResponse>> readByDateRangeAndStatus(Date start_date, Date end_date, String status) {
         List<FreeDaysBookingResponse> result = freeDaysBookingResponseRepository.freeDaysTypeRequestByDateRangeAndStatus(start_date, end_date, status);
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(result);
     }
+
+
+    public ResponseEntity<String> freeDaysAcceptance(List<FreeDaysBookingUpdateDTO> freeDaysBookingUpdateDTO) {
+        List<Integer> freeDaysCalendarIds = freeDaysBookingUpdateDTO.stream().map(FreeDaysBookingUpdateDTO::getId).toList();
+        List<FreeDaysBookingResponse> freeDaysBooking = listConverter(freeDaysBookingResponseRepository.findAllById(freeDaysCalendarIds));
+        if (freeDaysBooking.isEmpty()) {
+            throw new CustomException("FreeDaysBooking not found");
+        }
+
+        List<FreeDaysBookingResponse> updatedBookings = freeDaysBooking.stream()
+                .map(freeDaysBookingResponse -> {
+                    freeDaysBookingResponse.setStatus(freeDaysBookingUpdateDTO.stream()
+                            .filter(freeday -> Objects.equals(freeday.getId(), freeDaysBookingResponse.getId()))
+                            .findFirst()
+                            .get()
+                            .getStatus());
+                    return freeDaysBookingResponse;
+                })
+                .collect(Collectors.toList());
+        try{
+            freeDaysBookingResponseRepository.saveAll(updatedBookings);
+        }catch(Exception e){
+            throw new CustomException(e.getMessage());
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("FreeDays accepted");
+        }
 
 }
