@@ -5,6 +5,7 @@ import com.caci.gaia_leave.administration.model.request.Calendar;
 import com.caci.gaia_leave.administration.model.request.FreeDaysBooking;
 import com.caci.gaia_leave.administration.model.response.CalendarResponse;
 import com.caci.gaia_leave.administration.model.response.FreeDaysBookingResponse;
+import com.caci.gaia_leave.administration.model.response.JobPositionResponse;
 import com.caci.gaia_leave.administration.repository.request.CalendarRepository;
 import com.caci.gaia_leave.administration.repository.request.FreeDaysBookingRepository;
 import com.caci.gaia_leave.administration.repository.request.UserRepository;
@@ -55,7 +56,7 @@ public class FreeDaysBookingService {
         });
         System.out.println(workingDays);
         try {
-//            freeDaysBookingRepository.saveAll(workingDays);
+            freeDaysBookingRepository.saveAll(workingDays);
             return ResponseEntity.status(HttpStatus.CREATED).body("Successfully created");
 
         } catch (Exception e) {
@@ -63,4 +64,25 @@ public class FreeDaysBookingService {
         }
 
     }
+
+    public ResponseEntity<List<FreeDaysBookingResponse>> readByStatus(Integer status){
+        List<FreeDaysBookingResponse> result = freeDaysBookingResponseRepository.readByStatus(status);
+        return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    public ResponseEntity<List<FreeDaysBookingResponse>> readByCalendarId(Integer calendarId){
+        List<FreeDaysBookingResponse> result = freeDaysBookingResponseRepository.readByCalendarId(calendarId);
+        return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    public ResponseEntity<List<FreeDaysBookingResponse>> readByUserId(Integer userId){
+        List<FreeDaysBookingResponse> result = freeDaysBookingResponseRepository.readByUserId(userId);
+        return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+
+
+
+
+
 }
