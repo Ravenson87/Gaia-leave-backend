@@ -71,13 +71,13 @@ public class FreeDaysBookingResponse implements Serializable {
 
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id", referencedColumnName = "user_id",
+    @JoinColumn(name = "user_id", referencedColumnName = "id",
             insertable = false, updatable = false)
     private User user;
 
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id", referencedColumnName = "calendar_id",
+    @JoinColumn(name = "calendar_id", referencedColumnName = "id",
             insertable = false, updatable = false)
-    private Calendar calendar;
+    private CalendarResponse calendar;
 }

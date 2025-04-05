@@ -1,5 +1,6 @@
 package com.caci.gaia_leave.administration.model.request;
 
+import com.caci.gaia_leave.administration.model.response.CalendarResponse;
 import com.caci.gaia_leave.shared_tools.model.Auditable;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -51,5 +52,17 @@ public class FreeDaysBooking extends Auditable implements Serializable {
     @JsonProperty("status")
     @Column(name = "status")
     private Integer status;
+
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "id",
+            insertable = false, updatable = false)
+    private User user;
+
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "calendar_id", referencedColumnName = "id",
+            insertable = false, updatable = false)
+    private Calendar calendar;
 
 }
