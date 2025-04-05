@@ -34,7 +34,7 @@ public class FreeDaysBookingService {
         List<FreeDaysBooking> workingDays = new ArrayList<>();
         List<Integer> freeDaysCalendarIds = freeDaysBooking.stream().map(FreeDaysBookingDTO::getCalendarId).collect(Collectors.toList());
         List<Calendar> calendar = calendarRep.calendarRequestByIdsAndType(freeDaysCalendarIds, "WORKING_DAY");
-        List<Integer> calendarIds = calendar.stream().map(Calendar::getId).collect(Collectors.toList());
+        List<Integer> calendarIds = calendar.stream().map(Calendar::getId).toList();
         if (userId == null) {
             throw new CustomException("User must be provided");
         }
@@ -43,11 +43,14 @@ public class FreeDaysBookingService {
         if (!checkUser) {
             throw new CustomException("User not found");
         }
+        FreeDaysBooking modelForWorkingDays = new FreeDaysBooking();
         freeDaysBooking.forEach(model -> {
             if (calendarIds.contains(model.getCalendarId())) {
-                model.setStatus(0);
-                model.setUserId(userId)
-                workingDays.add(model);
+                modelForWorkingDays.setCalendarId(model.getCalendarId());
+                modelForWorkingDays.setUserId(userId);
+                modelForWorkingDays.setDescription(model.getDescription());
+                modelForWorkingDays.setStatus(0);
+                workingDays.add(modelForWorkingDays);
             }
         });
         System.out.println(workingDays);
