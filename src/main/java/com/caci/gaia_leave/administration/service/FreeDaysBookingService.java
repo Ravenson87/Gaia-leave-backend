@@ -31,9 +31,17 @@ public class FreeDaysBookingService {
     private final CalendarRepository calendarRep;
     private final UserRepository userRepository;
 
+    /**
+     * Create free days booking by user request.
+     *
+     * @param freeDaysBooking List<FreeDaysBookingDTO>
+     * @param userId          Integer
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> freeDaysRequest(List<FreeDaysBookingDTO> freeDaysBooking, Integer userId) {
         List<FreeDaysBooking> workingDays = new ArrayList<>();
         List<Integer> freeDaysCalendarIds = freeDaysBooking.stream().map(FreeDaysBookingDTO::getCalendarId).collect(Collectors.toList());
+        // Retrieving the list of calendars that match the specified calendar id and type WORKING_DAY with native query.
         List<Calendar> calendar = calendarRep.calendarRequestByIdsAndType(freeDaysCalendarIds, "WORKING_DAY");
         List<Integer> calendarIds = calendar.stream().map(Calendar::getId).toList();
         if (userId == null) {
@@ -45,7 +53,9 @@ public class FreeDaysBookingService {
             throw new CustomException("User not found");
         }
         FreeDaysBooking modelForWorkingDays = new FreeDaysBooking();
+        // We are iterating through the input data to verify if a calendar with the specified ID exists.
         freeDaysBooking.forEach(model -> {
+            // if a match is found, we add to the model.
             if (calendarIds.contains(model.getCalendarId())) {
                 modelForWorkingDays.setCalendarId(model.getCalendarId());
                 modelForWorkingDays.setUserId(userId);
@@ -54,7 +64,6 @@ public class FreeDaysBookingService {
                 workingDays.add(modelForWorkingDays);
             }
         });
-        System.out.println(workingDays);
         try {
             freeDaysBookingRepository.saveAll(workingDays);
             return ResponseEntity.status(HttpStatus.CREATED).body("Successfully created");
@@ -65,17 +74,17 @@ public class FreeDaysBookingService {
 
     }
 
-    public ResponseEntity<List<FreeDaysBookingResponse>> readByStatus(Integer status){
+    public ResponseEntity<List<FreeDaysBookingResponse>> readByStatus(Integer status) {
         List<FreeDaysBookingResponse> result = freeDaysBookingResponseRepository.readByStatus(status);
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    public ResponseEntity<List<FreeDaysBookingResponse>> readByCalendarId(Integer calendarId){
+    public ResponseEntity<List<FreeDaysBookingResponse>> readByCalendarId(Integer calendarId) {
         List<FreeDaysBookingResponse> result = freeDaysBookingResponseRepository.readByCalendarId(calendarId);
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    public ResponseEntity<List<FreeDaysBookingResponse>> readByUserId(Integer userId){
+    public ResponseEntity<List<FreeDaysBookingResponse>> readByUserId(Integer userId) {
         List<FreeDaysBookingResponse> result = freeDaysBookingResponseRepository.readByUserId(userId);
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(result);
     }
@@ -83,9 +92,5 @@ public class FreeDaysBookingService {
     public List<Calendar> jobPositionOccupation(Integer jobPositionId) {
 
     }
-
-
-
-
 
 }

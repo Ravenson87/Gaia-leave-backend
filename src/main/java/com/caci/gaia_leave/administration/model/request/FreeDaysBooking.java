@@ -51,17 +51,4 @@ public class FreeDaysBooking extends Auditable implements Serializable {
     @JsonProperty("status")
     @Column(name = "status")
     private Integer status;
-
-    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", referencedColumnName = "id",
-            insertable = false, updatable = false)
-    private User user;
-
-    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "calendar_id", referencedColumnName = "id",
-            insertable = false, updatable = false)
-    private Calendar calendar;
-
 }
