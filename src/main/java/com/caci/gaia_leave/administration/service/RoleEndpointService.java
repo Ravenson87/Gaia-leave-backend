@@ -24,6 +24,12 @@ public class RoleEndpointService {
     private final RoleRepository roleRepository;
     private final EndpointRepository endpointRepository;
 
+    /**
+     * Create RoleEndpoint in database
+     *
+     * @param models RoleEndpoint
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> create(List<RoleEndpoint> models) {
         models.forEach(model -> {
             if (!roleRepository.existsById(model.getRoleId())) {
@@ -48,11 +54,22 @@ public class RoleEndpointService {
 
     }
 
+    /**
+     * Read RoleEndpoints from database
+     *
+     * @return ResponseEntity<List<RoleEndpointResponse>>
+     */
     public ResponseEntity<List<RoleEndpointResponse>> read() {
         List<RoleEndpointResponse> result = AllHelpers.listConverter(roleEndpointResponseRepository.findAll());
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);
     }
 
+    /**
+     * Read RoleEndpoint by id from database
+     *
+     * @param id Integer
+     * @return ResponseEntity<RoleEndpointResponse>
+     */
     public ResponseEntity<RoleEndpointResponse> readById(Integer id) {
         Optional<RoleEndpointResponse> result = roleEndpointResponseRepository.findById(id);
         return result
@@ -60,6 +77,13 @@ public class RoleEndpointService {
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
+    /**
+     * Update RoleEndpoint in database
+     *
+     * @param id Integer
+     * @param model RoleEndpoint
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> update(Integer id, RoleEndpoint model) {
         if (!roleEndpointRepository.existsById(id)) {
             throw new CustomException("RoleEndpoint with id: `" + id + "` not found");
@@ -73,6 +97,12 @@ public class RoleEndpointService {
         }
     }
 
+    /**
+     * Delete RoleEndpoint by id from database
+     *
+     * @param id Integer
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> delete(Integer id) {
         if (!roleEndpointRepository.existsById(id)) {
             throw new CustomException("RoleEndpoint with id: `" + id + "` not found");
@@ -85,6 +115,12 @@ public class RoleEndpointService {
         }
     }
 
+    /**
+     * Delete RoleEndpoints by ids from database
+     *
+     * @param roleIds List<Integer>
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> deleteByIds(List<Integer> roleIds) {
        try{
            roleEndpointRepository.deleteAllById(roleIds);

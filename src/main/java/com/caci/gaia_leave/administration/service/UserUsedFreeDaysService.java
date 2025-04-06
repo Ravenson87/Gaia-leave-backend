@@ -29,6 +29,12 @@ public class UserUsedFreeDaysService {
     private final CalendarRepository calendarRepository;
     private final UserRepository userRepository;
 
+    /**
+     * Create UserUsedFreeDays in database
+     *
+     * @param models List<UserUsedFreeDays>
+     * @return ResponseEntity<List<UserUsedFreeDaysResponse>>
+     */
     @Transactional(rollbackFor = {Exception.class, CustomException.class})
     public ResponseEntity<List<UserUsedFreeDaysResponse>> create(List<UserUsedFreeDays> models) {
 
@@ -47,11 +53,12 @@ public class UserUsedFreeDaysService {
 
 
         try {
+            //Save models in database
             Iterable<UserUsedFreeDays> save = userUsedFreeDaysRepository.saveAll(models);
+            //Get all ids from list of UserUsedFreeDays models and check is it saved in database
             List<Integer> ids = new ArrayList<>();
             save.forEach(model -> ids.add(model.getId()));
             List<UserUsedFreeDaysResponse> result = AllHelpers.listConverter(userUsedFreeDaysResponseRepository.findAllById(ids));
-
 
             return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(result);
 
@@ -61,12 +68,22 @@ public class UserUsedFreeDaysService {
 
     }
 
-
+    /**
+     * Read UserUsedFreeDays from database
+     *
+     * @return ResponseEntity<List<UserUsedFreeDaysResponse>>
+     */
     public ResponseEntity<List<UserUsedFreeDaysResponse>> read() {
         List<UserUsedFreeDaysResponse> result = AllHelpers.listConverter(userUsedFreeDaysResponseRepository.findAll());
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    /**
+     * Read UserUsedFreeDays by id from database
+     *
+     * @param id Integer
+     * @return ResponseEntity<UserUsedFreeDaysResponse>
+     */
     public ResponseEntity<UserUsedFreeDaysResponse> readById(Integer id) {
 
         Optional<UserUsedFreeDaysResponse> result = userUsedFreeDaysResponseRepository.findById(id);
@@ -76,6 +93,13 @@ public class UserUsedFreeDaysService {
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
+    /**
+     * Update UserUsedFreeDays in database
+     *
+     * @param id Integer
+     * @param model UserUsedFreeDays
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> update(Integer id, UserUsedFreeDays model) {
         if (!userUsedFreeDaysRepository.existsById(id)) {
             throw new CustomException("Column by id: `" + id + "` not found");
@@ -107,6 +131,12 @@ public class UserUsedFreeDaysService {
         }
     }
 
+    /**
+     * Delete UserUsedFreeDays by id from database
+     *
+     * @param id Integer
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> delete(Integer id) {
         if (!userUsedFreeDaysRepository.existsById(id)) {
             throw new CustomException("Column by id: `" + id + "` not found");
@@ -122,6 +152,12 @@ public class UserUsedFreeDaysService {
 
     }
 
+    /**
+     * Delete UserUsedFreeDays by ids in database
+     *
+     * @param ids List<Integer>
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> deleteByIds(List<Integer> ids) {
         try{
             userUsedFreeDaysRepository.deleteAllById(ids);
@@ -131,6 +167,12 @@ public class UserUsedFreeDaysService {
         }
     }
 
+    /**
+     * Check if day is a weekend or not
+     *
+     * @param model UserUsedFreeDays
+     * @return boolean
+     */
     public boolean weekendChecker(UserUsedFreeDays model) {
         Optional<Calendar> weekendCheck = calendarRepository.findById(model.getCalendarId());
         return weekendCheck.isPresent() && weekendCheck.get().getType().equals(WorkingDayType.WEEKEND);

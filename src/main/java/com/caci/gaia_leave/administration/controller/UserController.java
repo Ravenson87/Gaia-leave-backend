@@ -1,7 +1,7 @@
 package com.caci.gaia_leave.administration.controller;
 
-import com.caci.gaia_leave.administration.model.request.User;
 import com.caci.gaia_leave.administration.model.dto.UserUpdateDTO;
+import com.caci.gaia_leave.administration.model.request.User;
 import com.caci.gaia_leave.administration.model.response.UserResponse;
 import com.caci.gaia_leave.administration.service.UserService;
 import jakarta.validation.Valid;

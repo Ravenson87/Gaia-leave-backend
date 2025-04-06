@@ -23,6 +23,12 @@ public class UserTotalAttendanceService {
     private final UserTotalAttendanceResponseRepository userTotalAttendanceResponseRepository;
     private final UserRepository userRepository;
 
+    /**
+     * Create UserTotalAttendance in database
+     *
+     * @param model UserTotalAttendance
+     * @return ResponseEntity<UserTotalAttendanceResponse>
+     */
     public ResponseEntity<UserTotalAttendanceResponse> create(UserTotalAttendance model) {
         if (!userRepository.existsById(model.getUserId())) {
             throw new CustomException("User with id: `" + model.getUserId() + "` not found");
@@ -42,11 +48,22 @@ public class UserTotalAttendanceService {
         }
     }
 
+    /**
+     * Read UserTotalAttendance from database
+     *
+     * @return ResponseEntity<List<UserTotalAttendanceResponse>>
+     */
     public ResponseEntity<List<UserTotalAttendanceResponse>> read() {
         List<UserTotalAttendanceResponse> result = AllHelpers.listConverter(userTotalAttendanceResponseRepository.findAll());
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);
     }
 
+    /**
+     * Read UserTotalAttendance by id from database
+     *
+     * @param id Integer
+     * @return ResponseEntity<UserTotalAttendanceResponse>
+     */
     public ResponseEntity<UserTotalAttendanceResponse> readById(Integer id) {
         Optional<UserTotalAttendanceResponse> result = userTotalAttendanceResponseRepository.findById(id);
 
@@ -55,6 +72,13 @@ public class UserTotalAttendanceService {
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
+    /**
+     * Update UserTotalAttendance in database
+     *
+     * @param id Integer
+     * @param model UserTotalAttendance
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> update(Integer id, UserTotalAttendance model) {
 
         if (!userTotalAttendanceRepository.existsById(id)) {
@@ -77,6 +101,12 @@ public class UserTotalAttendanceService {
         }
     }
 
+    /**
+     * Delete UserTotalAttendance by id in database
+     *
+     * @param id Integer
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> delete(Integer id) {
         if (!userTotalAttendanceRepository.existsById(id)) {
             throw new CustomException("User Total Attendance With ID Not Found");

@@ -1,7 +1,7 @@
 package com.caci.gaia_leave.administration.service;
 
-import com.caci.gaia_leave.administration.model.request.User;
 import com.caci.gaia_leave.administration.model.dto.UserUpdateDTO;
+import com.caci.gaia_leave.administration.model.request.User;
 import com.caci.gaia_leave.administration.model.response.UserResponse;
 import com.caci.gaia_leave.administration.repository.request.UserRepository;
 import com.caci.gaia_leave.administration.repository.response.UserResponseRepository;
@@ -37,6 +37,12 @@ public class UserService {
     private final ResourceLoader resourceLoader;
     private final MailService mailService;
 
+    /**
+     * Create User in database
+     *
+     * @param model User
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> create(User model) {
 
         if (userResponseRepository.existsByUsername(model.getUsername())) {
@@ -49,12 +55,15 @@ public class UserService {
 
         try {
             Date now = new Date();
+            // Set expire date for registration link
             Date newExpiryDate = DateUtils.addDays(now, LINK_EXPIRATION_TIME);
+            // Set unique hash for user
             String hash = DigestUtils.md5Hex(model.getUsername() + model.getEmail());
             model.setHash(hash);
             model.setLinkExpired(newExpiryDate);
+            // Set template for registration email and sending registration email
+            // TODO pitaj sta tacno radimo sa ovim registration_email.html
             String template = readFileAsString("registration_email.html");
-            System.out.println("Pre" + model.getUsername() + " " + model.getFirstName());
             template = template.replace("{{userName}}", model.getUsername())
                     .replace("{{firstName}}", model.getFirstName())
                     .replace("{{lastName}}", model.getLastName())
@@ -68,11 +77,22 @@ public class UserService {
 
     }
 
+    /**
+     * Read user from database
+     *
+     * @return ResponseEntity<List<UserResponse>>
+     */
     public ResponseEntity<List<UserResponse>> read() {
         List<UserResponse> result = listConverter(userResponseRepository.findByIdGreaterThan(1));
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);
     }
 
+    /**
+     * Read User by id from database
+     *
+     * @param id Integer
+     * @return ResponseEntity<UserResponse>
+     */
     public ResponseEntity<UserResponse> readById(Integer id) {
 
         if (id == 1) {
@@ -86,6 +106,12 @@ public class UserService {
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
+    /**
+     * Update User in database
+     *
+     * @param model UserUpdateDTO
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> update(UserUpdateDTO model) {
 
         if (!userRepository.existsById(model.getId())) {
@@ -123,16 +149,27 @@ public class UserService {
         }
     }
 
+    /**
+     * Update user password in database
+     *
+     * @param id Integer
+     * @param oldPassword Integer
+     * @param newPassword Integer
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> updatePassword(Integer id, String oldPassword, String newPassword) {
         if (!userRepository.existsById(id)) {
             throw new CustomException("User with id `" + id + "` does not exist.");
         }
         User user = userRepository.findById(id).get();
+
+        // Check old password
         boolean checkPassword = BCrypt.checkpw(oldPassword, user.getPassword());
         if (!checkPassword) {
             throw new CustomException("Wrong old password.");
         }
 
+        // Set new password
         try {
             user.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt()));
             userRepository.save(user);
@@ -142,6 +179,13 @@ public class UserService {
         return ResponseEntity.ok().body("Successfully updated password");
     }
 
+    /**
+     * Update user status in database
+     *
+     * @param id Integer
+     * @param status Boolean
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> updateStatus(Integer id, Boolean status) {
         if (!userRepository.existsById(id)) {
             throw new CustomException("User with id `" + id + "` does not exist.");
@@ -156,6 +200,13 @@ public class UserService {
         return ResponseEntity.ok().body("Successfully updated status");
     }
 
+    /**
+     * Upload user Image in database
+     *
+     * @param file MultipartFile
+     * @param userId Integer
+     * @return Integer
+     */
     public ResponseEntity<String> uploadImage(MultipartFile file, Integer userId) {
 
         Optional<User> imageUser = userRepository.findById(userId);
@@ -163,9 +214,11 @@ public class UserService {
             throw new CustomException("User with id `" + userId + "` does not exist.");
         }
 
+        // Save image and find image path
         String filePath = imageHandler.storeImage("profile_image", file, AppConst.IMAGE_TYPE);
 
         try {
+            // Save image path in database
             imageUser.get().setProfileImage(filePath);
             userRepository.save(imageUser.get());
         } catch (Exception e) {
@@ -177,6 +230,12 @@ public class UserService {
 
     }
 
+    /**
+     * Check if link for registration is expired or not
+     *
+     * @param hash String
+     * @return ResponseEntity<Boolean>
+     */
     public ResponseEntity<Boolean> checkLinkExpired(String hash) {
         Optional<UserResponse> data = userResponseRepository.findByHash(hash);
 
@@ -189,6 +248,12 @@ public class UserService {
         return ResponseEntity.ok().body(linkedExpired.after(now));
     }
 
+    /**
+     * Delete User by id from database
+     *
+     * @param id Integer
+     * @return ResponseEntity<HttpStatus>
+     */
     public ResponseEntity<HttpStatus> delete(Integer id) {
         if (!userRepository.existsById(id)) {
             throw new CustomException("User with id `" + id + "` does not exist.");
@@ -201,9 +266,17 @@ public class UserService {
         }
     }
 
+    /**
+     * Read file as string
+     *
+     * @param fileName String
+     * @return String
+     */
     private String readFileAsString(String fileName) {
+        // TODO Pitaj sta tacno radi ovaj Resource i kakav je to interfejs-objekat
         Resource resource = resourceLoader.getResource("classpath:static/" + fileName);
 
+        // Transform file into string (char array)
         try (InputStream stream = resource.getInputStream()) {
             return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
         } catch (Exception e) {

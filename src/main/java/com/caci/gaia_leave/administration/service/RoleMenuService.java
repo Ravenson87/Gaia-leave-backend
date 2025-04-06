@@ -25,6 +25,12 @@ public class RoleMenuService {
     private final RoleRepository roleRepository;
     private final MenuRepository menuRepository;
 
+    /**
+     * Create RoleMenu in database
+     *
+     * @param models List<RoleMenu>
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> create(List<RoleMenu> models) {
         // TODO Optimise this (with other list, or maybe query)
         models.forEach(model -> {
@@ -50,11 +56,22 @@ public class RoleMenuService {
 
     }
 
+    /**
+     * Read RoleMenu from database
+     *
+     * @return ResponseEntity<List<RoleMenuResponse>>
+     */
     public ResponseEntity<List<RoleMenuResponse>> read() {
         List<RoleMenuResponse> result = AllHelpers.listConverter(roleMenuResponseRepository.findAll());
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);
     }
 
+    /**
+     * Read RoleMenu by id from database
+     *
+     * @param roleId Integer
+     * @return ResponseEntity<RoleMenuResponse>
+     */
     public ResponseEntity<RoleMenuResponse> readById(Integer roleId) {
         Optional<RoleMenuResponse> result = roleMenuResponseRepository.findById(roleId);
         return result
@@ -62,6 +79,13 @@ public class RoleMenuService {
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
+    /**
+     * Update RoleMenu in database
+     *
+     * @param id Integer
+     * @param model RoleMenu
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> update(Integer id, RoleMenu model) {
         if (!roleMenuRepository.existsById(id)) {
             throw new CustomException("RoleMenu with id: `" + id + "` not found");
@@ -76,6 +100,12 @@ public class RoleMenuService {
         }
     }
 
+    /**
+     * Delete RoleMenu by id from database
+     *
+     * @param id Integer
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> delete(Integer id) {
         if (!roleMenuRepository.existsById(id)) {
             throw new CustomException("RoleMenu with id: `" + id + "` not found");
@@ -88,6 +118,12 @@ public class RoleMenuService {
         }
     }
 
+    /**
+     * Delete RoleMenus by ids from database
+     *
+     * @param roleIds List<Integer>
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> deleteByIds(List<Integer> roleIds) {
         try{
             roleMenuRepository.deleteAllById(roleIds);

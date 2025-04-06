@@ -28,6 +28,12 @@ public class OvertimeHoursService {
     private final CalendarRepository calendarRepository;
     private final UserTotalAttendanceRepository userTotalAttendanceRepository;
 
+    /**
+     * Create OvertimeHours in database
+     *
+     * @param models List<OvertimeHours>
+     * @return ResponseEntity<List<OvertimeHoursResponse>>
+     */
     public ResponseEntity<List<OvertimeHoursResponse>> create(List<OvertimeHours> models) {
         List<OvertimeHours> save = new ArrayList<>();
 
@@ -57,7 +63,9 @@ public class OvertimeHoursService {
         });
 
         try {
+            //Save models in database
             overtimeHoursRepository.saveAll(models);
+            //Get all ids from list of OvertimeHours models and check is it saved in database
             List<Integer> ids = new ArrayList<>();
             save.forEach(model -> ids.add(model.getId()));
             List<OvertimeHoursResponse> result = AllHelpers.listConverter(overtimeHoursResponseRepository.findAllById(ids));
@@ -68,11 +76,21 @@ public class OvertimeHoursService {
         }
     }
 
+    /**
+     * Read OvertimeHours from database
+     *
+     * @return ResponseEntity<List<OvertimeHoursResponse>>
+     */
     public ResponseEntity<List<OvertimeHoursResponse>> read() {
         List<OvertimeHoursResponse> result = AllHelpers.listConverter(overtimeHoursResponseRepository.findAll());
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);
     }
 
+    /**
+     *
+     * @param id Integer
+     * @return ResponseEntity<OvertimeHoursResponse>
+     */
     public ResponseEntity<OvertimeHoursResponse> readById(Integer id) {
         Optional<OvertimeHoursResponse> result = overtimeHoursResponseRepository.findById(id);
         return result
@@ -80,6 +98,13 @@ public class OvertimeHoursService {
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
+    /**
+     * Update OvertimeHours in database
+     *
+     * @param id Integer
+     * @param model OvertimeHours
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> update(Integer id, OvertimeHours model) {
         if (!overtimeHoursResponseRepository.existsById(id)) {
             throw new CustomException("Overtime hours for that date and that user does not exist.");
@@ -103,6 +128,12 @@ public class OvertimeHoursService {
         }
     }
 
+    /**
+     * Delete OvertimeHours by id from database
+     *
+     * @param id Integer
+     * @return ResponseEntity<HttpStatus>
+     */
     public ResponseEntity<HttpStatus> delete(Integer id) {
         if (!overtimeHoursResponseRepository.existsById(id)) {
             throw new CustomException("Overtime hours for that date and that user does not exist.");

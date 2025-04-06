@@ -21,6 +21,12 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuResponseRepository menuResponseRepository;
 
+    /**
+     * Create Menu in database
+     *
+     * @param model Menu
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> create(Menu model) {
 
         if (menuRepository.existsByName(model.getName())) {
@@ -39,11 +45,22 @@ public class MenuService {
         }
     }
 
+    /**
+     * Read Menu from database
+     *
+     * @return ResponseEntity<List<MenuResponse>>
+     */
     public ResponseEntity<List<MenuResponse>> read() {
         List<MenuResponse> result = AllHelpers.listConverter(menuResponseRepository.findAll());
         return result.isEmpty() ? ResponseEntity.status(HttpStatus.NO_CONTENT).build() : ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    /**
+     * Read Menu by id in database
+     *
+     * @param id Integer
+     * @return ResponseEntity<MenuResponse>
+     */
     public ResponseEntity<MenuResponse> readById(Integer id) {
         Optional<MenuResponse> result = menuResponseRepository.findById(id);
         return result
@@ -51,6 +68,13 @@ public class MenuService {
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
+    /**
+     * Update Menu in database
+     *
+     * @param id Integer
+     * @param model Menu
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> update(Integer id, Menu model) {
 
         if (!menuRepository.existsById(id)) {
@@ -77,6 +101,12 @@ public class MenuService {
         }
     }
 
+    /**
+     * Delete Menu by id in database
+     *
+     * @param id Integer
+     * @return ResponseEntity<HttpStatus>
+     */
     public ResponseEntity<HttpStatus> delete(Integer id) {
 
         if (!menuRepository.existsById(id)) {

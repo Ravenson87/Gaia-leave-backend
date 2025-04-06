@@ -2,8 +2,6 @@ package com.caci.gaia_leave.administration.controller;
 
 import com.caci.gaia_leave.administration.model.dto.FreeDaysBookingDTO;
 import com.caci.gaia_leave.administration.model.dto.FreeDaysBookingUpdateDTO;
-import com.caci.gaia_leave.administration.model.request.FreeDaysBooking;
-import com.caci.gaia_leave.administration.model.request.User;
 import com.caci.gaia_leave.administration.model.response.FreeDaysBookingResponse;
 import com.caci.gaia_leave.administration.service.FreeDaysBookingService;
 import jakarta.validation.Valid;

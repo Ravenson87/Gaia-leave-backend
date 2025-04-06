@@ -21,10 +21,10 @@ public class RoleService {
     private final RoleResponseRepository roleResponseRepository;
 
     /**
-     * Create role.
+     * Create Role in database.
      *
-     * @param model
-     * @return
+     * @param model Role
+     * @return ResponseEntity<RoleResponse>
      */
     public ResponseEntity<RoleResponse> create(Role model) {
 
@@ -44,11 +44,22 @@ public class RoleService {
         }
     }
 
+    /**
+     * Read Role from database
+     *
+     * @return ResponseEntity<List<RoleResponse>>
+     */
     public ResponseEntity<List<RoleResponse>> read() {
         List<RoleResponse> result = roleResponseRepository.findByIdGreaterThan(1);
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);
     }
 
+    /**
+     * Read Role by id in database
+     *
+     * @param id Integer
+     * @return ResponseEntity<RoleResponse>
+     */
     public ResponseEntity<RoleResponse> readById(Integer id) {
 
         if (id == 1) {
@@ -61,6 +72,13 @@ public class RoleService {
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
+    /**
+     * Update Role in database
+     *
+     * @param id Integer
+     * @param model Role
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> update(Integer id, Role model) {
 
         if (!roleRepository.existsById(id)) {
@@ -81,6 +99,12 @@ public class RoleService {
         }
     }
 
+    /**
+     * Delete Role by id from database
+     *
+     * @param id Integer
+     * @return ResponseEntity<HttpStatus>
+     */
     public ResponseEntity<HttpStatus> delete(Integer id) {
         if (!roleRepository.existsById(id)) {
             throw new CustomException("Role with id `" + id + "` does not exists.");

@@ -26,11 +26,23 @@ public class MailService {
     private final JavaMailSender mailSender;
     private final MailHistoryService mailHistoryService;
 
+    /**
+     *
+     *
+     * @param sendTo String
+     * @param subject String
+     * @param body String
+     * @param files Multipart files
+     */
     public void sendEmail(String sendTo, String subject, String body, MultipartFile[] files) {
+        // Prepare email address
         String prepareAddresses = sendTo.trim().replaceAll("\\s+", "");
+        // Check is file null
         boolean check = files != null;
+
         FileSystemResource fsr = null;
 
+        // Create and prepare email to be sent
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, check);
@@ -48,6 +60,7 @@ public class MailService {
             mailSender.send(message);
             createMailHistory(prepareAddresses,  body);
 
+            // Check if there is a saved file and delete file if it is already sent
             if (fsr != null) {
                 try {
                     if (fsr.isFile()) Files.delete(fsr.getFile().toPath());

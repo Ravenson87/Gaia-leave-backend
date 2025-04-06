@@ -24,7 +24,16 @@ public class WorkingHoursService {
     private final OvertimeHoursRepository overtimeHoursRepository;
     private final CalendarRepository calendarRepository;
 
+    /**
+     * Assign OvertimeHours to User and convert overtime hours to free days or payment
+     *
+     * @param userId Integer
+     * @param overTimeWorkingHours Integer
+     * @param asFreeDays boolean
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> assignOvertimeHours(Integer userId, Integer overTimeWorkingHours, boolean asFreeDays) {
+        // Check does user with given id exists
         Optional<OvertimeHours> overtimeHoursEntity = overtimeHoursRepository.findById(userId);
         if (overtimeHoursEntity.isEmpty()) {
             throw new CustomException("User id " + userId + " not found");
@@ -34,6 +43,7 @@ public class WorkingHoursService {
             throw new CustomException("User id " + userId + " not found");
         }
 
+        // Transform working hours in free days, and count how much hours remain
         Integer userTotalWorkingHours = userTotalAttendance.get().getTotalWorkingHours();
         int freeDays = overTimeWorkingHours / userTotalWorkingHours;
         Integer remainderWorkingHours = overTimeWorkingHours % userTotalWorkingHours;
@@ -42,10 +52,12 @@ public class WorkingHoursService {
             throw new CustomException("User dont have overtime hours");
         }
 
+        // Count how much hours to subtract from overtime hours
         int totalFreeDays = userTotalAttendance.get().getTotalFreeDays();
         int hoursToSubtractAsDays = freeDays * userTotalAttendance.get().getTotalWorkingHours();
         int overtimeHoursToSubtract = userTotalAttendance.get().getOvertimeHoursSum() - hoursToSubtractAsDays;
 
+        // Check if hours are transform to days or payment, and then update overtime hours and free days if needed
         if(asFreeDays) {
             if (overTimeWorkingHours < userTotalAttendance.get().getTotalWorkingHours()) {
                 throw new CustomException(remainderWorkingHours + " is not enough overtime working hours for free day");
@@ -66,7 +78,14 @@ public class WorkingHoursService {
         return ResponseEntity.ok().body("Successfully updated");
     }
 
-
+    /**
+     * Sum overtime working hours
+     *
+     * @param userId Integer
+     * @param startDate String
+     * @param endDate String
+     * @return ResponseEntity<Integer>
+     */
     public ResponseEntity<Integer> sumOvertimeWorkingHours(Integer userId, String startDate, String endDate) {
         if(!overtimeHoursRepository.existsByUserId(userId)) {
             throw new CustomException("User id " + userId + " does not exists");

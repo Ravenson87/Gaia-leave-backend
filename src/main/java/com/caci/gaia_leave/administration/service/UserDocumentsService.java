@@ -30,13 +30,22 @@ public class UserDocumentsService {
     private final UserRepository userRepository;
     private final DocumentHandler documentHandler;
 
+    /**
+     * Create UserDocuments in database
+     *
+     * @param userId Integer
+     * @param file MultipartFile
+     * @return ResponseEntity<UserDocuments>
+     */
     public ResponseEntity<UserDocuments> create(Integer userId, MultipartFile file) {
         if(!userRepository.existsById(userId)){
             throw new CustomException("User with id `" + userId + "` does not exist.");
         }
 
+        // Get file path for document
         String filePath = documentHandler.storeDocument("user_document", file, AppConst.DOCUMENT_TYPE);
 
+        // Set user document, save it in database and check is it saved
         try{
             UserDocuments userDocuments = new UserDocuments();
             userDocuments.setUserId(userId);
@@ -52,11 +61,22 @@ public class UserDocumentsService {
         }
     }
 
+    /**
+     * Read UserDocuments from database
+     *
+     * @return ResponseEntity<List<UserDocumentsResponse>>
+     */
     public ResponseEntity<List<UserDocumentsResponse>> read(){
         List<UserDocumentsResponse> result = AllHelpers.listConverter(userDocumentsResponseRepository.findAll());
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);
     }
 
+    /**
+     * Read UserDocuments by id from database
+     *
+     * @param id Integer
+     * @return ResponseEntity<UserDocumentsResponse>
+     */
     public ResponseEntity<UserDocumentsResponse> readById(Integer id){
         Optional<UserDocumentsResponse> result = userDocumentsResponseRepository.findById(id);
         return result
@@ -65,20 +85,32 @@ public class UserDocumentsService {
 
     }
 
+    /**
+     * Update UserDocuments in database
+     *
+     * @param id Integer
+     * @param file MultipartFile
+     * @return ResponseEntity<String>
+     */
     public ResponseEntity<String> update(Integer id, MultipartFile file){
         if(!userDocumentsResponseRepository.existsById(id)){
             throw new CustomException("Document does not exist.");
         }
 
+
         try{
+            // Find path of file that has to be updated
             UserDocuments model = userDocumentsRepository.findById(id).get();
             String pathToDeleteString = model.getDocumentPath();
-            Path pathToDelete = Paths.get(pathToDeleteString);
-            System.out.println(pathToDelete);
-            System.out.println(Files.deleteIfExists(pathToDelete));
 
+            // Delete file that is updated
+            Path pathToDelete = Paths.get(pathToDeleteString);
+            Files.deleteIfExists(pathToDelete);
+
+            // Save file and find path where file is stored
             String filePath = documentHandler.storeDocument("user_document", file, AppConst.DOCUMENT_TYPE);
 
+            // Save file path in database
             model.setId(id);
             model.setDocumentPath(filePath);
             userDocumentsRepository.save(model);
@@ -88,6 +120,12 @@ public class UserDocumentsService {
         }
     }
 
+    /**
+     * Delete UserDocuments by id from database
+     *
+     * @param id Integer
+     * @return ResponseEntity<HttpStatus>
+     */
     public ResponseEntity<HttpStatus> delete(Integer id){
         if(!userDocumentsResponseRepository.existsById(id)){
             throw new CustomException("Document does not exist.");

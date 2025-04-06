@@ -1,6 +1,5 @@
 package com.caci.gaia_leave.administration.model.request;
 
-import com.caci.gaia_leave.administration.model.response.CalendarResponse;
 import com.caci.gaia_leave.shared_tools.model.Auditable;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
