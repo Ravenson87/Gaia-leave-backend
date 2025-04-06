@@ -20,6 +20,16 @@ import java.util.List;
 @EnableWebMvc
 @ControllerAdvice
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler implements CustomGlobalExceptionHandlerIpl {
+
+    /**
+     * Error handle for @Valid
+     *
+     * @param ex MethodArgumentNotValidException
+     * @param headers HttpHeaders
+     * @param status HttpStatus
+     * @param request WebRequest
+     * @return ResponseEntity<Object>
+     */
     // error handle for @Valid
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(

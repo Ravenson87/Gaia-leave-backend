@@ -32,6 +32,14 @@ public class ImageHandler {
 
     private final AppProperties appProperties;
 
+    /**
+     * Store Image and return saved file path
+     *
+     * @param prefix String
+     * @param file MultipartFile
+     * @param allowedExtensions String[]
+     * @return String
+     */
     public String storeImage(String prefix, MultipartFile file, String[] allowedExtensions) {
         String originalFileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         String fileExtension = StringUtils.getFilenameExtension(originalFileName);

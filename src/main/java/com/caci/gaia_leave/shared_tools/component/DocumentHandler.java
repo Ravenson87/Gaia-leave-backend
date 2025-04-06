@@ -53,7 +53,7 @@ public class DocumentHandler {
             Path filePath = Paths.get(appProperties.getUploadImagePath()).resolve(newFileName).normalize();
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-        // Check OS and if it is linux, give it standard linux premitions
+        // Check OS and if it is linux, give it standard linux permissions
             if (Objects.requireNonNull(checkOs()).equalsIgnoreCase("linux")) {
                 ProcessBuilder processBuilder = new ProcessBuilder();
                 processBuilder.command("bash", "-c", "sudo chmod 777 " + filePath);
