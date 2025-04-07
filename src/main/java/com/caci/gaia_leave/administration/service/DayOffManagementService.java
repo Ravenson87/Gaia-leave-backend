@@ -7,6 +7,7 @@ import com.caci.gaia_leave.administration.repository.request.UserUsedFreeDaysRep
 import com.caci.gaia_leave.shared_tools.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,18 +19,19 @@ import java.util.stream.Collectors;
 public class DayOffManagementService {
     private final UserTotalAttendanceRepository userTotalAttendanceRepository;
     private final UserUsedFreeDaysRepository userUsedFreeDaysRepository;
+    private final JdbcTemplate jdbcTemplate;
 
     /**
      * Subtract or add free days form UserUsedFreeDays
      *
      * @param usersFreeDays List<UserUsedFreeDays>
-     * @param save Boolean
+     * @param save          Boolean
      * @return ResponseEntity<String>
      */
     @Transactional
     public ResponseEntity<String> subtractDaysFromFreeDays(List<UserUsedFreeDays> usersFreeDays, Boolean save) {
         // Get ids from users, and then create map, grouping all the same ids together
-        // PITATI ZORANA DA TI JOS JEDNOM OBJASNI OVO GRUPISANJE JUZERA
+        // PITATI ZORANA DA TI JOS JEDNOM OBJASNI OVO GRUPISANJE User-a
         List<Integer> usersIds = usersFreeDays.stream().map(UserUsedFreeDays::getUserId).toList();
         Map<Integer, List<Integer>> groups = usersIds.stream().collect(Collectors.groupingBy(num -> num, LinkedHashMap::new, Collectors.toList()));
 
@@ -45,11 +47,11 @@ public class DayOffManagementService {
             int freeDays = group.size();
             Optional<UserTotalAttendance> check = userTotalAttendanceRepository.findByUserId(userId);
             if (check.isEmpty()) {
-                throw new CustomException("User with id " + userId + " does not exist");
+                throw new CustomException("User with id " + userId + " does not exist in UserTotalAttendance");
             }
-            if(save) {
+            if (save) {
                 check.get().setTotalFreeDays(check.get().getTotalFreeDays() - freeDays);
-            }else{
+            } else {
                 check.get().setTotalFreeDays(check.get().getTotalFreeDays() + freeDays);
             }
             models.add(check.get());
@@ -59,7 +61,7 @@ public class DayOffManagementService {
         try {
             updateUserUsedFreeDays(usersFreeDays, save);
             userTotalAttendanceRepository.saveAll(models);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
         return ResponseEntity.ok().body("Successfully update");
@@ -69,20 +71,57 @@ public class DayOffManagementService {
      * Update UserUsedFreeDays, if save is true then save, else delete
      *
      * @param userUsedFreeDays List<UserUsedFreeDays>
-     * @param save boolean
+     * @param save             boolean
      */
     public void updateUserUsedFreeDays(List<UserUsedFreeDays> userUsedFreeDays, boolean save) {
-        if(save) {
-            userUsedFreeDaysRepository.saveAll(userUsedFreeDays);
+        if (save) {
+            try {
+                userUsedFreeDaysRepository.saveAll(userUsedFreeDays);
+            } catch (Exception e) {
+                throw new CustomException(e.getMessage());
+            }
         } else {
-            //TODO optimise this with native query
-            userUsedFreeDays.forEach(userUsedFreeDay -> {
-                userUsedFreeDaysRepository.deleteByUserIdAndCalendarId(userUsedFreeDay.getUserId(), userUsedFreeDay.getCalendarId());
-            });
+
+            Map<Integer, Integer> userIdCalendarId = new HashMap<>();
+            userUsedFreeDays.forEach(userUsedFreeDay -> userIdCalendarId.put(userUsedFreeDay.getUserId(), userUsedFreeDay.getCalendarId()));
+            String paramForQuery = userIdCalendarIdStringForQuery(userIdCalendarId);
+            String sql = "DELETE FROM `user_used_free_days` WHERE ( user_id, calendar_id ) IN (" + paramForQuery + ")";
+
+            try {
+                jdbcTemplate.execute(sql);
+            } catch (Exception e) {
+                throw new CustomException(e.getMessage());
+            }
+
+            // Old way for deleting, which we change wit native query
+//            userUsedFreeDays.forEach(userUsedFreeDay -> {
+//                userUsedFreeDaysRepository.deleteByUserIdAndCalendarId(userUsedFreeDay.getUserId(), userUsedFreeDay.getCalendarId());
+//            });
 
         }
 
     }
+
+    private String userIdCalendarIdStringForQuery(Map<Integer, Integer> userIdCalendarId) {
+        return userIdCalendarId.entrySet().stream().map(e -> "(" + e.getKey() + "," + e.getValue() + ")").collect(Collectors.joining(","));
+    }
 }
 
+/**
+ * Zoranovi primeri kako da se koristi stream() sa stringom...
+ * Dole je primer moje metode, koju je Zoran "zamenio" jednom linijom koda
+ * Dao nam je 2 mogucnosti ("result" i "result2" kako se moze resiti)
+ */
 
+// Map<Integer, Integer> userIdCalendarId = Map.of(1,1,2,2,3,3);
+// String result = userIdCalendarId.entrySet().stream().map(e ->"(" + e.getKey() + "," + e.getValue() + ")").collect(Collectors.joining(","));
+// String result2 = String.join(",", userIdCalendarId.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(e ->"(" + e.getKey() + "," + e.getValue() + ")").toList());
+//
+//private String userIdCalendarIdStringForQuery(Map<Integer, Integer> userIdCalendarId) {
+//    StringBuilder sb = new StringBuilder();
+//    userIdCalendarId.forEach((key, value) -> {
+//        sb.append("(").append(key).append(",").append(value).append("),");
+//    });
+//
+//    return sb.toString();
+//}

@@ -27,7 +27,7 @@ public class CalendarService {
     private final CalendarResponseRepository calendarResponseRepository;
 
     /**
-     * Populet table Calendar in database
+     * Populate table Calendar in database
      */
     public void populateCalendar() {
         int currentYear = LocalDate.now().getYear();
@@ -39,9 +39,7 @@ public class CalendarService {
         LocalDate endDate = LocalDate.of(currentYear, Month.DECEMBER, 31);
 
         //Add every calendar date to existedDays list
-        calendarRepository.findAll().forEach(calendar -> {
-            existedDays.add(calendar.getDate());
-        });
+        calendarRepository.findAll().forEach(calendar -> existedDays.add(calendar.getDate()));
 
         // Create every day in calendar with date, day name and day type
         while (!startDate.isAfter(endDate)) {
@@ -59,7 +57,7 @@ public class CalendarService {
         }
 
         // Check if day already exists in calendar
-        //There was an error: parametar in !existedDays.contains() was days, instead of days.getDate().
+        // There was an error: param in !existedDays.contains() was days, instead of days.getDate().
         // That is the problem, because existedDays is list of existedDays is list of Date objects not Calendar objects
         List<Calendar> diffDays = calendarSet.stream().filter(days -> !existedDays.contains(days.getDate())).collect(Collectors.toList());
 

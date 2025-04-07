@@ -202,7 +202,7 @@ public class AuthorizationService {
      * Create personal holiday free day type for user
      *
      * @param holidayDescription String
-     * @return
+     * @return Integer
      */
     private Integer crateFreeDayType(String holidayDescription) {
         try {
