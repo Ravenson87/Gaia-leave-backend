@@ -90,4 +90,14 @@ public class OvertimeHoursController {
     ) {
         return workingHoursService.sumOvertimeWorkingHours(userId, startDate, endDate);
     }
+
+    @PutMapping("/update-overtime-compensation")
+    public ResponseEntity<String> updateOvertimeCompensation(
+            @Valid
+            @RequestBody
+            @NotEmpty(message = "List can not be empty or null")
+            List<OvertimeHoursResponse> models
+    ){
+        return overtimeHoursService.updateOvertimeCompensation(models);
+    }
 }

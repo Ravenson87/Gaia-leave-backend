@@ -52,7 +52,7 @@ public class WorkingHoursService {
             throw new CustomException("User dont have overtime hours");
         }
 
-        // Count how much hours to subtract from overtime hours
+        // Count how many hours to subtract from overtime hours
         int totalFreeDays = userTotalAttendance.get().getTotalFreeDays();
         int hoursToSubtractAsDays = freeDays * userTotalAttendance.get().getTotalWorkingHours();
         int overtimeHoursToSubtract = userTotalAttendance.get().getOvertimeHoursSum() - hoursToSubtractAsDays;

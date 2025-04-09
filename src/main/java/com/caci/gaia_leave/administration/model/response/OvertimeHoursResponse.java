@@ -26,7 +26,7 @@ public class OvertimeHoursResponse implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
+    @JsonProperty("id")
     @Column(name = "id")
     private Integer id;
 

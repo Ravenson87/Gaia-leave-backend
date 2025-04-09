@@ -24,9 +24,7 @@ import static com.caci.gaia_leave.shared_tools.helper.AllHelpers.checkOs;
 public class DocumentHandler {
 
     private final AppProperties appProperties;
-
-    //TODO Check why document have wrong path when we save it
-
+    
     /**
      * Method store document on server, and save path in table in database
      *

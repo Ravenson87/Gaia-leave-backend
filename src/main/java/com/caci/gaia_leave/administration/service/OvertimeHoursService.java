@@ -2,6 +2,7 @@ package com.caci.gaia_leave.administration.service;
 
 import com.caci.gaia_leave.administration.model.request.OvertimeHours;
 import com.caci.gaia_leave.administration.model.request.UserTotalAttendance;
+import com.caci.gaia_leave.administration.model.request.UserUsedFreeDays;
 import com.caci.gaia_leave.administration.model.response.OvertimeHoursResponse;
 import com.caci.gaia_leave.administration.repository.request.CalendarRepository;
 import com.caci.gaia_leave.administration.repository.request.OvertimeHoursRepository;
@@ -10,14 +11,13 @@ import com.caci.gaia_leave.administration.repository.request.UserTotalAttendance
 import com.caci.gaia_leave.administration.repository.response.OvertimeHoursResponseRepository;
 import com.caci.gaia_leave.shared_tools.exception.CustomException;
 import com.caci.gaia_leave.shared_tools.helper.AllHelpers;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -27,12 +27,13 @@ public class OvertimeHoursService {
     private final UserRepository userRepository;
     private final CalendarRepository calendarRepository;
     private final UserTotalAttendanceRepository userTotalAttendanceRepository;
+    private final ObjectMapper objectMapper;
 
     /**
      * Create OvertimeHours in database
      *
      * @param models List<OvertimeHours>
-     * @return ResponseEntity<List<OvertimeHoursResponse>>
+     * @return ResponseEntity<List < OvertimeHoursResponse>>
      */
     public ResponseEntity<List<OvertimeHoursResponse>> create(List<OvertimeHours> models) {
         List<OvertimeHours> save = new ArrayList<>();
@@ -55,7 +56,7 @@ public class OvertimeHoursService {
             }
             int maxOvertimeHours = 24 - userTotalAttendance.get().getTotalWorkingHours();
 
-            if(model.getOvertimeHours() > maxOvertimeHours) {
+            if (model.getOvertimeHours() > maxOvertimeHours) {
                 throw new CustomException("Overtime hours can not exceed 24 hours.");
             }
             save.add(model);
@@ -79,7 +80,7 @@ public class OvertimeHoursService {
     /**
      * Read OvertimeHours from database
      *
-     * @return ResponseEntity<List<OvertimeHoursResponse>>
+     * @return ResponseEntity<List < OvertimeHoursResponse>>
      */
     public ResponseEntity<List<OvertimeHoursResponse>> read() {
         List<OvertimeHoursResponse> result = AllHelpers.listConverter(overtimeHoursResponseRepository.findAll());
@@ -87,7 +88,6 @@ public class OvertimeHoursService {
     }
 
     /**
-     *
      * @param id Integer
      * @return ResponseEntity<OvertimeHoursResponse>
      */
@@ -101,7 +101,7 @@ public class OvertimeHoursService {
     /**
      * Update OvertimeHours in database
      *
-     * @param id Integer
+     * @param id    Integer
      * @param model OvertimeHours
      * @return ResponseEntity<String>
      */
@@ -145,4 +145,35 @@ public class OvertimeHoursService {
             throw new CustomException(e.getMessage());
         }
     }
+
+    /**
+     * Update overtimeCompensation
+     *
+     * @param models List<OvertimeHoursResponse>
+     * @return ResponseEntity<String>
+     */
+    public ResponseEntity<String> updateOvertimeCompensation(List<OvertimeHoursResponse> models) {
+        List<OvertimeHours> save = new ArrayList<>();
+        // Find overtimeHours by userId and calendarId and add it to the list
+        models.forEach(model -> {
+            if (!overtimeHoursRepository.existsByUserIdAndCalendarId(model.getUserId(), model.getCalendarId())) {
+                throw new CustomException("Overtime hours for that date and that user does not exist.");
+            }
+
+            // Map OvertimeHoursResponse to OvertimeHours with ObjectMapper
+            OvertimeHours overtimeHours = objectMapper.convertValue(model, OvertimeHours.class);
+
+            //Set id, because OvertimeHoursResponse doesnt have id value
+            overtimeHours.setId(model.getId());
+            save.add(overtimeHours);
+        });
+        // Save overtimeHours in database
+        try {
+            overtimeHoursRepository.saveAll(save);
+            return ResponseEntity.ok().body("Successfully update");
+        } catch (Exception e) {
+            throw new CustomException(e.getMessage());
+        }
+    }
+
 }

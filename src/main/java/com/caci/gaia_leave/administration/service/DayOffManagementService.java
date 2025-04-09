@@ -74,6 +74,7 @@ public class DayOffManagementService {
      * @param save             boolean
      */
     public void updateUserUsedFreeDays(List<UserUsedFreeDays> userUsedFreeDays, boolean save) {
+        //Check does function need to save free days or delete free days
         if (save) {
             try {
                 userUsedFreeDaysRepository.saveAll(userUsedFreeDays);
@@ -82,11 +83,15 @@ public class DayOffManagementService {
             }
         } else {
 
+            // Get user_id and calendar id
             Map<Integer, Integer> userIdCalendarId = new HashMap<>();
             userUsedFreeDays.forEach(userUsedFreeDay -> userIdCalendarId.put(userUsedFreeDay.getUserId(), userUsedFreeDay.getCalendarId()));
+            // Prepare string for query - transform Map<Integer, Integer> in "(x,y)
             String paramForQuery = userIdCalendarIdStringForQuery(userIdCalendarId);
+            // Query for Delete user free days by unique columns (combination of user_id and calendar_id)
             String sql = "DELETE FROM `user_used_free_days` WHERE ( user_id, calendar_id ) IN (" + paramForQuery + ")";
 
+            // Executing query
             try {
                 jdbcTemplate.execute(sql);
             } catch (Exception e) {
