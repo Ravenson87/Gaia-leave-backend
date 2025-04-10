@@ -2,7 +2,6 @@ package com.caci.gaia_leave.administration.service;
 
 import com.caci.gaia_leave.administration.model.request.OvertimeHours;
 import com.caci.gaia_leave.administration.model.request.UserTotalAttendance;
-import com.caci.gaia_leave.administration.model.request.UserUsedFreeDays;
 import com.caci.gaia_leave.administration.model.response.OvertimeHoursResponse;
 import com.caci.gaia_leave.administration.repository.request.CalendarRepository;
 import com.caci.gaia_leave.administration.repository.request.OvertimeHoursRepository;
@@ -17,7 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

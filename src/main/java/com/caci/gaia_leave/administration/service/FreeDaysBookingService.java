@@ -32,6 +32,7 @@ public class FreeDaysBookingService {
     private final CalendarRepository calendarRep;
     private final UserRepository userRepository;
 
+    private final int IN_PROGRESS = 0;
     /**
      * Create free days booking by user request.
      *
@@ -61,7 +62,7 @@ public class FreeDaysBookingService {
                 modelForWorkingDays.setCalendarId(model.getCalendarId());
                 modelForWorkingDays.setUserId(userId);
                 modelForWorkingDays.setDescription(model.getDescription());
-                modelForWorkingDays.setStatus(0);
+                modelForWorkingDays.setStatus(IN_PROGRESS);
                 workingDays.add(modelForWorkingDays);
             }
         });
@@ -128,7 +129,7 @@ public class FreeDaysBookingService {
      * @return ResponseEntity<String>
      */
     public ResponseEntity<String> freeDaysAcceptance(List<FreeDaysBookingUpdateDTO> freeDaysBookingUpdateDTO) {
-        // Get ids from input parametar
+        // Get ids from input parameter
         List<Integer> freeDaysCalendarIds = freeDaysBookingUpdateDTO.stream().map(FreeDaysBookingUpdateDTO::getId).toList();
         // Find free days booking response by ids and saved in list
         List<FreeDaysBookingResponse> freeDaysBooking = listConverter(freeDaysBookingResponseRepository.findAllById(freeDaysCalendarIds));

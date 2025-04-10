@@ -1,7 +1,6 @@
 package com.caci.gaia_leave.administration.repository.request;
 
 import com.caci.gaia_leave.administration.model.request.OvertimeHours;
-import com.caci.gaia_leave.administration.model.response.OvertimeHoursResponse;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
