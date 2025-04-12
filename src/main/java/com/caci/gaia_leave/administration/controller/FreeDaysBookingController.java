@@ -5,13 +5,13 @@ import com.caci.gaia_leave.administration.model.dto.FreeDaysBookingUpdateDTO;
 import com.caci.gaia_leave.administration.model.response.FreeDaysBookingResponse;
 import com.caci.gaia_leave.administration.service.FreeDaysBookingService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -29,9 +29,15 @@ public class FreeDaysBookingController {
             Integer userId,
             @RequestBody
             @NotNull(message = "Model can not be null")
-            List<FreeDaysBookingDTO> freeDaysBookingDTO
+            List<FreeDaysBookingDTO> model
     ) {
-        return freeDaysBookingService.freeDaysRequest(freeDaysBookingDTO, userId);
+        return freeDaysBookingService.freeDaysRequest(model, userId);
+    }
+
+    @GetMapping("/read")
+    public ResponseEntity<List<FreeDaysBookingResponse>> read(){
+       return freeDaysBookingService.read();
+
     }
 
     @GetMapping("/read-by-status")
@@ -68,14 +74,14 @@ public class FreeDaysBookingController {
     public ResponseEntity<List<FreeDaysBookingResponse>> readByDateRangeAndStatus(
             @Valid
             @RequestParam(name = "start_date")
-            @NotNull(message = "start_date can not be null")
-            Date startDate,
+            @NotEmpty(message = "start_date can not be null or empty")
+            String startDate,
             @RequestParam(name = "end_date")
-            @NotNull(message = "end_date can not be null")
-            Date endDate,
+            @NotEmpty(message = "end_date can not be null or empty")
+            String endDate,
             @RequestParam(name = "status")
             @NotNull(message = "Status can not be null")
-            String status
+            Integer status
     ) {
         return freeDaysBookingService.readByDateRangeAndStatus(startDate, endDate, status);
     }

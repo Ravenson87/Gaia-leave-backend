@@ -1,6 +1,5 @@
 package com.caci.gaia_leave.administration.model.response;
 
-import com.caci.gaia_leave.administration.model.request.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -71,7 +70,7 @@ public class FreeDaysBookingResponse implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id",
             insertable = false, updatable = false)
-    private User user;
+    private UserResponse user;
 
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     @ManyToOne(fetch = FetchType.EAGER)

@@ -10,13 +10,13 @@ import com.caci.gaia_leave.administration.repository.request.FreeDaysBookingRepo
 import com.caci.gaia_leave.administration.repository.request.UserRepository;
 import com.caci.gaia_leave.administration.repository.response.FreeDaysBookingResponseRepository;
 import com.caci.gaia_leave.shared_tools.exception.CustomException;
+import com.caci.gaia_leave.shared_tools.helper.AllHelpers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -77,6 +77,16 @@ public class FreeDaysBookingService {
     }
 
     /**
+     * Read all from FreeDaysBooking table
+     *
+     * @return ResponseEntity<List<FreeDaysBookingResponse>>
+     */
+    public ResponseEntity<List<FreeDaysBookingResponse>> read(){
+        List<FreeDaysBookingResponse> result = AllHelpers.listConverter(freeDaysBookingResponseRepository.findAll());
+        return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    /**
      * Read free days by status
      *
      * @param status Integer
@@ -112,13 +122,13 @@ public class FreeDaysBookingService {
     /**
      * Read by date range and status
      *
-     * @param start_date Date
-     * @param end_date   Date
+     * @param startDate Date
+     * @param endDate   Date
      * @param status     String
      * @return ResponseEntity<List < FreeDaysBookingResponse>>
      */
-    public ResponseEntity<List<FreeDaysBookingResponse>> readByDateRangeAndStatus(Date start_date, Date end_date, String status) {
-        List<FreeDaysBookingResponse> result = freeDaysBookingResponseRepository.freeDaysTypeRequestByDateRangeAndStatus(start_date, end_date, status);
+    public ResponseEntity<List<FreeDaysBookingResponse>> readByDateRangeAndStatus(String startDate, String endDate, Integer status) {
+        List<FreeDaysBookingResponse> result = freeDaysBookingResponseRepository.freeDaysTypeRequestByDateRangeAndStatus(startDate, endDate, status);
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

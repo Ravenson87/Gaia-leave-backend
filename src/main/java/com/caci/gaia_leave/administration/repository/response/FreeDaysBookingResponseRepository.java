@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Date;
 import java.util.List;
 
 public interface FreeDaysBookingResponseRepository extends CrudRepository<FreeDaysBookingResponse, Integer> {
@@ -16,5 +15,5 @@ public interface FreeDaysBookingResponseRepository extends CrudRepository<FreeDa
             name = "FreeDaysType.freeDaysTypeRequestByDateRangeAndStatus",
             nativeQuery = true
     )
-    List<FreeDaysBookingResponse> freeDaysTypeRequestByDateRangeAndStatus(@Param("start_date") Date start_date, @Param("end_date") Date end_date, @Param("status") String status);
+    List<FreeDaysBookingResponse> freeDaysTypeRequestByDateRangeAndStatus(@Param("start_date") String startDate, @Param("end_date") String endDate, @Param("status") Integer status);
 }
