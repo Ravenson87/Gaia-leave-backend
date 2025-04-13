@@ -162,10 +162,4 @@ public class UserResponse implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "id",
             insertable = false, updatable = false)
     private List<UserDocumentsResponse> userDocuments;
-
-    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", referencedColumnName = "id",
-            insertable = false, updatable = false)
-    private List<FreeDaysBookingResponse> freeDaysBooking;
 }
