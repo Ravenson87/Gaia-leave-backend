@@ -226,7 +226,7 @@ public class UserService {
         }
 
 
-        return ResponseEntity.ok().body("Image uploaded");
+        return ResponseEntity.ok().body(filePath);
 
     }
 
