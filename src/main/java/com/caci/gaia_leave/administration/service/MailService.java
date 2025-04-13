@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.time.LocalDate;
+import java.util.Base64;
 import java.util.Date;
 
 @Service
@@ -27,12 +28,10 @@ public class MailService {
     private final MailHistoryService mailHistoryService;
 
     /**
-     *
-     *
-     * @param sendTo String
+     * @param sendTo  String
      * @param subject String
-     * @param body String
-     * @param files Multipart files
+     * @param body    String
+     * @param files   Multipart files
      */
     public void sendEmail(String sendTo, String subject, String body, MultipartFile[] files) {
         // Prepare email address
@@ -58,7 +57,7 @@ public class MailService {
                 }
             }
             mailSender.send(message);
-            createMailHistory(prepareAddresses,  body);
+            createMailHistory(prepareAddresses, body);
 
             // Check if there is a saved file and delete file if it is already sent
             if (fsr != null) {
@@ -90,7 +89,7 @@ public class MailService {
      * Create MailHistory in database
      *
      * @param prepareAddresses String
-     * @param body String
+     * @param body             String
      */
     private void createMailHistory(String prepareAddresses, String body) {
         MailHistory model = new MailHistory();
@@ -98,7 +97,13 @@ public class MailService {
         Date convertedDate = AllHelpers.convertToDateViaInstant(date);
 
         model.setAddresses(prepareAddresses);
-        model.setMessage(body);
+        try {
+            Base64.getDecoder().decode(body);
+            model.setMessage(body);
+        } catch (Exception e) {
+            String encodedBody = Base64.getEncoder().encodeToString(body.getBytes());
+            model.setMessage(encodedBody);
+        }
         model.setCreatedDate(convertedDate);
         mailHistoryService.create(model);
     }

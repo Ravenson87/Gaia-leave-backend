@@ -1,9 +1,11 @@
 package com.caci.gaia_leave.administration.controller;
 
 import com.caci.gaia_leave.administration.model.request.MailHistory;
+import com.caci.gaia_leave.administration.model.response.MailHistoryResponse;
 import com.caci.gaia_leave.administration.service.MailHistoryService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -39,14 +41,14 @@ public class MailHistoryController {
     @GetMapping("/read-by-id")
     public ResponseEntity<MailHistory> readById(
             @Valid
-            @NotEmpty(message = "Id cannot be empty")
+            @NotNull(message = "Id cannot be empty")
             Integer id
     ) {
         return mailHistoryService.readById(id);
     }
 
     @GetMapping("/read-by-addresses")
-    public ResponseEntity<List<MailHistory>> readByAddress(
+    public ResponseEntity<List<MailHistoryResponse>> readByAddress(
             @Valid
             @NotEmpty(message = "Addresses cannot be empty")
             String addresses
@@ -55,7 +57,7 @@ public class MailHistoryController {
     }
 
     @GetMapping("/read-by-messages")
-    public ResponseEntity<List<MailHistory>> readByMessage(
+    public ResponseEntity<List<MailHistoryResponse>> readByMessage(
             @Valid
             @NotEmpty(message = "Message cannot be empty")
             String message

@@ -1,6 +1,7 @@
 package com.caci.gaia_leave.administration.service;
 
 import com.caci.gaia_leave.administration.model.request.MailHistory;
+import com.caci.gaia_leave.administration.model.response.MailHistoryResponse;
 import com.caci.gaia_leave.administration.repository.request.MailHistoryRepository;
 import com.caci.gaia_leave.administration.repository.response.MailHistoryResponseRepository;
 import com.caci.gaia_leave.shared_tools.exception.CustomException;
@@ -59,8 +60,8 @@ public class MailHistoryService {
      * @param addresses String
      * @return ResponseEntity<List<MailHistory>>
      */
-    public ResponseEntity<List<MailHistory>> readByAddresses(String addresses) {
-        List<MailHistory> result = listConverter(mailHistoryResponseRepository.findByAddresses(addresses));
+    public ResponseEntity<List<MailHistoryResponse>> readByAddresses(String addresses) {
+        List<MailHistoryResponse> result = listConverter(mailHistoryResponseRepository.findByAddresses(addresses));
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);
     }
 
@@ -70,8 +71,8 @@ public class MailHistoryService {
      * @param message String
      * @return ResponseEntity<List<MailHistory>>
      */
-    public ResponseEntity<List<MailHistory>> readByMessage(String message) {
-        List<MailHistory> result = listConverter(mailHistoryResponseRepository.findByMessage(message));
+    public ResponseEntity<List<MailHistoryResponse>> readByMessage(String message) {
+        List<MailHistoryResponse> result = listConverter(mailHistoryResponseRepository.findByMessage(message));
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(result);
     }
 }
