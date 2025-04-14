@@ -32,7 +32,7 @@ public class MappingService {
         headers.setBasicAuth(appProperties.getGlobalUser(), appProperties.getGlobalPassword());
 
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
-        ResponseEntity<String> res = restTemplate.exchange("https://admin-troter.softmetrixgroup.com:8443/gaia_leave/actuator/mappings", HttpMethod.GET, entity, String.class);
+        ResponseEntity<String> res = restTemplate.exchange("http://localhost:8080/actuator/mappings", HttpMethod.GET, entity, String.class);
 
         if (res.getStatusCode() != HttpStatus.OK || !res.hasBody() || res.getBody() == null) {
             return null;

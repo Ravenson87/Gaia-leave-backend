@@ -16,7 +16,7 @@ public class ScheduledTasks {
     /**
      * Populate endpoint table.
      */
-    @Scheduled(initialDelay = 10000, fixedDelay = 3000) // 5 min
+    @Scheduled(initialDelay = 10000, fixedDelay = 30000) // 5 min
     public void doPopulateEndpoints() {
         endpointService.populate();
     }
