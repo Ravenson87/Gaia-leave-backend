@@ -21,4 +21,6 @@ public class ScheduledTasks {
         endpointService.populate();
     }
 
+    @Scheduled(cron = "0 0 0 1 1 *")
+    public void populateCalendar() { calendarService.populateCalendar(); }
 }

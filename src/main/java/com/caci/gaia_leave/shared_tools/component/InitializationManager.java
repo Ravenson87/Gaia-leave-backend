@@ -1,5 +1,6 @@
 package com.caci.gaia_leave.shared_tools.component;
 
+import com.caci.gaia_leave.administration.service.CalendarService;
 import com.caci.gaia_leave.shared_tools.configuration.AppProperties;
 import com.caci.gaia_leave.shared_tools.exception.CustomException;
 import jakarta.annotation.PostConstruct;
@@ -19,6 +20,7 @@ import static com.caci.gaia_leave.shared_tools.helper.AllHelpers.checkOs;
 public class InitializationManager {
 
     private final AppProperties appProperties;
+    private final CalendarService calendarService;
 
     /**
      * Create folder where images should be stored
@@ -26,13 +28,14 @@ public class InitializationManager {
     // Annotation PostConstruct serve to invoke method when application start
     @PostConstruct
     public void createImageFolder() {
+        // Populate calendar
+        calendarService.populateCalendar();
         //Create path for directory
         String dir = appProperties.getUploadImagePath();
         Path path = Paths.get(dir);
         try {
             // Create directory on given path
             Files.createDirectories(path);
-
             // Check OS and if it is linux, give it standard linux permissions
             if (Objects.requireNonNull(checkOs()).equalsIgnoreCase("linux")) {
                 ProcessBuilder processBuilder = new ProcessBuilder();
@@ -43,4 +46,5 @@ public class InitializationManager {
             throw new CustomException(e.getMessage());
         }
     }
+
 }

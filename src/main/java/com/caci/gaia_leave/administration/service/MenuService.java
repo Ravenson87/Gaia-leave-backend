@@ -24,11 +24,14 @@ public class MenuService {
     /**
      * Create Menu in database
      *
-     * @param model Menu
+     * @param models Menu
      * @return ResponseEntity<String>
      */
-    public ResponseEntity<String> create(Menu model) {
-
+    public ResponseEntity<String> create(List<Menu> models) {
+        if(models == null || models.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        models.forEach(model -> {
         if (menuRepository.existsByName(model.getName())) {
             throw new CustomException("Menu with name `" + model.getName() + "` already exists.");
         }
@@ -36,9 +39,9 @@ public class MenuService {
         if (menuRepository.existsByMenuNumber(model.getMenuNumber())) {
             throw new CustomException("Menu number `" + model.getMenuNumber() + "` already exists.");
         }
-
+        });
         try {
-            menuRepository.save(model);
+            menuRepository.saveAll(models);
             return ResponseEntity.status(HttpStatus.CREATED).body("Successfully created");
         } catch (CustomException e) {
             throw new CustomException(e.getMessage());
