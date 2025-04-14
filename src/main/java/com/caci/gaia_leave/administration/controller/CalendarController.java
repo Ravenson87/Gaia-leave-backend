@@ -92,7 +92,7 @@ public class CalendarController {
             @RequestParam("type")
             @NotNull(message = "Type can not be null")
             String type,
-            @RequestParam("descrpition")
+            @RequestParam("description")
             @NotNull(message = "Type can not be null")
             String description
     ) {
