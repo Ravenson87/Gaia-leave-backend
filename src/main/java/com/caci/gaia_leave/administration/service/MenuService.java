@@ -29,7 +29,7 @@ public class MenuService {
      */
     public ResponseEntity<String> create(List<Menu> models) {
         if(models == null || models.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         models.forEach(model -> {
         if (menuRepository.existsByName(model.getName())) {
