@@ -82,7 +82,7 @@ public class CalendarController {
         return calendarService.update(id, model);
     }
 
-    @PutMapping("/update-by-type/{id}/{type}")
+    @PutMapping("/update-by-type/{id}")
     public ResponseEntity<String> updateByType(
             @Valid
             @PathVariable("id")
