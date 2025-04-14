@@ -26,9 +26,9 @@ public class MenuController {
             @Valid
             @RequestBody
             @NotNull(message = "Model cen not be null")
-            Menu model
+            List<Menu> models
     ) {
-        return menuService.create(model);
+        return menuService.create(models);
     }
 
     @GetMapping("/read")
