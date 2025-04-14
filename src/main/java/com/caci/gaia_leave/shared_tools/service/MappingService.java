@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -25,6 +26,10 @@ public class MappingService {
     private final AppProperties appProperties;
     private final RestTemplate restTemplate;
 
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
+    @Value("${server.port}")
+    private String serverPort;
 
     public MappingServiceWrapper getActuator(String appName) {
         HttpHeaders headers = new HttpHeaders();
@@ -32,7 +37,7 @@ public class MappingService {
         headers.setBasicAuth(appProperties.getGlobalUser(), appProperties.getGlobalPassword());
 
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
-        ResponseEntity<String> res = restTemplate.exchange("http://localhost:8080/actuator/mappings", HttpMethod.GET, entity, String.class);
+        ResponseEntity<String> res = restTemplate.exchange(currentUrl() +"/actuator/mappings", HttpMethod.GET, entity, String.class);
 
         if (res.getStatusCode() != HttpStatus.OK || !res.hasBody() || res.getBody() == null) {
             return null;
@@ -139,4 +144,13 @@ public class MappingService {
         return (String) request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
     }
 
+    /**
+     * Get current url.
+     *
+     * @return String
+     */
+    private String currentUrl() {
+        String local = "http://localhost:" + serverPort, remote = local + "/" + appProperties.getMsApplicationName();
+        return activeProfile.equals("local") ? local : remote;
+    }
 }
