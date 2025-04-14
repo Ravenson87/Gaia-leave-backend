@@ -35,19 +35,23 @@ public class Calendar implements Serializable {
     @Column(name = "date")
     private Date date;
 
-    @NotEmpty(message = "days cannot be empty")
-    @NotNull(message = "days cannot be null")
+    @NotEmpty(message = "days cannot be empty or null")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("days")
     @Column(name = "days")
     private String days;
 
-    //Expected problems, look for Enums
-    @NotNull(message = "type cannot be empty")
+
+    @NotEmpty(message = "type cannot be empty or null")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @Enumerated(EnumType.STRING)
     @JsonProperty("type")
     @Column(name = "type")
-    private WorkingDayType type;
+    private String type;
+
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonProperty("description")
+    @Column(name = "description")
+    private String description;
 
 }

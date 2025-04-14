@@ -50,7 +50,7 @@ public class CalendarService {
             calendar.setDate(convertedDate);
             DayOfWeek daysOfWeek = startDate.getDayOfWeek();
             calendar.setDays(String.valueOf(daysOfWeek).toLowerCase());
-            calendar.setType(weekend ? WorkingDayType.WEEKEND : WorkingDayType.WORKING_DAY);
+            calendar.setType(weekend ? WorkingDayType.WEEKEND.getValue() : WorkingDayType.WORKING_DAY.getValue());
 
             startDate = startDate.plusDays(1);
             calendarSet.add(calendar);
@@ -153,7 +153,8 @@ public class CalendarService {
         CalendarResponse model = result.orElseThrow(() -> new CustomException("Day with " + id + "does not exist in calendar"));
         try {
             model.setId(id);
-            model.setType(workingDayType);
+            model.setType(workingDayType.getValue());
+            System.out.println("working day type modela: " + model.getType());
             calendarResponseRepository.save(model);
             return ResponseEntity.ok().body("Successfully updated");
         } catch (Exception e) {
@@ -201,13 +202,16 @@ public class CalendarService {
      * @param type String
      * @return WorkingDayType
      */
-    public WorkingDayType getWorkingDayType(String type) {
-        return switch (type) {
-            case "WEEKEND" -> WorkingDayType.WEEKEND;
-            case "WORKING_DAY" -> WorkingDayType.WORKING_DAY;
-            case "NATIONAL_HOLIDAY" -> WorkingDayType.NATIONAL_HOLIDAY;
+    private WorkingDayType getWorkingDayType(String type) {
+        WorkingDayType workingDayType;
+        switch (type) {
+            case "RELIGIOUS_HOLIDAY" -> workingDayType = WorkingDayType.RELIGIOUS_HOLIDAY;
+            case "WORKING_DAY" -> workingDayType = WorkingDayType.WORKING_DAY;
+            case "NATIONAL_HOLIDAY" -> workingDayType = WorkingDayType.NATIONAL_HOLIDAY;
             default -> throw new CustomException("Invalid type");
-        };
+        }
+        System.out.println(workingDayType);
+        return workingDayType;
     }
 
 

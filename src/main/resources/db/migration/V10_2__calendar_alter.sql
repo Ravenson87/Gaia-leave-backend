@@ -1,0 +1,2 @@
+ALTER TABLE `calendar`
+    MODIFY COLUMN  `type` VARCHAR(255) NOT NULL;

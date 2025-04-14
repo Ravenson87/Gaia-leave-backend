@@ -19,13 +19,5 @@ public enum WorkingDayType {
         return value;
     }
 
-//    @JsonCreator
-//    public static WorkingDayType fromString(String value) {
-//        for (WorkingDayType type : WorkingDayType.values()) {
-//            if (type.value.equalsIgnoreCase(value)) {
-//                return type;
-//            }
-//        }
-//        throw new IllegalArgumentException("Unknown enum value: " + value);
-//    }
+
 }

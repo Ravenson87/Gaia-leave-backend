@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -38,9 +39,14 @@ public class CalendarResponse implements Serializable {
     @Column(name = "days")
     private String days;
 
-    //Expected problems, look for Enums
-    @Enumerated(EnumType.STRING)
+    @NotEmpty(message = "type cannot be empty or null")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("type")
     @Column(name = "type")
-    private WorkingDayType type;
+    private String type;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonProperty("description")
+    @Column(name = "description")
+    private String description;
 }
