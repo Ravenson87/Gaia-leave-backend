@@ -89,12 +89,14 @@ public class CalendarController {
             @NotNull(message = "Id can not be null")
             @Min(value = 1, message = "Id can not be less than zero")
             Integer id,
-            @PathVariable("type")
+            @RequestParam("type")
             @NotNull(message = "Type can not be null")
-            @NotBlank(message = "Type can not be empty")
-            String type
+            String type,
+            @RequestParam("descrpition")
+            @NotNull(message = "Type can not be null")
+            String description
     ) {
-        return calendarService.updateByType(id, type);
+        return calendarService.updateByType(id, type, description);
     }
 
     @DeleteMapping("/delete")

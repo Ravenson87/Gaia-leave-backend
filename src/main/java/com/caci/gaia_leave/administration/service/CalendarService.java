@@ -147,13 +147,14 @@ public class CalendarService {
      * @param type String
      * @return ResponseEntity<String>
      */
-    public ResponseEntity<String> updateByType(Integer id, String type) {
+    public ResponseEntity<String> updateByType(Integer id, String type, String description) {
         WorkingDayType workingDayType = getWorkingDayType(type);
         Optional<CalendarResponse> result = calendarResponseRepository.findById(id);
         CalendarResponse model = result.orElseThrow(() -> new CustomException("Day with " + id + "does not exist in calendar"));
         try {
             model.setId(id);
             model.setType(workingDayType.getValue());
+            model.setDescription(description);
             System.out.println("working day type modela: " + model.getType());
             calendarResponseRepository.save(model);
             return ResponseEntity.ok().body("Successfully updated");
