@@ -2,6 +2,7 @@ package com.caci.gaia_leave.administration.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -45,5 +46,9 @@ public class UserValidationDTO {
     @JsonProperty("holiday_description")
     private String holidayDescription;
 
+    @JsonFormat(shape = JsonFormat.Shape.BOOLEAN)
+    @JsonProperty("verified")
+    @Column(name = "verified")
+    private Boolean verified;
 
 }

@@ -140,7 +140,6 @@ public class UserService {
             userModel.setUsername(model.getUsername());
             userModel.setStatus(model.getStatus());
             userModel.setDateOfBirth(model.getDateOfBirth());
-            userModel.setStatus(model.getStatus());
             userModel.setPhone(model.getPhone());
             userModel.setProfileImage(model.getProfileImage());
             userModel.setHash(DigestUtils.md5Hex(model.getUsername() + model.getEmail()));

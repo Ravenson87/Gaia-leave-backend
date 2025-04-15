@@ -3,6 +3,7 @@ package com.caci.gaia_leave.administration.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -81,4 +82,6 @@ public class UserUpdateDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("profile_image")
     private String profileImage;
+
+
 }
