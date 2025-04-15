@@ -28,6 +28,8 @@ public class MailService {
     private final MailHistoryService mailHistoryService;
 
     /**
+     * Send mail to user
+     *
      * @param sendTo  String
      * @param subject String
      * @param body    String
@@ -49,6 +51,7 @@ public class MailService {
             helper.setTo(InternetAddress.parse(prepareAddresses));
             helper.setSubject(subject);
             helper.setText(body, true);
+            System.out.println(body);
             if (check) {
                 for (MultipartFile file : files) {
                     String fileName = file.getOriginalFilename();
