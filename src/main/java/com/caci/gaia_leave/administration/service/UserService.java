@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
@@ -43,6 +44,8 @@ public class UserService {
      * @param model User
      * @return ResponseEntity<String>
      */
+
+    @Transactional
     public ResponseEntity<String> create(User model) {
 
         if (userResponseRepository.existsByUsername(model.getUsername())) {
@@ -67,7 +70,7 @@ public class UserService {
             template = template.replace("{{userName}}", model.getUsername())
                     .replace("{{firstName}}", model.getFirstName())
                     .replace("{{lastName}}", model.getLastName())
-                    .replace("{{registrationForm}}", "https://gaia.softmetrixgroup.com/#/registartion?h=" + hash);
+                    .replace("{{registrationForm}}", "https://freedays.softmetrixgroup.com/#/registartion?h=" + hash);
             userRepository.save(model);
             mailService.sendEmail(model.getEmail(), "Activate your GaiaLeave account", template, null);
             return ResponseEntity.status(HttpStatus.CREATED).body("Successfully created");
