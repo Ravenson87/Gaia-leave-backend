@@ -1,4 +1,5 @@
-INSERT IGNORE INTO `role` (
+INSERT
+IGNORE INTO `role` (
        id,
        name,
        description,
@@ -16,7 +17,8 @@ INSERT IGNORE INTO `role` (
       NOW(),
       NOW());
 
-INSERT IGNORE INTO `job_position` (
+INSERT
+IGNORE INTO `job_position` (
        id,
        title,
        description)
@@ -26,7 +28,8 @@ VALUES
        'Technical Lead',
        'The Technical Lead will guide the team through the development process.');
 
-INSERT IGNORE INTO `user` (
+INSERT
+IGNORE INTO `user` (
        id,
        role_id,
        job_position_id,
@@ -56,3 +59,23 @@ VALUES
        NOW(),
        NOW()
        );
+INSERT
+IGNORE INTO `free_day_type`(
+        id,
+        `type`,
+        description,
+        created_by,
+        last_modified_by,
+        created_date,
+        last_modified_date
+)
+VALUES
+(
+1,
+'vacation',
+'vacation',
+   'system',
+       'system',
+       NOW(),
+       NOW()
+);

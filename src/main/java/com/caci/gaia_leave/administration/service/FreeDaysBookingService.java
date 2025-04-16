@@ -5,10 +5,12 @@ import com.caci.gaia_leave.administration.model.dto.FreeDaysBookingUpdateDTO;
 import com.caci.gaia_leave.administration.model.request.Calendar;
 import com.caci.gaia_leave.administration.model.request.FreeDaysBooking;
 import com.caci.gaia_leave.administration.model.response.FreeDaysBookingResponse;
+import com.caci.gaia_leave.administration.model.response.UserUsedFreeDaysResponse;
 import com.caci.gaia_leave.administration.repository.request.CalendarRepository;
 import com.caci.gaia_leave.administration.repository.request.FreeDaysBookingRepository;
 import com.caci.gaia_leave.administration.repository.request.UserRepository;
 import com.caci.gaia_leave.administration.repository.response.FreeDaysBookingResponseRepository;
+import com.caci.gaia_leave.administration.repository.response.UserUsedFreeDaysResponseRepository;
 import com.caci.gaia_leave.shared_tools.exception.CustomException;
 import com.caci.gaia_leave.shared_tools.helper.AllHelpers;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,7 @@ public class FreeDaysBookingService {
     private final FreeDaysBookingResponseRepository freeDaysBookingResponseRepository;
     private final CalendarRepository calendarRep;
     private final UserRepository userRepository;
+    private final UserUsedFreeDaysResponseRepository userUsedFreeDaysResponseRepository;
 
     private final int IN_PROGRESS = 0;
     /**
@@ -143,6 +146,9 @@ public class FreeDaysBookingService {
         List<Integer> freeDaysCalendarIds = freeDaysBookingUpdateDTO.stream().map(FreeDaysBookingUpdateDTO::getId).toList();
         // Find free days booking response by ids and saved in list
         List<FreeDaysBookingResponse> freeDaysBooking = listConverter(freeDaysBookingResponseRepository.findAllById(freeDaysCalendarIds));
+
+        List<UserUsedFreeDaysResponse> usedFreeDays = new ArrayList<>();
+
         if (freeDaysBooking.isEmpty()) {
             throw new CustomException("FreeDaysBooking not found");
         }
@@ -158,7 +164,16 @@ public class FreeDaysBookingService {
                     return freeDaysBookingResponse;
                 })
                 .collect(Collectors.toList());
+        updatedBookings.forEach(freeDaysBookingResponse -> {
+            UserUsedFreeDaysResponse freeDaysUsedResponse = new UserUsedFreeDaysResponse();
+            freeDaysUsedResponse.setUserId(freeDaysBookingResponse.getUserId());
+            freeDaysUsedResponse.setCalendarId(freeDaysBookingResponse.getCalendarId());
+            freeDaysUsedResponse.setFreeDayTypeId(1);
+            usedFreeDays.add(freeDaysUsedResponse);
+
+        });
         try {
+            userUsedFreeDaysResponseRepository.saveAll(usedFreeDays);
             freeDaysBookingResponseRepository.saveAll(updatedBookings);
         } catch (Exception e) {
             throw new CustomException(e.getMessage());
