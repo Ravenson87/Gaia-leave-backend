@@ -17,8 +17,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -171,7 +174,7 @@ public class FreeDaysBookingService {
             } else if (status == 0) {
                 deleteFreeDays(updatedBookings);
             }
-            freeDaysBookingResponseRepository.saveAll(updatedBookings);
+//            freeDaysBookingResponseRepository.saveAll(updatedBookings);
         } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
@@ -180,18 +183,40 @@ public class FreeDaysBookingService {
     }
 
     public void updateFreeDays(List<FreeDaysBookingResponse> updatedBookings) {
-        List<UserUsedFreeDaysResponse> userUsedFreeDays = new ArrayList<>();
         Map<Integer, Integer> userIdCalendarId = new HashMap<>();
-
-        updatedBookings.forEach(userUsedFreeDay -> userIdCalendarId.put(userUsedFreeDay.getUserId(), userUsedFreeDay.getCalendarId()));
+        List<UserUsedFreeDaysResponse> usedFreeDays = new ArrayList<>();
+        updatedBookings.forEach(userUsedFreeDay -> userIdCalendarId.put(userUsedFreeDay.getCalendarId(), userUsedFreeDay.getUserId()));
 
         // Prepare string for query - transform Map<Integer, Integer> in "(x,y)
         String paramForQuery = userIdCalendarIdStringForQuery(userIdCalendarId);
+        String sql = "SELECT * FROM `user_used_free_days` WHERE ( calendar_id, user_id ) IN (" + paramForQuery + ")";
 
-        String sql = "UPDATE `user_used_free_days` SET free_day_type_id=1 WHERE ( user_id, calendar_id ) IN (" + paramForQuery + ")";
+        RowMapper<UserUsedFreeDaysResponse> rowMapper = (rs, rowNum) -> {
+            UserUsedFreeDaysResponse response = new UserUsedFreeDaysResponse();
+            response.setId(rs.getInt("id"));
+            response.setCalendarId(rs.getInt("calendar_id"));
+            response.setUserId(rs.getInt("user_id"));
+            response.setFreeDayTypeId(rs.getInt(1));
+            return response;
+        };
+
+        List<UserUsedFreeDaysResponse> usersWithFreeDaysUsed = this.jdbcTemplate.query(sql, rowMapper);
+
+        updatedBookings.forEach(freeDaysBookingResponse -> {
+            UserUsedFreeDaysResponse freeDaysUsedResponse = new UserUsedFreeDaysResponse();
+            freeDaysUsedResponse.setUserId(freeDaysBookingResponse.getUserId());
+            freeDaysUsedResponse.setCalendarId(freeDaysBookingResponse.getCalendarId());
+            freeDaysUsedResponse.setFreeDayTypeId(1);
+            usedFreeDays.add(freeDaysUsedResponse);
+
+        });
+
+        List<UserUsedFreeDaysResponse> usersWithNoDaysUsed = usedFreeDays
+                .stream()
+                .filter( day -> !usersWithFreeDaysUsed.);
 
         try {
-        jdbcTemplate.execute(sql);
+//            jdbcTemplate.execute(sql);
         } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
