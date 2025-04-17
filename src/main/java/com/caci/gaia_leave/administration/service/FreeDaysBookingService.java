@@ -202,6 +202,10 @@ public class FreeDaysBookingService {
 
         List<UserUsedFreeDaysResponse> usersWithFreeDaysUsed = this.jdbcTemplate.query(sql, rowMapper);
 
+        Set<String> existingUserCalendarPairs = usersWithFreeDaysUsed.stream()
+                .map(u -> u.getUserId() + "_" + u.getCalendarId())
+                .collect(Collectors.toSet());
+
         updatedBookings.forEach(freeDaysBookingResponse -> {
             UserUsedFreeDaysResponse freeDaysUsedResponse = new UserUsedFreeDaysResponse();
             freeDaysUsedResponse.setUserId(freeDaysBookingResponse.getUserId());
@@ -211,9 +215,10 @@ public class FreeDaysBookingService {
 
         });
 
-        List<UserUsedFreeDaysResponse> usersWithNoDaysUsed = usedFreeDays
-                .stream()
-                .filter( day -> !usersWithFreeDaysUsed.);
+        List<UserUsedFreeDaysResponse> usersWithNoDaysUsed = usedFreeDays.stream()
+                .filter(day -> !existingUserCalendarPairs.contains(day.getUserId() + "_" + day.getCalendarId()))
+                .collect(Collectors.toList());
+        System.out.println(usersWithNoDaysUsed);
 
         try {
 //            jdbcTemplate.execute(sql);
