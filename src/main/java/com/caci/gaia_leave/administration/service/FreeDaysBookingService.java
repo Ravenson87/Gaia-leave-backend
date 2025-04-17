@@ -145,7 +145,6 @@ public class FreeDaysBookingService {
     public ResponseEntity<String> freeDaysAcceptance(List<FreeDaysBookingUpdateDTO> freeDaysBookingUpdateDTO) {
         int status = freeDaysBookingUpdateDTO.get(0).getStatus();
 
-        System.out.println("freeDaysBookingUpdateDTO: " + freeDaysBookingUpdateDTO);
         // Get ids from input parameter
         List<Integer> freeDaysCalendarIds = freeDaysBookingUpdateDTO.stream().map(FreeDaysBookingUpdateDTO::getId).toList();
         // Find free days booking response by ids and saved in list
@@ -154,7 +153,6 @@ public class FreeDaysBookingService {
         if (freeDaysBooking.isEmpty()) {
             throw new CustomException("FreeDaysBooking not found");
         }
-        System.out.println(freeDaysBooking + "freeDaysBooking");
         // Update status for each found request recorded in the corresponding DTO object
         List<FreeDaysBookingResponse> updatedBookings = freeDaysBooking.stream()
                 .map(freeDaysBookingResponse -> {
@@ -166,7 +164,6 @@ public class FreeDaysBookingService {
                     return freeDaysBookingResponse;
                 })
                 .collect(Collectors.toList());
-        System.out.println(status + "updatedBookings");
 
         try {
             if (status == 1) {
@@ -191,7 +188,7 @@ public class FreeDaysBookingService {
         // Prepare string for query - transform Map<Integer, Integer> in "(x,y)
         String paramForQuery = userIdCalendarIdStringForQuery(userIdCalendarId);
 
-        String sql = "UPDATE `user_used_free_days` SET free_day_type_id=2 WHERE ( user_id, calendar_id ) IN (" + paramForQuery + ")";
+        String sql = "UPDATE `user_used_free_days` SET free_day_type_id=1 WHERE ( user_id, calendar_id ) IN (" + paramForQuery + ")";
 
         try {
         jdbcTemplate.execute(sql);
@@ -201,18 +198,11 @@ public class FreeDaysBookingService {
     }
 
     public void deleteFreeDays(List<FreeDaysBookingResponse> updatedBookings) {
-        List<UserUsedFreeDaysResponse> userUsedFreeDays = new ArrayList<>();
-        updatedBookings.forEach(freeDaysBookingResponse -> {
-            UserUsedFreeDaysResponse freeDaysUsedResponse = new UserUsedFreeDaysResponse();
-            freeDaysUsedResponse.setUserId(freeDaysBookingResponse.getUserId());
-            freeDaysUsedResponse.setCalendarId(freeDaysBookingResponse.getCalendarId());
-            freeDaysUsedResponse.setFreeDayTypeId(1);
-            userUsedFreeDays.add(freeDaysUsedResponse);
-        });
 
         // Get user_id and calendar id
         Map<Integer, Integer> userIdCalendarId = new HashMap<>();
-        userUsedFreeDays.forEach(userUsedFreeDay -> userIdCalendarId.put(userUsedFreeDay.getUserId(), userUsedFreeDay.getCalendarId()));
+
+        updatedBookings.forEach(userUsedFreeDay -> userIdCalendarId.put(userUsedFreeDay.getUserId(), userUsedFreeDay.getCalendarId()));
         // Prepare string for query - transform Map<Integer, Integer> in "(x,y)
         String paramForQuery = userIdCalendarIdStringForQuery(userIdCalendarId);
         // Query for Delete user free days by unique columns (combination of user_id and calendar_id)
