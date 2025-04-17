@@ -20,8 +20,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -196,7 +194,7 @@ public class FreeDaysBookingService {
             response.setId(rs.getInt("id"));
             response.setCalendarId(rs.getInt("calendar_id"));
             response.setUserId(rs.getInt("user_id"));
-            response.setFreeDayTypeId(rs.getInt(1));
+            response.setFreeDayTypeId(rs.getInt("free_day_type_id"));
             return response;
         };
 
@@ -217,11 +215,12 @@ public class FreeDaysBookingService {
 
         List<UserUsedFreeDaysResponse> usersWithNoDaysUsed = usedFreeDays.stream()
                 .filter(day -> !existingUserCalendarPairs.contains(day.getUserId() + "_" + day.getCalendarId()))
-                .collect(Collectors.toList());
-        System.out.println(usersWithNoDaysUsed);
+                .toList();
+
 
         try {
-//            jdbcTemplate.execute(sql);
+            userUsedFreeDaysResponseRepository.saveAll(usersWithFreeDaysUsed);
+            userUsedFreeDaysResponseRepository.saveAll(usersWithNoDaysUsed);
         } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
