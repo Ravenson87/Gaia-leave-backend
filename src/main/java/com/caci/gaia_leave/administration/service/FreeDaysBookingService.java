@@ -16,11 +16,10 @@ import com.caci.gaia_leave.shared_tools.helper.AllHelpers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.caci.gaia_leave.shared_tools.helper.AllHelpers.listConverter;
@@ -34,8 +33,10 @@ public class FreeDaysBookingService {
     private final CalendarRepository calendarRep;
     private final UserRepository userRepository;
     private final UserUsedFreeDaysResponseRepository userUsedFreeDaysResponseRepository;
+    private final JdbcTemplate jdbcTemplate;
 
     private final int IN_PROGRESS = 0;
+
     /**
      * Create free days booking by user request.
      *
@@ -82,9 +83,9 @@ public class FreeDaysBookingService {
     /**
      * Read all from FreeDaysBooking table
      *
-     * @return ResponseEntity<List<FreeDaysBookingResponse>>
+     * @return ResponseEntity<List < FreeDaysBookingResponse>>
      */
-    public ResponseEntity<List<FreeDaysBookingResponse>> read(){
+    public ResponseEntity<List<FreeDaysBookingResponse>> read() {
         List<FreeDaysBookingResponse> result = AllHelpers.listConverter(freeDaysBookingResponseRepository.findAll());
         return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(result);
     }
@@ -127,7 +128,7 @@ public class FreeDaysBookingService {
      *
      * @param startDate Date
      * @param endDate   Date
-     * @param status     String
+     * @param status    String
      * @return ResponseEntity<List < FreeDaysBookingResponse>>
      */
     public ResponseEntity<List<FreeDaysBookingResponse>> readByDateRangeAndStatus(String startDate, String endDate, Integer status) {
@@ -142,17 +143,18 @@ public class FreeDaysBookingService {
      * @return ResponseEntity<String>
      */
     public ResponseEntity<String> freeDaysAcceptance(List<FreeDaysBookingUpdateDTO> freeDaysBookingUpdateDTO) {
+        int status = freeDaysBookingUpdateDTO.get(0).getStatus();
+
+        System.out.println("freeDaysBookingUpdateDTO: " + freeDaysBookingUpdateDTO);
         // Get ids from input parameter
         List<Integer> freeDaysCalendarIds = freeDaysBookingUpdateDTO.stream().map(FreeDaysBookingUpdateDTO::getId).toList();
         // Find free days booking response by ids and saved in list
         List<FreeDaysBookingResponse> freeDaysBooking = listConverter(freeDaysBookingResponseRepository.findAllById(freeDaysCalendarIds));
 
-        List<UserUsedFreeDaysResponse> usedFreeDays = new ArrayList<>();
-
         if (freeDaysBooking.isEmpty()) {
             throw new CustomException("FreeDaysBooking not found");
         }
-
+        System.out.println(freeDaysBooking + "freeDaysBooking");
         // Update status for each found request recorded in the corresponding DTO object
         List<FreeDaysBookingResponse> updatedBookings = freeDaysBooking.stream()
                 .map(freeDaysBookingResponse -> {
@@ -164,16 +166,14 @@ public class FreeDaysBookingService {
                     return freeDaysBookingResponse;
                 })
                 .collect(Collectors.toList());
-        updatedBookings.forEach(freeDaysBookingResponse -> {
-            UserUsedFreeDaysResponse freeDaysUsedResponse = new UserUsedFreeDaysResponse();
-            freeDaysUsedResponse.setUserId(freeDaysBookingResponse.getUserId());
-            freeDaysUsedResponse.setCalendarId(freeDaysBookingResponse.getCalendarId());
-            freeDaysUsedResponse.setFreeDayTypeId(1);
-            usedFreeDays.add(freeDaysUsedResponse);
+        System.out.println(status + "updatedBookings");
 
-        });
         try {
-            userUsedFreeDaysResponseRepository.saveAll(usedFreeDays);
+            if (status == 1) {
+                updateFreeDays(updatedBookings);
+            } else if (status == 0) {
+                deleteFreeDays(updatedBookings);
+            }
             freeDaysBookingResponseRepository.saveAll(updatedBookings);
         } catch (Exception e) {
             throw new CustomException(e.getMessage());
@@ -182,4 +182,50 @@ public class FreeDaysBookingService {
         return ResponseEntity.status(HttpStatus.CREATED).body("FreeDays accepted");
     }
 
+    public void updateFreeDays(List<FreeDaysBookingResponse> updatedBookings) {
+        List<UserUsedFreeDaysResponse> userUsedFreeDays = new ArrayList<>();
+        Map<Integer, Integer> userIdCalendarId = new HashMap<>();
+
+        updatedBookings.forEach(userUsedFreeDay -> userIdCalendarId.put(userUsedFreeDay.getUserId(), userUsedFreeDay.getCalendarId()));
+
+        // Prepare string for query - transform Map<Integer, Integer> in "(x,y)
+        String paramForQuery = userIdCalendarIdStringForQuery(userIdCalendarId);
+
+        String sql = "UPDATE `user_used_free_days` SET free_day_type_id=2 WHERE ( user_id, calendar_id ) IN (" + paramForQuery + ")";
+
+        try {
+        jdbcTemplate.execute(sql);
+        } catch (Exception e) {
+            throw new CustomException(e.getMessage());
+        }
+    }
+
+    public void deleteFreeDays(List<FreeDaysBookingResponse> updatedBookings) {
+        List<UserUsedFreeDaysResponse> userUsedFreeDays = new ArrayList<>();
+        updatedBookings.forEach(freeDaysBookingResponse -> {
+            UserUsedFreeDaysResponse freeDaysUsedResponse = new UserUsedFreeDaysResponse();
+            freeDaysUsedResponse.setUserId(freeDaysBookingResponse.getUserId());
+            freeDaysUsedResponse.setCalendarId(freeDaysBookingResponse.getCalendarId());
+            freeDaysUsedResponse.setFreeDayTypeId(1);
+            userUsedFreeDays.add(freeDaysUsedResponse);
+        });
+
+        // Get user_id and calendar id
+        Map<Integer, Integer> userIdCalendarId = new HashMap<>();
+        userUsedFreeDays.forEach(userUsedFreeDay -> userIdCalendarId.put(userUsedFreeDay.getUserId(), userUsedFreeDay.getCalendarId()));
+        // Prepare string for query - transform Map<Integer, Integer> in "(x,y)
+        String paramForQuery = userIdCalendarIdStringForQuery(userIdCalendarId);
+        // Query for Delete user free days by unique columns (combination of user_id and calendar_id)
+        String sql = "DELETE FROM `user_used_free_days` WHERE ( user_id, calendar_id ) IN (" + paramForQuery + ")";
+
+        try {
+            jdbcTemplate.execute(sql);
+        } catch (Exception e) {
+            throw new CustomException(e.getMessage());
+        }
+    }
+
+    private String userIdCalendarIdStringForQuery(Map<Integer, Integer> userIdCalendarId) {
+        return userIdCalendarId.entrySet().stream().map(e -> "(" + e.getKey() + "," + e.getValue() + ")").collect(Collectors.joining(","));
+    }
 }
