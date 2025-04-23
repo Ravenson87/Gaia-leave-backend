@@ -52,12 +52,16 @@ public class OvertimeHoursService {
             }
 
             Optional<UserTotalAttendance> userTotalAttendance = userTotalAttendanceRepository.findByUserId(model.getUserId());
+
             if (userTotalAttendance.isEmpty()) {
-                throw new CustomException("User Id " + model.getUserId() + " does not exist.");
+                throw new CustomException("User total free days and total working hours must be created");
             }
+
             if(userTotalAttendance.get().getTotalWorkingHours() == null){
                 throw new CustomException("Total working hours for " + model.getUserId() + " is not set.");
             }
+
+
             int maxOvertimeHours = 24 - userTotalAttendance.get().getTotalWorkingHours();
 
             if (model.getOvertimeHours() > maxOvertimeHours) {

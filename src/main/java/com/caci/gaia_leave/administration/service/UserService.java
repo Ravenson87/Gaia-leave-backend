@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.caci.gaia_leave.shared_tools.component.AppConst.LINK_EXPIRATION_TIME;
+import static com.caci.gaia_leave.shared_tools.helper.AllHelpers.getOrthodoxEasterDate;
 import static com.caci.gaia_leave.shared_tools.helper.AllHelpers.listConverter;
 
 @Service
@@ -250,6 +251,9 @@ public class UserService {
 
         if (data.isEmpty()) {
             throw new CustomException("User does not exist.");
+        }
+        if(data.get().getVerified()){
+            return ResponseEntity.ok(false);
         }
         Date linkedExpired = data.get().getLinkExpired();
         Date now = new Date();

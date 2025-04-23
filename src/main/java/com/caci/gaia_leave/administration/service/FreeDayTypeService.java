@@ -98,6 +98,9 @@ public class FreeDayTypeService {
         if (!freeDayTypeRepository.existsById(id)) {
             throw new CustomException("FreeDayType with id `" + id + "` doesn't exists.");
         }
+        if(id == 1){
+            throw new CustomException("FreeDayType with id `1` can not be deleted.");
+        }
 
         try{
             freeDayTypeRepository.deleteById(id);
