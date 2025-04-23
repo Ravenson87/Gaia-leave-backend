@@ -21,8 +21,7 @@ public class AppProperties {
 
     private boolean superAdminEnabled = false;
 
-
-
+    private Integer userId = null;
 
     /**
      * Excluded packets from mapping.

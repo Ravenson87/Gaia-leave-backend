@@ -1,9 +1,11 @@
 package com.caci.gaia_leave.administration.service;
 
 import com.caci.gaia_leave.administration.model.request.Calendar;
+import com.caci.gaia_leave.administration.model.request.FreeDaysBooking;
 import com.caci.gaia_leave.administration.model.request.UserUsedFreeDays;
 import com.caci.gaia_leave.administration.model.response.UserUsedFreeDaysResponse;
 import com.caci.gaia_leave.administration.repository.request.CalendarRepository;
+import com.caci.gaia_leave.administration.repository.request.FreeDaysBookingRepository;
 import com.caci.gaia_leave.administration.repository.request.UserRepository;
 import com.caci.gaia_leave.administration.repository.request.UserUsedFreeDaysRepository;
 import com.caci.gaia_leave.administration.repository.response.UserUsedFreeDaysResponseRepository;
@@ -26,6 +28,7 @@ public class UserUsedFreeDaysService {
 
     private final UserUsedFreeDaysRepository userUsedFreeDaysRepository;
     private final UserUsedFreeDaysResponseRepository userUsedFreeDaysResponseRepository;
+    private final FreeDaysBookingRepository freeDaysBookingRepository;
     private final CalendarRepository calendarRepository;
     private final UserRepository userRepository;
 
@@ -138,8 +141,16 @@ public class UserUsedFreeDaysService {
      * @return ResponseEntity<String>
      */
     public ResponseEntity<String> delete(Integer id) {
-        if (!userUsedFreeDaysRepository.existsById(id)) {
+        Optional<UserUsedFreeDays> data = userUsedFreeDaysRepository.findById(id);
+
+        if (data.isEmpty()) {
             throw new CustomException("Column by id: `" + id + "` not found");
+        }
+
+        Optional<FreeDaysBooking> freeDaysBooking = freeDaysBookingRepository.findByCalendarIdAndUserId(data.get().getCalendarId(), data.get().getUserId());
+        if (freeDaysBooking.isPresent()) {
+            freeDaysBooking.get().setStatus(2);
+            freeDaysBookingRepository.save(freeDaysBooking.get());
         }
 
         try {

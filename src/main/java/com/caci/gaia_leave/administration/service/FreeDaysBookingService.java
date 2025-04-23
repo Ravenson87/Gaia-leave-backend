@@ -172,7 +172,7 @@ public class FreeDaysBookingService {
             } else if (status == 0) {
                 deleteFreeDays(updatedBookings);
             }
-//            freeDaysBookingResponseRepository.saveAll(updatedBookings);
+            freeDaysBookingResponseRepository.saveAll(updatedBookings);
         } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }

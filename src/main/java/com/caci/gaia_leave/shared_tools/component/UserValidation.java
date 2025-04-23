@@ -22,12 +22,16 @@ public class UserValidation {
 
     public boolean validate(HttpServletRequest request, String endpoint) {
         String fullName = jwtService.getFullName(request);
+        Integer userId = jwtService.getUserId(request);
+
+        appProperties.setUserId(userId);
 
         if (jwtService.superAdmin(request)) {
             appProperties.setSuperAdminEnabled(true);
             appProperties.setAdminFullName(fullName);
             return true;
         }
+
         Integer roleId = jwtService.getRoleId(request);
         Optional<RoleResponse> roleResponse = roleResponseRepository.findById(roleId);
         if (roleResponse.isEmpty()) {

@@ -107,6 +107,11 @@ public class JwtService {
 
     }
 
+    public Integer getUserId(HttpServletRequest request) {
+        return Integer.parseInt(getValue(request, "id"));
+
+    }
+
     private String getValue(HttpServletRequest request, String key) {
         return jwsToken(request).get(key).toString();
     }

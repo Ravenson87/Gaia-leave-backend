@@ -137,7 +137,7 @@ public class AuthorizationService {
         if (user.isEmpty()) {
             throw new CustomException("User not found.");
         }
-        System.out.println(user.get());
+
         if (user.get().getVerified()) {
             throw new CustomException("User is already verified.");
         }
