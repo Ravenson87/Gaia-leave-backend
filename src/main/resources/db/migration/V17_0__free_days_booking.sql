@@ -9,6 +9,6 @@ CREATE TABLE `free_days_booking` (
                                   `created_date` datetime DEFAULT  NULL,
                                   `last_modified_date` datetime DEFAULT NULL,
                                   PRIMARY KEY ( `id` ) USING BTREE,
-                                  CONSTRAINT `fk_free_days_booking_v1` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-                                  CONSTRAINT `fk_free_days_booking_v2` FOREIGN KEY (`calendar_id`) REFERENCES `calendar`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
+                                  CONSTRAINT `fk_free_days_booking_v1` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE ,
+                                  CONSTRAINT `fk_free_days_booking_v2` FOREIGN KEY (`calendar_id`) REFERENCES `calendar`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;

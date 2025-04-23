@@ -10,4 +10,4 @@ CREATE TABLE `menu` (
     PRIMARY KEY(`id`) USING BTREE,
     UNIQUE KEY `menu_number` (`menu_number`) USING BTREE,
     UNIQUE KEY `name` (`name`) USING BTREE
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;

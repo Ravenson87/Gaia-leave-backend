@@ -8,4 +8,4 @@ CREATE TABLE `job_position` (
     `last_modified_date` datetime DEFAULT NULL,
     PRIMARY KEY(`id`) USING BTREE,
     UNIQUE KEY `title` (`title`) USING BTREE
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;

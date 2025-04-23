@@ -55,6 +55,9 @@ public class OvertimeHoursService {
             if (userTotalAttendance.isEmpty()) {
                 throw new CustomException("User Id " + model.getUserId() + " does not exist.");
             }
+            if(userTotalAttendance.get().getTotalWorkingHours() == null){
+                throw new CustomException("Total working hours for " + model.getUserId() + " is not set.");
+            }
             int maxOvertimeHours = 24 - userTotalAttendance.get().getTotalWorkingHours();
 
             if (model.getOvertimeHours() > maxOvertimeHours) {

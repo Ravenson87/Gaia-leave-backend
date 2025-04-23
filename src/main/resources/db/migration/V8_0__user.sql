@@ -1,12 +1,12 @@
 CREATE TABLE `user` (
     `id` INT (11) NOT NULL AUTO_INCREMENT,
-    `role_id` INT (11) NOT NULL,
-    `job_position_id` INT (11) NOT NULL,
+    `role_id` INT (11) DEFAULT NULL,
+    `job_position_id` INT (11) DEFAULT NULL,
     `first_name` VARCHAR (255) NOT NULL,
     `last_name` VARCHAR (255) NOT NULL,
     `email` VARCHAR (255) NOT NULL,
-    `username` VARCHAR (255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-    `password` VARCHAR (255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+    `username` VARCHAR (255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+    `password` VARCHAR (255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
     `status` BOOLEAN DEFAULT true,
     `created_by` VARCHAR (255) DEFAULT NULL,
     `last_modified_by` VARCHAR (255) DEFAULT NULL,
@@ -15,6 +15,6 @@ CREATE TABLE `user` (
     PRIMARY KEY(`id`) USING BTREE,
     UNIQUE KEY `email` (`email`) USING BTREE,
     UNIQUE KEY `username` (`username`) USING BTREE,
-    CONSTRAINT `fk_user_v1` FOREIGN KEY (`role_id`) REFERENCES `role`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-    CONSTRAINT `fk_user_v2` FOREIGN KEY (`job_position_id`) REFERENCES `job_position`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
+    CONSTRAINT `fk_user_v1` FOREIGN KEY (`role_id`) REFERENCES `role`(`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT `fk_user_v2` FOREIGN KEY (`job_position_id`) REFERENCES `job_position`(`id`) ON DELETE SET NULL ON UPDATE CASCADE
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
