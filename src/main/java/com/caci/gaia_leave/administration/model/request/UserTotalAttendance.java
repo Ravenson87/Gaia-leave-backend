@@ -38,16 +38,15 @@ public class UserTotalAttendance extends Auditable implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     @JsonProperty("total_free_days")
     @Column(name = "total_free_days")
-    private Integer totalFreeDays;
+    private Integer totalFreeDays = 0;
 
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     @JsonProperty("total_working_hours")
     @Column(name = "total_working_hours")
-    private Integer totalWorkingHours;
+    private Integer totalWorkingHours = 0;
 
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     @JsonProperty("overtime_hours_sum")
     @Column(name = "overtime_hours_sum")
-    private Integer overtimeHoursSum;
-
+    private Integer overtimeHoursSum = 0;
 }

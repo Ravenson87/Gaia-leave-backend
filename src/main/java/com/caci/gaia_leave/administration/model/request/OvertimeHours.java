@@ -44,8 +44,7 @@ public class OvertimeHours extends Auditable implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     @JsonProperty("overtime_hours")
     @Column(name = "overtime_hours")
-    private Integer overtimeHours;
-
+    private Integer overtimeHours = 0;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("overtime_compensation")
