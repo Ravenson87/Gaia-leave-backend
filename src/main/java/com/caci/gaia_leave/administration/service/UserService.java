@@ -7,6 +7,7 @@ import com.caci.gaia_leave.administration.repository.request.UserRepository;
 import com.caci.gaia_leave.administration.repository.response.UserResponseRepository;
 import com.caci.gaia_leave.shared_tools.component.AppConst;
 import com.caci.gaia_leave.shared_tools.component.ImageHandler;
+import com.caci.gaia_leave.shared_tools.configuration.AppProperties;
 import com.caci.gaia_leave.shared_tools.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -37,6 +38,7 @@ public class UserService {
     private final ImageHandler imageHandler;
     private final ResourceLoader resourceLoader;
     private final MailService mailService;
+    private final AppProperties appProperties;
 
     /**
      * Create User in database
@@ -192,6 +194,11 @@ public class UserService {
         if (!userRepository.existsById(id)) {
             throw new CustomException("User with id `" + id + "` does not exist.");
         }
+
+        if (appProperties.getUserId().equals(id)) {
+            throw new CustomException("User cannot change the status of their own account.");
+        }
+
         User user = userRepository.findById(id).get();
         try {
             user.setStatus(status);
@@ -260,6 +267,11 @@ public class UserService {
         if (!userRepository.existsById(id)) {
             throw new CustomException("User with id `" + id + "` does not exist.");
         }
+
+        if (appProperties.getUserId().equals(id)) {
+            throw new CustomException("User cannot delete their own account.");
+        }
+
         try {
             userRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).build();
