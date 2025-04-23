@@ -5,4 +5,4 @@ CREATE TABLE `mail_history` (
                                   `created_date` datetime DEFAULT  NULL,
                                   FULLTEXT(addresses, message),
                                   PRIMARY KEY ( `id` ) USING BTREE
-) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;

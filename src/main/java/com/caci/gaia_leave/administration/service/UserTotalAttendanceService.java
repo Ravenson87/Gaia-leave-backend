@@ -31,10 +31,10 @@ public class UserTotalAttendanceService {
      */
     public ResponseEntity<UserTotalAttendanceResponse> create(UserTotalAttendance model) {
         if (!userRepository.existsById(model.getUserId())) {
-            throw new CustomException("User with id: `" + model.getUserId() + "` not found");
+            throw new CustomException("User with id in user table: `" + model.getUserId() + "` not found");
         }
-        if(!userTotalAttendanceRepository.existsByUserId(model.getUserId())) {
-            throw new CustomException("User with id: `" + model.getUserId() + " does not exists");
+        if(userTotalAttendanceRepository.existsByUserId(model.getUserId())) {
+            throw new CustomException("User with id in userTotalAttendance table : `" + model.getUserId() + " already exists");
         }
         try {
             UserTotalAttendance save = userTotalAttendanceRepository.save(model);

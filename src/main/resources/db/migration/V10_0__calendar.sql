@@ -5,4 +5,4 @@ CREATE TABLE `calendar` (
                             `type` ENUM ( 'WEEKEND', 'NATIONAL_HOLIDAY','RELIGIOUS_HOLIDAY', 'WORKING_DAY' ),
                             PRIMARY KEY ( `id` ) USING BTREE,
                             UNIQUE KEY `date` ( `date` ) USING BTREE
-) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
