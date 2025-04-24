@@ -56,6 +56,7 @@ public class AppProperties {
 
     private final String[] excludedRoutes = {
             "/api/v1/auth/**",
+            "/api/v1/sse/**",
             "/api/v1/user/read-by-hash/**",
             "/error"
     };

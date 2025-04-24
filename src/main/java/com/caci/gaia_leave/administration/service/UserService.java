@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.caci.gaia_leave.shared_tools.component.AppConst.LINK_EXPIRATION_TIME;
-import static com.caci.gaia_leave.shared_tools.helper.AllHelpers.getOrthodoxEasterDate;
 import static com.caci.gaia_leave.shared_tools.helper.AllHelpers.listConverter;
 
 @Service
@@ -205,9 +204,6 @@ public class UserService {
         try {
             user.setStatus(status);
             userRepository.save(user);
-            if (!status) {
-                sseService.updateStatus(String.valueOf(id));
-            }
 
         } catch (Exception e) {
             throw new CustomException(e.getMessage());
