@@ -40,6 +40,7 @@ public class UserService {
     private final ResourceLoader resourceLoader;
     private final MailService mailService;
     private final AppProperties appProperties;
+    SSEService sseService;
 
     /**
      * Create User in database
@@ -204,6 +205,10 @@ public class UserService {
         try {
             user.setStatus(status);
             userRepository.save(user);
+            if (!status) {
+                sseService.updateStatus(String.valueOf(id));
+            }
+
         } catch (Exception e) {
             throw new CustomException(e.getMessage());
         }
