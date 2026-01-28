@@ -418,4 +418,4 @@ Please read our contributing guidelines before submitting pull requests.
 
 ---
 
-*Developed and maintained by ĆACI*
+*Developed and maintained by Minja and Siniša*
