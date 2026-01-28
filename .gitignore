@@ -31,3 +31,25 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Environment & sensitive configs ###
+.env
+application-local.properties
+application-dev.properties
+application-prod.properties
+
+### Logs ###
+*.log
+
+### SSL / private keys ###
+*.pem
+*.crt
+*.key
+
+### OS files ###
+.DS_Store
+Thumbs.db
+
+### Additional environment configs ###
+application-test.properties
+application-staging.properties

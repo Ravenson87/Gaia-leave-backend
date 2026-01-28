@@ -381,6 +381,36 @@ Migration scripts are located in the `src/main/resources/db/migration/` folder a
 7. **V7_0__job_position.sql** - Creates the `job_position` table with job positions.
 8. **V8_0__user.sql** - Creates the `user` table with user data.
 
+### 🔐 Environment Variables
+
+Sensitive values are not stored directly in `application.properties`.  
+Instead, they are injected via environment variables or a `.env` file (excluded from GitHub).
+
+Required variables:
+
+```env
+# Database
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=gaia_leave
+DB_USER=your_db_user
+DB_PASS=your_db_password
+
+# Spring Security
+SECURITY_USER=your_admin_user
+SECURITY_PASS=your_admin_password
+
+# JWT
+JWT_SECRET=your_jwt_secret
+
+# Mail
+MAIL_USER=your_mailjet_user
+MAIL_PASS=your_mailjet_password
+MAIL_FROM=your_email@example.com
+
+# Other
+TIMEZONE=Europe/Belgrade
+```
 
 ## Contributing
 

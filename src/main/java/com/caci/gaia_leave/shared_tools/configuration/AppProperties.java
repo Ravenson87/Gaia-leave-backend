@@ -14,44 +14,34 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AppProperties {
 
-    /**
-     * Admin user.
-     */
     private String adminFullName = null;
-
     private boolean superAdminEnabled = false;
-
     private Integer userId = null;
 
-    /**
-     * Excluded packets from mapping.
-     */
     private final String[] excludedPackets = {"tools", "ui", "api"};
 
-    private final String[] actuatorAuthorisationEndpoints =
-            {
-                    "/actuator/auditevents",        // Exposes audit events information for the current application
-                    "/actuator/beans",              // Displays a complete list of all the Spring beans in your application
-                    "/actuator/caches",             // Exposes available caches
-                    "/actuator/conditions",         // Shows the conditions that were evaluated on configuration and auto-configuration classes
-                    "/actuator/configprops",        // Displays a collated list of all @ConfigurationProperties
-                    "/actuator/env",                // Exposes properties from Spring’s ConfigurableEnvironment
-                    "/actuator/flyway",             // Shows any Flyway database migrations that have been applied
-                    "/actuator/health",             // Shows application health information
-                    "/actuator/httptrace",          // Displays HTTP trace information (last 100 request-response exchanges)
-                    "/actuator/info",               // Displays arbitrary application info
-                    "/actuator/integrationgraph",   // Shows the Spring Integration graph
-                    "/actuator/loggers",            // Shows and modifies the configuration of loggers
-                    "/actuator/liquibase",          // Shows any Liquibase database migrations that have been applied
-                    "/actuator/metrics",            // Shows ‘metrics’ information for the current application
-                    "/actuator/mappings",           // Displays a collated list of all @RequestMapping paths
-                    "/actuator/scheduledtasks",     // Displays the scheduled tasks in your application
-                    "/actuator/sessions"            // Allows retrieval and deletion of user sessions
-            };
+    private final String[] actuatorAuthorisationEndpoints = {
+            "/actuator/auditevents",
+            "/actuator/beans",
+            "/actuator/caches",
+            "/actuator/conditions",
+            "/actuator/configprops",
+            "/actuator/env",
+            "/actuator/flyway",
+            "/actuator/health",
+            "/actuator/httptrace",
+            "/actuator/info",
+            "/actuator/integrationgraph",
+            "/actuator/loggers",
+            "/actuator/liquibase",
+            "/actuator/metrics",
+            "/actuator/mappings",
+            "/actuator/scheduledtasks",
+            "/actuator/sessions"
+    };
+
     private final String[] basicAuthorization = {};
-
     private final String[] allowedMethods = {"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"};
-
     private final String[] securityHeaders = {"authorization", "content-type", "x-auth-token", "permissions"};
 
     private final String[] excludedRoutes = {
