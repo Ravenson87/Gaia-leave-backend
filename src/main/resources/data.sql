@@ -1,35 +1,32 @@
-INSERT
-IGNORE INTO `role` (
+INSERT IGNORE INTO `role` (
        id,
        name,
        description,
        created_by,
        last_modified_by,
        created_date,
-       last_modified_date)
-    VALUES
-      (
+       last_modified_date
+) VALUES (
         1,
         'super_admin',
         'Super admin role',
         'system',
         'system',
-      NOW(),
-      NOW());
+        NOW(),
+        NOW()
+);
 
-INSERT
-IGNORE INTO `job_position` (
+INSERT IGNORE INTO `job_position` (
        id,
        title,
-       description)
-VALUES
-       (
+       description
+) VALUES (
        1,
        'Technical Lead',
-       'The Technical Lead will guide the team through the development process.');
+       'The Technical Lead will guide the team through the development process.'
+);
 
-INSERT
-IGNORE INTO `user` (
+INSERT IGNORE INTO `user` (
        id,
        role_id,
        job_position_id,
@@ -42,25 +39,24 @@ IGNORE INTO `user` (
        created_by,
        last_modified_by,
        created_date,
-       last_modified_date)
-VALUES
-       (
+       last_modified_date
+) VALUES (
        1,
        1,
        1,
        'system',
        'system',
-       'zgojkovic@finmetrixgroup.com',
+       'admin@example.com',   -- neutral placeholder email
        'system',
-       '$2a$10$XBP6uil6WndHNkA7ZGaM5OAueBxWikjtjub2LKf0KlO1N5ysujlku',
+       '$2a$10$PLACEHOLDERHASHVALUE1234567890abcdef',  -- placeholder hash
        1,
        'system',
        'system',
        NOW(),
        NOW()
-       );
-INSERT
-IGNORE INTO `free_day_type`(
+);
+
+INSERT IGNORE INTO `free_day_type` (
         id,
         `type`,
         description,
@@ -68,14 +64,12 @@ IGNORE INTO `free_day_type`(
         last_modified_by,
         created_date,
         last_modified_date
-)
-VALUES
-(
-1,
-'vacation',
-'vacation',
-   'system',
-       'system',
-       NOW(),
-       NOW()
+) VALUES (
+        1,
+        'vacation',
+        'vacation',
+        'system',
+        'system',
+        NOW(),
+        NOW()
 );
