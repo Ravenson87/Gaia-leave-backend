@@ -1,10 +1,10 @@
 # gaia_leave
 
-- Employee Leave Management System
+- Workforce management system
 
 ## Overview
 
-GaiaLeave is a comprehensive employee leave management system designed to streamline the process of managing and tracking employee absences within a company. The system implements role-based access control, ensuring that HR personnel, managers, and employees have appropriate permissions based on their responsibilities.
+GaiaWork is a comprehensive workforce management system designed to streamline employee attendance, leave tracking, and overtime payment processes within a company. The system provides role‑based access control, ensuring that HR personnel, managers, and employees have appropriate permissions based on their responsibilities. In addition to managing absences, GaiaWork supports tracking working hours, calculating overtime, and maintaining accurate records for payroll and reporting.
 
 ## Technology Stack
 
